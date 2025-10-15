@@ -51,8 +51,8 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
-    public function Reservations(){
-        return $this->hasMany(Reservation::class);
+    public function approvedReservations() {
+        return $this->hasMany(Reservation::class, 'approved_by');
     }
 
 

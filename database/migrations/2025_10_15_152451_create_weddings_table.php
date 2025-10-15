@@ -32,7 +32,6 @@ return new class extends Migration
             $table->year('series_end')->nullable();
             $table->foreignId('issued_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
-
             $table->index('wedding_date');
             $table->index('husband_member_id');
         });
