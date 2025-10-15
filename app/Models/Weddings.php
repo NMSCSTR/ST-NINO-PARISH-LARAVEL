@@ -5,7 +5,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Weddings extends Model
 {
-    //
     protected $fillable = [
         'husband_user_id',
         'wife_user_id',
@@ -35,5 +34,14 @@ class Weddings extends Model
         'series_end' => 'integer',
         'witnesses' => 'array',
     ];
+
+
+    public function member() {
+        return $this->belongsTo(Member::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
 }
