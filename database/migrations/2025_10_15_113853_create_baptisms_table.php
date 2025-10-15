@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('place')->nullable();
             $table->string('godfather')->nullable();
             $table->string('godmother')->nullable();
-            $table->string('witnesses')->nullable(); //atleast more witnesses
+            $table->json('witnesses')->nullable(); //atleast more witnesses
             $table->foreignId('issued_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -19,11 +18,17 @@ class Baptism extends Model
         'witnesses',
     ];
 
-    public function member() {
+    protected $casts = [
+        'witnesses' => 'array',
+    ];
+
+    public function member()
+    {
         return $this->belongsTo(Member::class);
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }
