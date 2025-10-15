@@ -24,12 +24,20 @@
         <form method="POST" action="{{ route('register') }}" class="space-y-4">
             @csrf
 
-            <!-- Name -->
+            <!-- First Name -->
             <div>
-                <label for="name" class="block text-sm font-medium text-[#4b3b2a]">Full Name</label>
-                <input type="text" id="name" name="name" required autofocus
+                <label for="first_name" class="block text-sm font-medium text-[#4b3b2a]">Firstname</label>
+                <input type="text" id="first_name" name="first_name" required autofocus
                        class="w-full px-4 py-2 mt-1 border rounded-lg bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
-                       value="{{ old('name') }}">
+                       value="{{ old('first_name') }}">
+            </div>
+
+            {{-- Lastname --}}
+            <div>
+                <label for="last_name" class="block text-sm font-medium text-[#4b3b2a]">Firstname</label>
+                <input type="text" id="last_name" name="last_name" required autofocus
+                       class="w-full px-4 py-2 mt-1 border rounded-lg bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
+                       value="{{ old('last_name') }}">
             </div>
 
             <!-- Email -->

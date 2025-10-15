@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('baptisms', function (Blueprint $table) {
             $table->id();
             $table->foreignId('member_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('set null')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->date('baptism_date');
             $table->string('name_of_father')->nullable();
             $table->string('name_of_mother')->nullable();
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('godfather')->nullable();
             $table->string('godmother')->nullable();
             $table->string('witnesses')->nullable(); //atleast more witnesses
-            $table->foreignId('issued_by')->constrained()->onDelete('set null')->nullable();
+            $table->foreignId('issued_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }
