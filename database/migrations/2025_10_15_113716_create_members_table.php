@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('address')->nullable();
+            $table->string('place_of_birth')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('email')->nullable();
             $table->timestamps();
