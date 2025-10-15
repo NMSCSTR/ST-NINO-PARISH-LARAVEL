@@ -42,7 +42,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4 delay-300 animate-fade-in">
-                <a href="#"
+                <a href="{{ route('login') }}"
                    class="inline-flex items-center justify-center px-6 py-3 text-sm sm:text-base font-semibold bg-gradient-to-r from-[#d4af37] to-[#8b5e3c] text-white rounded-lg shadow-lg hover:from-[#c9a137] hover:to-[#77492e] hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                     Login to System
                     <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
