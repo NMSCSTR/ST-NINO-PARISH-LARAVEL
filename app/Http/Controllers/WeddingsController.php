@@ -2,35 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\c;
+use App\Models\Weddings;
 use Illuminate\Http\Request;
 
-class User extends Controller
+class WeddingsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('welcome');
-    }
-
-    public function adminView() {
-        return view('admin.dashboard');
-    }
-
-    public function memberView() {
-        return view('member.dashboard');
-    }
-
-    public function login()
-    {
-        return view('login');
-    }
-
-    public function register()
-    {
-        return view('register');
+        //
     }
 
     /**
@@ -52,7 +34,7 @@ class User extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(c $c)
+    public function show(Weddings $weddings)
     {
         //
     }
@@ -60,7 +42,7 @@ class User extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(c $c)
+    public function edit(Weddings $weddings)
     {
         //
     }
@@ -68,7 +50,7 @@ class User extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, c $c)
+    public function update(Request $request, Weddings $weddings)
     {
         //
     }
@@ -76,7 +58,7 @@ class User extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(c $c)
+    public function destroy(Weddings $weddings)
     {
         //
     }
