@@ -20,4 +20,12 @@ class Event extends Model
         'end_date'   => 'datetime',
     ];
 
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
+    }
+
 }

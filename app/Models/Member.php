@@ -25,4 +25,8 @@ class Member extends Model
         return $this->hasMany(Wedding::class);
     }
 
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
+    }
+
 }
