@@ -15,16 +15,6 @@ class User extends Controller
         //
     }
 
-    public function loginView()
-    {
-        return view('login');
-    }
-
-    public function regView()
-    {
-        return view('register');
-    }
-
     /**
      * Show the form for creating a new resource.
      */

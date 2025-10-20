@@ -1,3 +1,6 @@
 <div>
-<pre>{{ print_r(session()->all(), true) }}</pre>
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
 </div>
