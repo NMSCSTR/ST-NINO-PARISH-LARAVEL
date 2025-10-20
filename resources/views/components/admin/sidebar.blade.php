@@ -1,5 +1,5 @@
 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4" data-aos="slide-right">
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">dashboard</span>
             Home
@@ -15,7 +15,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('admin.reservations') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event_available</span>
             Reservations
@@ -23,7 +23,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('admin.members') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">group</span>
             Members
@@ -31,7 +31,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('admin.events') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event</span>
             Events
@@ -39,7 +39,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('admin.payments') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">payments</span>
             Payments
@@ -47,7 +47,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('admin.documents') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">description</span>
             Documents
