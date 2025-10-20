@@ -21,7 +21,7 @@
             <p class="text-sm text-[#4b3b2a]">Please login to your account</p>
         </div>
 
-        <form method="POST" action="#" class="space-y-4">
+        <form method="POST" action="{{ route('user.login') }}" class="space-y-4">
             @csrf
 
             <!-- Email -->

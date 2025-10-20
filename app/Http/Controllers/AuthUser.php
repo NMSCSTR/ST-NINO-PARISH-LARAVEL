@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class AuthUser extends Controller
@@ -27,25 +28,30 @@ class AuthUser extends Controller
      */
     public function auth(Request $request)
     {
-        $credentials =$request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
-        if (Auth::attempt($credentials)) {
+        $remember = $request->has('remember');
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            $user =Auth::user();
-            $request->session()->flash('welcome', 'Welcome back, ' . $user->firstname . '!');
+            $user = Auth::user();
+            session()->flash('welcome', 'Welcome back, ' . $user->firstname . '!');
+
 
             if ($user->role === 'admin' || $user->role === 'staff') {
                 return redirect()->intended(route('admin.dashboard'));
             } else {
                 return redirect()->intended(route('member.dashboard'));
             }
-
         }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
+
 
     /**
      * Display the specified resource.

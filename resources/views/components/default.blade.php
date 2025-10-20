@@ -28,6 +28,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
         body {
@@ -85,7 +87,42 @@
 </head>
 
 <body>
-    <div class="my-4"></div>
+    <div class="my-4">
+    </div>
+    {{-- Global display of error --}}
+    @if(session('welcome'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Welcome!',
+                    text: "{{ session('welcome') }}",
+                    confirmButtonText: 'Thanks'
+                });
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    html: `
+                        <ul style="text-align: left; margin: 0; padding-left: 20px;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                    confirmButtonText: 'Try Again'
+                });
+            });
+        </script>
+    @endif
+
+
     @yield('content')
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>

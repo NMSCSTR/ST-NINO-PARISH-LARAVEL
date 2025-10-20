@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User as UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Controller
 {
