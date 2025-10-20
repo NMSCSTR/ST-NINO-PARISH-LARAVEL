@@ -19,7 +19,7 @@
 
         {{-- Main Content --}}
         <div class="lg:w-10/12 w-full">
-            <div class="flex flex-col lg:flex-row gap-4" data-aos="fade-up">
+            <div class="flex flex-col lg:flex-row gap-4" data-aos="zoom-in">
                 <div class="bg-red-200 border border-red-300 rounded-xl p-6 flex-1 bg-no-repeat"
                     style="background-image: url(...); background-position: 90% center;">
                     <p class="text-4xl text-indigo-900">Welcome <br><strong>Lorem Ipsum</strong></p>
