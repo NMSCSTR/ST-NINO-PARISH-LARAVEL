@@ -9,12 +9,12 @@ Route::get('/', function () {
 });
 
 
-Route::get('/login', [User::class, 'login'])->name('login');
-Route::get('/register', [User::class, 'register'])->name('register');
+Route::get('/login', [User::class, 'loginView'])->name('login');
+Route::get('/register', [User::class, 'regView'])->name('register');
 Route::post('/register', [User::class, 'store'])->name('user.store');
 
 Route::middleware('auth')->group(function () {
-    Route::middleware('user_Role:staff')->group(function () {
+    Route::middleware('user_Role:staff,admin')->group(function () {
         Route::get('/admin/dashboard', [User::class, 'adminView'])->name('admin.dashboard');
 
     });
