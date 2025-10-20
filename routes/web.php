@@ -11,6 +11,7 @@ Route::get('/', function () {
 
 Route::get('/login', [User::class, 'login'])->name('login');
 Route::get('/register', [User::class, 'register'])->name('register');
+Route::post('/register', [User::class, 'store'])->name('user.store');
 
 Route::middleware('auth')->group(function () {
     Route::middleware('user_Role:staff')->group(function () {

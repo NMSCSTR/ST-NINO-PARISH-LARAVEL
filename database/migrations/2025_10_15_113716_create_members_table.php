@@ -16,8 +16,6 @@ return new class extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // links to users.id
-            $table->string('first_name');
-            $table->string('last_name');
             $table->string('middle_name')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('place_of_birth')->nullable();

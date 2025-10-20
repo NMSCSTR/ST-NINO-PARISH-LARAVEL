@@ -21,23 +21,23 @@
             <p class="text-sm text-[#4b3b2a]">Join Santo Niño Parish Church system</p>
         </div>
 
-        <form method="POST" action="{{ route('register') }}" class="space-y-4">
+        <form method="POST" action="{{ route('user.store') }}" class="space-y-4">
             @csrf
 
             <!-- First Name -->
             <div>
                 <label for="first_name" class="block text-sm font-medium text-[#4b3b2a]">Firstname</label>
-                <input type="text" id="first_name" name="first_name" required autofocus
+                <input type="text" id="firstname" name="firstname" required autofocus
                        class="w-full px-4 py-2 mt-1 border rounded-lg bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
-                       value="{{ old('first_name') }}">
+                       value="{{ old('firstname') }}">
             </div>
 
             {{-- Lastname --}}
             <div>
-                <label for="last_name" class="block text-sm font-medium text-[#4b3b2a]">Firstname</label>
-                <input type="text" id="last_name" name="last_name" required autofocus
+                <label for="last_name" class="block text-sm font-medium text-[#4b3b2a]">Lastname</label>
+                <input type="text" id="lastname" name="lastname" required autofocus
                        class="w-full px-4 py-2 mt-1 border rounded-lg bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
-                       value="{{ old('last_name') }}">
+                       value="{{ old('lastname') }}">
             </div>
 
             <!-- Email -->
@@ -61,6 +61,17 @@
                 <input type="password" id="password_confirmation" name="password_confirmation" required
                        class="w-full px-4 py-2 mt-1 border rounded-lg bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent">
             </div>
+
+             <!-- Role -->
+             <div>
+                <label for="role" class="block text-sm font-medium text-[#4b3b2a]">Role</label>
+                <select name="role" id="role" class="w-full px-4 py-2 mt-1 border rounded-lg bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent">
+                    <option value="">Select Role</option>
+                    <option value="admin">Admin</option>
+                    <option value="staff">Staff</option>
+                    <option value="member">Member</option>
+                </select>
+             </div>
 
             <!-- Register Button -->
             <button type="submit"

@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User as UserModel;
+
 use Illuminate\Http\Request;
 
-class User extends Controller
+class AuthUser extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,25 +25,26 @@ class User extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function auth(Request $request)
     {
-        $validated = $request->validate([
-            'firstname' =>  'required|string|max:100',
-            'lastname' =>  'required|string|max:100',
-            'email' =>  'required|string|email|max:255',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required',
+        $credentials =$request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        $user = UserModel::create([
-            'firstname' => $validated['firstname'],
-            'lastname' => $validated['lastname'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-        ]);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        return redirect()->back()->with('success', 'User added successfully!');
+            $user =Auth::user();
+            $request->session()->flash('welcome', 'Welcome back, ' . $user->firstname . '!');
+
+            if ($user->role === 'admin' || $user->role === 'staff') {
+                return redirect()->intended(route('admin.dashboard'));
+            } else {
+                return redirect()->intended(route('member.dashboard'));
+            }
+
+        }
     }
 
     /**
