@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
+use App\Models\Event;
+use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class RouteController extends Controller
@@ -11,7 +14,10 @@ class RouteController extends Controller
      */
     public function adminView()
     {
-        return view('admin.dashboard');
+        $users = User::all();
+        $events = Event::all();
+        $reservations = Reservation::all();
+        return view('admin.dashboard', compact('users','events','reservations'));
     }
 
     /**

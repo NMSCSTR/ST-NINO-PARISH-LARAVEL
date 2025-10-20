@@ -72,11 +72,39 @@
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
-        <span class="flex items-center">
-            <span class="material-icons-outlined pr-2">power_settings_new</span>
-            Log out
-        </span>
-        <span class="material-icons-outlined">keyboard_arrow_right</span>
-    </a>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="inline">
+        @csrf
+        <button type="button" id="logout-button"
+            class="flex items-center justify-between text-gray-600 hover:text-black my-4 bg-transparent border-none p-0 m-0 cursor-pointer">
+            <span class="flex items-center">
+                <span class="material-icons-outlined pr-2">power_settings_new</span>
+                Log out
+            </span>
+            <span class="material-icons-outlined">keyboard_arrow_right</span>
+        </button>
+    </form>
+
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the logout form
+                document.getElementById('logout-form').submit();
+            }
+        });
+    });
+    </script>
+
+
 </div>
