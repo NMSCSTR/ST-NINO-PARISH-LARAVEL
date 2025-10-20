@@ -26,7 +26,12 @@ Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::middleware('user_Role:staff,admin')->group(function () {
         Route::get('/admin/dashboard', [RouteController::class, 'admin'])->name('admin.dashboard');
-
+        Route::get('/admin/users', [RouteController::class, 'users'])->name('admin.users');
+        Route::get('/admin/reservations', [RouteController::class, 'reservations'])->name('admin.reservations');
+        Route::get('/admin/members', [RouteController::class, 'members'])->name('admin.members');
+        Route::get('/admin/events', [RouteController::class, 'events'])->name('admin.events');
+        Route::get('/admin/payments', [RouteController::class, 'payments'])->name('admin.payments');
+        Route::get('/admin/documents', [RouteController::class, 'documents'])->name('admin.documents');
     });
 
     Route::middleware('user_Role:member')->group(function () {

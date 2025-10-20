@@ -7,7 +7,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('admin.users') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">person</span>
             User
