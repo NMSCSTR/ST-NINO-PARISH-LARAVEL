@@ -28,14 +28,14 @@
                         </div>
 
                         <p class="text-xl text-gray-700">Welcome back,</p>
-                        <h2 class="text-4xl font-bold text-indigo-900 leading-tight"> Admin
+                        <h2 class="text-4xl font-bold text-indigo-900 leading-tight"> {{ Str::ucfirst(auth()->user()->role) }}
                             {{ auth()->user()->firstname }}
                         </h2>
 
                         <div class="mt-6">
                             <span class="bg-red-400 text-white text-sm px-5 py-2 rounded-full font-semibold shadow">
                                 <i class="material-icons text-base align-middle mr-1">access_time</i>
-                                01:51
+                                {{ now()->setTimezone('Asia/Manila')->format('l, F j, Y h:i A') }}
                             </span>
                         </div>
                     </div>
