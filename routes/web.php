@@ -19,23 +19,27 @@ Route::get('/register', function () {
 Route::post('/register', [User::class, 'store'])->name('user.store');
 Route::post('/login', [AuthUserController::class, 'auth'])->name('user.login');
 Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
-// use route grouping
-Route::middleware('auth')->group(function () {
-    Route::middleware('user_Role:staff,admin')->group(function () {
-        Route::get('/admin/dashboard', [RouteController::class, 'admin'])->name('admin.dashboard');
-        Route::get('/admin/users', [User::class, 'index'])->name('admin.users');
-        Route::get('/admin/users/{id}/edit', [User::class, 'edit'])->name('users.edit');
-        Route::put('/admin/users/{id}', [User::class, 'update'])->name('users.update');
-        Route::delete('/admin/users/{id}', [User::class, 'destroy'])->name('users.destroy');
 
-        Route::get('/admin/reservations', [RouteController::class, 'reservations'])->name('admin.reservations');
-        Route::get('/admin/members', [RouteController::class, 'members'])->name('admin.members');
-        Route::get('/admin/events', [RouteController::class, 'events'])->name('admin.events');
-        Route::get('/admin/payments', [RouteController::class, 'payments'])->name('admin.payments');
-        Route::get('/admin/documents', [RouteController::class, 'documents'])->name('admin.documents');
+Route::middleware('auth')->group(function () {
+
+    Route::prefix('admin')->middleware('user_Role:staff,admin')->group(function () {
+        Route::get('/dashboard', [RouteController::class, 'admin'])->name('admin.dashboard');
+
+        Route::get('/users', [User::class, 'index'])->name('admin.users');
+        Route::get('/users/{id}/edit', [User::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [User::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [User::class, 'destroy'])->name('users.destroy');
+
+        Route::get('/reservations', [RouteController::class, 'reservations'])->name('admin.reservations');
+        Route::get('/members', [RouteController::class, 'members'])->name('admin.members');
+        Route::get('/events', [RouteController::class, 'events'])->name('admin.events');
+        Route::get('/payments', [RouteController::class, 'payments'])->name('admin.payments');
+        Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
     });
 
-    Route::middleware('user_Role:member')->group(function () {
-        Route::get('/member/dashboard', [User::class, 'memberView'])->name('member.dashboard');
+    
+    Route::prefix('member')->middleware('user_Role:member')->group(function () {
+        Route::get('/dashboard', [User::class, 'memberView'])->name('member.dashboard');
     });
 });
+

@@ -81,3 +81,6 @@
     }
 </style>
 @endsection
+@push('scripts')
+    @include('components.alerts')
+@endpush

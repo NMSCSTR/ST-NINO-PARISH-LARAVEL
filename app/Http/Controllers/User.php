@@ -33,7 +33,7 @@ class User extends Controller
         $validated = $request->validate([
             'firstname' => 'required|string|max:100',
             'lastname'  => 'required|string|max:100',
-            'email'     => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password'  => 'required|string|min:8|confirmed',
             'role'      => 'required',
         ]);
@@ -108,6 +108,6 @@ class User extends Controller
         $user = UserModel::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
+        return redirect()->route('admin.users')->with('success', 'User deleted successfully. You can login now!');
     }
 }
