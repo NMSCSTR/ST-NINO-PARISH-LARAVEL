@@ -39,7 +39,8 @@ class RouteController extends Controller
     public function members()
     {
         $members = Member::all();
-        return view('admin.members', compact('members'));
+        // return view('admin.members', compact('members'));
+        return $members;
     }
 
     public function baptisms()

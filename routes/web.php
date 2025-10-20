@@ -2,6 +2,9 @@
 use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\User;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,14 +33,21 @@ Route::middleware('auth')->group(function () {
         Route::put('/users/{id}', [User::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [User::class, 'destroy'])->name('users.destroy');
 
-        Route::get('/reservations', [RouteController::class, 'reservations'])->name('admin.reservations');
-        Route::get('/members', [RouteController::class, 'members'])->name('admin.members');
-        Route::get('/events', [RouteController::class, 'events'])->name('admin.events');
+        Route::get('/reservations', [ReservationController::class, 'index'])->name('admin.reservations');
+        Route::post('/reservations/{id}/approve', [ReservationController::class, 'approve'])->name('reservations.approve');
+        Route::get('/reservations/{id}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
+        Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+
+        Route::get('/members', [MemberController::class, 'index'])->name('admin.members');
+
+        Route::get('/events', [EventController::class, 'index'])->name('admin.events');
+
+
         Route::get('/payments', [RouteController::class, 'payments'])->name('admin.payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
     });
 
-    
+
     Route::prefix('member')->middleware('user_Role:member')->group(function () {
         Route::get('/dashboard', [User::class, 'memberView'])->name('member.dashboard');
     });

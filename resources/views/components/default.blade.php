@@ -35,6 +35,11 @@
         body {
             font-family: 'Poppins', sans-serif;
         }
+        a.active {
+            color: blue !important;
+            font-weight: bold;   
+        }
+
     </style>
 
     @stack('styles')
@@ -115,7 +120,7 @@
         });
     </script>
 
-    
+
 
 
 </body>
