@@ -8,8 +8,8 @@
     <title>@yield('title', 'Welcome')</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
     <!-- Google Font: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -22,14 +22,20 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js">
     </script>
     <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.tailwindcss.min.js">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.13.4/js/dataTables.tailwindcss.min.js">
     </script>
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+        rel="stylesheet" />
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
 
 
     <style>
@@ -41,17 +47,17 @@
     @stack('styles')
     <!-- Tailwind (via Vite) -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 </head>
 
-<body >
+<body>
     <div class="my-4">
     </div>
     {{-- Global display of error --}}
     @if(session('welcome'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Welcome!',
@@ -59,12 +65,12 @@
                     confirmButtonText: 'Thanks'
                 });
             });
-        </script>
+    </script>
     @endif
 
     @if ($errors->any())
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -78,13 +84,34 @@
                     confirmButtonText: 'Try Again'
                 });
             });
-        </script>
+    </script>
     @endif
 
 
     @yield('content')
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        AOS.init({
+            duration: 1000, // Animation duration in ms
+            once: true // Only animate once
+        });
+    });
+    </script>
 </body>
 
 </html>
+
+{{-- | Animation   | `data-aos` value |
+| ----------- | ---------------- |
+| Fade In     | `fade`           |
+| Fade Up     | `fade-up`        |
+| Fade Down   | `fade-down`      |
+| Slide Right | `slide-right`    |
+| Zoom In     | `zoom-in`        |
+| Flip Left   | `flip-left`      |
+| Flip Up     | `flip-up`        |
+ --}}
