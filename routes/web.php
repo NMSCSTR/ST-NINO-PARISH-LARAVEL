@@ -25,7 +25,7 @@ Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::middleware('user_Role:staff,admin')->group(function () {
-        Route::get('/admin/dashboard', [RouteController::class, 'adminView'])->name('admin.dashboard');
+        Route::get('/admin/dashboard', [RouteController::class, 'admin'])->name('admin.dashboard');
 
     });
 
