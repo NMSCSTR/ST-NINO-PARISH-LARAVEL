@@ -54,3 +54,8 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+// Laravel Task Scheduler
+// Accessors And Mutators
+// Tinker
+// Event and Listeners
+//Facade
