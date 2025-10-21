@@ -5,6 +5,7 @@ use App\Http\Controllers\User;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -44,13 +45,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/events', [EventController::class, 'index'])->name('admin.events');
 
 
-        Route::get('/payments', [RouteController::class, 'payments'])->name('admin.payments');
+        Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
     });
 
 
     Route::prefix('member')->middleware('user_Role:member')->group(function () {
-        Route::get('/dashboard', [User::class, 'memberView'])->name('member.dashboard');
+        Route::get('/dashboard', function () {
+            return view('member.dashboard');
+        })->name('member.dashboad');
     });
 });
 
