@@ -1,6 +1,6 @@
 @extends('components.default')
 
-@section('title', 'Users | Santo Niño Parish Church')
+@section('title', 'Edit Users | Santo Niño Parish Church')
 
 @section('content')
 <section>

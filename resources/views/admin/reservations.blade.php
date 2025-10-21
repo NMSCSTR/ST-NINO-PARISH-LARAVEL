@@ -163,7 +163,13 @@
                                         {{ $reservation->event->title }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $reservation->status }}
+                                         @if ($reservation->status === 'approved')
+                                            <span class="text-green-600 font-semibold">Approved</span>
+                                        @elseif ($reservation->status === 'pending')
+                                            <span class="text-yellow-600 font-semibold">Pending</span>
+                                        @elseif ($reservation->status === 'cancel')
+                                            <span class="text-red-600 font-semibold">Cancelled</span>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $reservation->reservation_date->format('F j, Y \a\t g:i A') }}
@@ -185,7 +191,7 @@
                                             </svg>
                                             Delete
                                         </a>
-
+                                        @if ($reservation->status !== 'cancel')
                                         <a href="{{ route('reservations.edit', ['id' => $reservation->id]) }}"
                                             class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             <svg class="w-4 h-4 text-white me-2" xmlns="http://www.w3.org/2000/svg"
@@ -196,6 +202,7 @@
                                             </svg>
                                             Edit
                                         </a>
+                                        @endif
 
                                         @if (!$reservation->approved_by)
                                         <form action="{{ route('reservations.approve', $reservation->id) }}"

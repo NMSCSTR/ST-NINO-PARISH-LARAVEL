@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
@@ -25,21 +24,19 @@ class ReservationController extends Controller
         //
     }
 
-
-
     public function approve($id)
     {
         $reservation = Reservation::findOrFail($id);
 
-        // Only approve if not already approved
-        if (!$reservation->approved_by) {
-            $reservation->approved_by = Auth::id(); // assuming the admin is logged in
+        if (! $reservation->approved_by) {
+            $reservation->approved_by = Auth::id();
+            $reservation->status      = 'approved';
+            $reservation->remarks     = 'approved';
             $reservation->save();
         }
 
         return redirect()->back()->with('success', 'Reservation approved successfully.');
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -60,17 +57,37 @@ class ReservationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reservation $reservation)
+    public function edit($id)
     {
-        //
+        $reservations = Reservation::findOrFail($id);
+        return view('admin.update.update_reservation', compact('reservations'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reservation $reservation)
+    public function update(Request $request, $id)
     {
-        //
+        $reservation = Reservation::findOrFail($id);
+
+        $request->validate([
+            'status'           => 'required',
+            'reservation_date' => 'date',
+            'remarks'          => 'nullable|string',
+        ]);
+
+
+        $reservation->status           = $request->status;
+        $reservation->reservation_date = $request->reservation_date;
+        $reservation->remarks          = $request->remarks;
+
+        if (in_array($request->status, ['pending', 'cancel'])) {
+            $reservation->approved_by = null;
+        }
+
+        $reservation->save();
+
+        return redirect()->route('admin.reservations')->with('success', 'Reservation updated successfully.');
     }
 
     /**
