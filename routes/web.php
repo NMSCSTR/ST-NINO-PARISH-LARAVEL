@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('member')->middleware('user_Role:member')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
+        Route::get('/reservation', [ReservationController::class, 'index'])->name('member.dashboard');
     });
 });
 

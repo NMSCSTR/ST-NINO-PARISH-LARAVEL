@@ -24,6 +24,11 @@ class ReservationController extends Controller
         //
     }
 
+    public function makeReservation()
+    {
+        
+    }
+
     public function approve($id)
     {
         $reservation = Reservation::findOrFail($id);

@@ -7,14 +7,14 @@
     <div class="min-h-screen pt-24">
         @include('components.admin.bg')
         {{-- Include Top Navigation --}}
-        @include('components.admin.topnav')
+        @include('components.member.topnav')
 
 
         <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-4 gap-6">
 
             {{-- Include Sidebar --}}
             <div class="lg:w-2/12 w-full">
-                @include('components.admin.sidebar')
+                @include('components.member.sidebar')
             </div>
 
             {{-- Main Content --}}
