@@ -1,9 +1,6 @@
-<div>
-    <!-- Always remember that you are absolutely unique. Just like everyone else. - Margaret Mead -->
-</div>
 @extends('components.default')
 
-@section('title', 'Member Dashboard | Santo Niño Parish Church')
+@section('title', 'Dashboard | Santo Niño Parish Church')
 
 @section('content')
 <section>
@@ -70,7 +67,7 @@
                     <div class="bg-white rounded-xl shadow-lg px-6 py-6 flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Total Members</p>
-                            <h3 class="text-3xl font-semibold text-indigo-900">{{ $users->where('role', '!=', 'admin')->count() }}</h3>
+                            <h3 class="text-3xl font-semibold text-indigo-900"></h3>
                         </div>
                         <span class="material-icons-outlined text-4xl text-blue-500">group</span>
                     </div>
@@ -79,7 +76,7 @@
                     <div class="bg-white rounded-xl shadow-lg px-6 py-6 flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Upcoming Events</p>
-                            <h3 class="text-3xl font-semibold text-indigo-900">{{ $events->count() }}</h3>
+                            <h3 class="text-3xl font-semibold text-indigo-900"></h3>
                         </div>
                         <span class="material-icons-outlined text-4xl text-orange-500">event</span>
                     </div>
@@ -88,7 +85,7 @@
                     <div class="bg-white rounded-xl shadow-lg px-6 py-6 flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">New Reservations</p>
-                            <h3 class="text-3xl font-semibold text-indigo-900">{{ $reservations->count() }}</h3>
+                            <h3 class="text-3xl font-semibold text-indigo-900"></h3>
                         </div>
                         <span class="material-icons-outlined text-4xl text-green-500">event_available</span>
                     </div>

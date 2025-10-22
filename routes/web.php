@@ -51,9 +51,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('member')->middleware('user_Role:member')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('member.dashboard');
-        })->name('member.dashboad');
+        Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
     });
 });
 
