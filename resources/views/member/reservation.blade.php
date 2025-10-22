@@ -68,9 +68,7 @@
 
                     <div class="relative overflow-x-auto sm:rounded-lg  px-6 py-6">
                         <section class="bg-white dark:bg-gray-900">
-                            <div class=" mx-auto max-w-2xl lg:py-16">
-                                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Reserve an Event</h2>
-
+                            <div class="mx-auto">
                                 <form method="POST" action="{{ route('member.makeReservation') }}">
                                     @csrf
 
@@ -84,14 +82,12 @@
                                             <label for="event_id"
                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
                                                 Event</label>
-                                            <select id="event_id" name="event_id" required
+                                            <select id="type" name="type" required
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option value="">-- Choose an event --</option>
-                                                @foreach ($events as $event)
-                                                <option value="{{ $event->id }}">{{ $event->title }} ({{
-                                                    $event->start_date->format('M d, Y h:i A') }})</option>
-                                                @endforeach
+                                                <option value="wedding">Wedding</option>
+                                                <option value="baptism">Baptism</option>
                                             </select>
                                         </div>
 
@@ -100,7 +96,7 @@
                                             <label for="reservation_date"
                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Reservation
                                                 Date</label>
-                                            <input type="datetime-local" id="reservation_date" name="reservation_date"
+                                            <input type="date" id="reservation_date" name="reservation_date"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         </div>
@@ -118,7 +114,7 @@
                                     </div>
 
                                     <!-- Submit Button -->
-                                    <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700
+                                    <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-gray-900 bg-dark-700
                      rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                                         Submit Reservation
                                     </button>

@@ -8,7 +8,7 @@ class Reservation extends Model
     //
     protected $fillable = [
         'member_id',
-        'event_id',
+        'type',
         'status',
         'reservation_date',
         'remarks',
@@ -22,10 +22,6 @@ class Reservation extends Model
     public function member()
     {
         return $this->belongsTo(Member::class);
-    }
-    public function event()
-    {
-        return $this->belongsTo(Event::class);
     }
 
     public function approvedBy() {

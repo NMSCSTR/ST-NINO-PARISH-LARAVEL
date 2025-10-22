@@ -24,9 +24,26 @@ class ReservationController extends Controller
         //
     }
 
-    public function makeReservation()
+    public function makeReservation(Request $request)
     {
-        
+        $memberId = Auth::user()->id;
+        $validated = $request->validate([
+            'type' => 'required',
+            'reservation_date' => 'nullable|date',
+            'remarks' => 'nullable|string|max:1000',
+
+        ]);
+
+        Reservation::create([
+            'member_id' => $memberId,
+            'type' => $validated['type'],
+            'status' => 'pending',
+            'reservation_date' => $validated['reservation_date'] ?? now(),
+            'remarks' => $validated['remarks'] ?? null,
+            'approved_by' => null,
+        ]);
+
+        return redirect()->back()->with('success', 'Reservation submitted successfully!');
     }
 
     public function approve($id)
