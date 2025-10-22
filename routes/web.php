@@ -41,10 +41,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
         Route::get('/members', [MemberController::class, 'index'])->name('admin.members');
-
         Route::get('/events', [EventController::class, 'index'])->name('admin.events');
-
-
         Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
     });
@@ -52,7 +49,10 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('member')->middleware('user_Role:member')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
-        Route::get('/reservation', [ReservationController::class, 'index'])->name('member.dashboard');
+        Route::get('/reservation', function () {
+            return view('member.reservation');
+        })->name('member.reservation');
+        Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('member.makeReservation');
     });
 });
 
