@@ -8,17 +8,9 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="{{ route('admin.users') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.users') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
-        <span class="flex items-center">
-            <span class="material-icons-outlined pr-2">person</span>
-            User
-        </span>
-        <span class="material-icons-outlined">keyboard_arrow_right</span>
-    </a>
 
-    <a href="{{ route('admin.reservations') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.reservations') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+    <a href="{{ route('member.reservation') }}"
+       class="flex items-center justify-between my-4 {{ request()->routeIs('member.reservation') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event_available</span>
             Reservations
@@ -26,14 +18,6 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="{{ route('admin.members') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.members') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
-        <span class="flex items-center">
-            <span class="material-icons-outlined pr-2">group</span>
-            Members
-        </span>
-        <span class="material-icons-outlined">keyboard_arrow_right</span>
-    </a>
 
     <a href="{{ route('admin.events') }}"
        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">

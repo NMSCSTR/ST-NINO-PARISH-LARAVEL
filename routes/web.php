@@ -49,9 +49,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('member')->middleware('user_Role:member')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
-        Route::get('/reservation', function () {
-            return view('member.reservation');
-        })->name('member.reservation');
+        Route::get('/reservation', [MemberController::class, 'reservation'])->name('member.reservation');
         Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('member.makeReservation');
     });
 });

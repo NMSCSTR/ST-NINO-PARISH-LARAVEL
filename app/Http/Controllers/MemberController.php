@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -15,6 +17,13 @@ class MemberController extends Controller
         $members = Member::all();
         return view('member.dashboard', compact('members'));
         // return $members;
+    }
+
+    public function reservation()
+    {
+        $events = Event::all();
+        $users = User::all();
+        return view('member.reservation', compact('events','users'));
     }
 
     /**
