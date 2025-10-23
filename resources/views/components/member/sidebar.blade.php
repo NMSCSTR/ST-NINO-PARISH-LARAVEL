@@ -19,8 +19,8 @@
     </a>
 
 
-    <a href="{{ route('admin.events') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+    <a href="{{ route('member.events') }}"
+       class="flex items-center justify-between my-4 {{ request()->routeIs('member.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event</span>
             Events

@@ -17,6 +17,13 @@ class EventController extends Controller
         return view('admin.events', compact('events'));
         // return $events;
     }
+    public function memberEvents()
+    {
+        //
+        $events = Event::all();
+        return view('member.events', compact('events'));
+        // return $events;
+    }
 
     /**
      * Show the form for creating a new resource.

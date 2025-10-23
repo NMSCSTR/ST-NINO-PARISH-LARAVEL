@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
         Route::get('/reservation', [MemberController::class, 'reservation'])->name('member.reservation');
         Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('member.makeReservation');
+
+        Route::get('/events', [EventController::class, 'memberEvents'])->name('member.events');
     });
 });
 
