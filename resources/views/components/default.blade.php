@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.tailwind.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.tailwind.min.css" />
 
-
+    
 
 
 
@@ -37,7 +37,7 @@
         }
         a.active {
             color: blue !important;
-            font-weight: bold;   
+            font-weight: bold;
         }
 
     </style>
@@ -88,6 +88,9 @@
 
     @yield('content')
     @stack('scripts')
+
+    @yield('scripts')
+
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>

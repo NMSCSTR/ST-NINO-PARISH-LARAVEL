@@ -52,7 +52,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/reservation', [MemberController::class, 'reservation'])->name('member.reservation');
         Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('member.makeReservation');
 
-        Route::get('/events', [EventController::class, 'memberEvents'])->name('member.events');
+        // Route::get('/events', [EventController::class, 'fecthEvents'])->name('member.events');
+        Route::get('/events', function () {
+            return view('member.events');
+        })->name('events.page');
+        Route::get('/events/data', [EventController::class, 'fetchEventsData'])->name('events.data');
+
     });
 });
 

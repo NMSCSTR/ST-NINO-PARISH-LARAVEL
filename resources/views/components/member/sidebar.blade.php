@@ -19,7 +19,7 @@
     </a>
 
 
-    <a href="{{ route('member.events') }}"
+    <a href="{{ route('events.page') }}"
        class="flex items-center justify-between my-4 {{ request()->routeIs('member.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event</span>
