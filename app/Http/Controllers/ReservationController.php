@@ -26,7 +26,12 @@ class ReservationController extends Controller
 
     public function makeReservation(Request $request)
     {
-        $memberId = Auth::user()->id;
+        $memberId = Auth::user()->id ?? null;
+
+        if (!$memberId) {
+            return redirect()->back()->withErrors(['member_id' => 'You do not have a valid member account.']);
+        }
+
         $validated = $request->validate([
             'type' => 'required',
             'reservation_date' => 'nullable|date',

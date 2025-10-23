@@ -75,7 +75,7 @@
                                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
 
                                         <!-- Hidden Member ID -->
-                                        <input type="hidden" name="member_id" value="{{ auth()->user()->id }}">
+                                        <input type="text" name="member_id" value="{{ auth()->user()->id }}">
 
                                         <!-- Event Selection -->
                                         <div class="sm:col-span-2">
