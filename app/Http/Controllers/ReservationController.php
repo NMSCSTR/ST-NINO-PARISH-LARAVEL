@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,10 @@ class ReservationController extends Controller
 
     public function makeReservation(Request $request)
     {
-        $memberId = Auth::user()->id ?? null;
+
+        $userId = Auth::user()->id ?? null;
+        $memberId = Member::where('user_id', $userId)->value('id');
+
 
         if (!$memberId) {
             return redirect()->back()->withErrors(['member_id' => 'You do not have a valid member account.']);
