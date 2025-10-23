@@ -21,9 +21,8 @@ class MemberController extends Controller
 
     public function reservation()
     {
-        $events = Event::all();
-        $users = User::all();
-        return view('member.reservation', compact('events','users'));
+        $events = Event::with('user')->get();
+        return view('member.reservation', compact('events'));
     }
 
     /**

@@ -1,6 +1,6 @@
 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4" data-aos="slide-right">
     <a href="{{ route('admin.dashboard') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.dashboard') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.dashboard') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">dashboard</span>
             Home
@@ -9,7 +9,7 @@
     </a>
 
     <a href="{{ route('admin.users') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.users') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.users') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">person</span>
             User
@@ -18,16 +18,20 @@
     </a>
 
     <a href="{{ route('admin.reservations') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.reservations') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.reservations') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event_available</span>
             Reservations
+            <span
+                class="inline-flex items-right justify-center w-4 h-4 ms-2 text-xs font-semibold text-gray-100 bg-red-800 rounded-full">
+                {{ $reservations->where('status', '=', 'pending')->count() }}
+            </span>
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
     <a href="{{ route('admin.members') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.members') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.members') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">group</span>
             Members
@@ -36,7 +40,7 @@
     </a>
 
     <a href="{{ route('admin.events') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event</span>
             Events
@@ -45,7 +49,7 @@
     </a>
 
     <a href="{{ route('admin.payments') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.payments') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.payments') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">payments</span>
             Payments
@@ -54,7 +58,7 @@
     </a>
 
     <a href="{{ route('admin.documents') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.documents') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        class="flex items-center justify-between my-4 {{ request()->routeIs('admin.documents') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">description</span>
             Documents

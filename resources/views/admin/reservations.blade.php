@@ -160,7 +160,7 @@
                                         $reservation->member->user->lastname }}
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ $reservation->event->title }}
+                                        {{ $reservation->type }}
                                     </td>
                                     <td class="px-6 py-4">
                                          @if ($reservation->status === 'approved')

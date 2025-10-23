@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\Member;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservations = Reservation::with('member.user', 'event')->get();
+        $reservations = Reservation::all();
         return view('admin.reservations', compact('reservations'));
     }
 
