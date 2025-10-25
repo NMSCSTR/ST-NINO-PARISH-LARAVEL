@@ -18,7 +18,7 @@
     <div class="relative z-10 grid w-full max-w-7xl px-6 py-16 mx-auto gap-12 lg:grid-cols-12 items-center">
 
         <!-- 🧭 Left: Text & Features -->
-        <div class="lg:col-span-7 flex flex-col justify-center space-y-8 text-left animate-fade-in">
+        <div class="lg:col-span-7 flex flex-col justify-center space-y-8 text-left animate-fade-in" data-aos="fade-right" data-aos-duration="1000">
             <h1
                 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight max-w-2xl text-[#5e3d2c]">
                 Welcome to <br>
@@ -34,7 +34,7 @@
                 </blockquote>
 
 
-            <div class="flex flex-wrap gap-4">
+            <div class="flex flex-wrap gap-4" data-aos="fade-up" data-aos-delay="400">
                 <a href="{{ route('login') }}"
                     class="inline-flex items-center justify-center px-6 py-3 text-base font-semibold bg-gradient-to-r from-[#d4af37] to-[#8b5e3c] text-white rounded-xl shadow-lg hover:from-[#c9a137] hover:to-[#77492e] hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                     Login to System
@@ -52,7 +52,7 @@
         </div>
 
         <!-- 🎨 Right: Logo -->
-        <div class="lg:col-span-5 flex justify-center items-center animate-fade-in delay-500">
+        <div class="lg:col-span-5 flex justify-center items-center animate-fade-in delay-500" data-aos="zoom-in" data-aos-delay="200">
             <div
                 class="p-5 sm:p-6 bg-white/70 backdrop-blur-lg rounded-3xl shadow-xl border border-[#d4af37] w-full max-w-xs sm:max-w-sm transition-transform duration-300 hover:scale-105">
                 <img src="https://pbs.twimg.com/profile_images/1018602821086691328/ZB3pi7f9_400x400.jpg"
@@ -62,34 +62,66 @@
     </div>
 </section>
 
-<section>
-    <div class="lg:w-10/12 w-full">
-        <div id="calendar" class="w-full h-[80vh] px-4 py-4"></div>
+<section class="relative py-20 bg-gradient-to-br from-[#f9f6f0] to-[#f2e8dc] text-[#2c1c0f] overflow-hidden">
+
+    <!-- Decorative Overlay -->
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')] opacity-30"></div>
+
+    <!-- Title -->
+    <div class="relative z-10 text-center mb-12" data-aos="fade-up" data-aos-duration="1000">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-[#5e3d2c] mb-3">
+            Parish <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] to-[#8b5e3c]">Events</span>
+        </h2>
+        <p class="text-lg text-[#6b4226]/80 max-w-2xl mx-auto" data-aos="zoom-in" data-aos-duration="1200">
+            Stay updated with the latest celebrations, gatherings, and activities in our parish community.
+        </p>
     </div>
 
+    <!-- Calendar Container -->
+    <div class="relative z-10 w-full max-w-6xl mx-auto bg-white/70 backdrop-blur-md rounded-3xl shadow-2xl p-6 border border-[#e0c389] hover:shadow-gold/20 transition-all duration-500" >
+        <div id="calendar" class="w-full h-[80vh] rounded-2xl overflow-hidden border border-[#e6d3b3]" ></div>
+    </div>
 
-    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-        <!-- Modal box -->
-        <div class="bg-white rounded-lg p-8 w-[600px] max-w-full max-h-[90vh] overflow-auto relative">
+    <!-- Modal -->
+    <div id="eventModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center hidden z-50 transition-opacity duration-300">
+        <div
+            class="relative bg-white/95 rounded-3xl shadow-2xl border border-[#d4af37] w-[95%] max-w-lg p-8 animate-fade-in" data-aos="zoom-in">
+
             <button id="closeModal"
-                class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
-            <h2 id="modalTitle" class="text-2xl font-bold mb-4"></h2>
-            <p id="modalDescription" class="mb-6 whitespace-pre-line"></p>
-            <p class="mb-2"><strong>Type:</strong> <span id="modalType"></span></p>
-            <p class="mb-2"><strong>Start:</strong> <span id="modalStart"></span></p>
-            <p><strong>End:</strong> <span id="modalEnd"></span></p>
+                class="absolute top-4 right-4 text-[#6b4226] hover:text-[#8b5e3c] text-3xl font-bold transition-all">&times;</button>
+
+            <h2 id="modalTitle"
+                class="text-2xl md:text-3xl font-bold mb-3 text-[#5e3d2c] border-b border-[#e0c389] pb-2"></h2>
+
+            <p id="modalDescription"
+                class="text-[#4a3223] mb-6 whitespace-pre-line leading-relaxed bg-[#fdf9f3] rounded-xl p-4 shadow-inner"></p>
+
+            <div class="space-y-2 text-sm sm:text-base text-[#5a3924]">
+                <p><strong class="text-[#8b5e3c]">Type:</strong> <span id="modalType"></span></p>
+                <p><strong class="text-[#8b5e3c]">Start:</strong> <span id="modalStart"></span></p>
+                <p><strong class="text-[#8b5e3c]">End:</strong> <span id="modalEnd"></span></p>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button id="closeModalBottom"
+                    class="inline-block px-6 py-2.5 bg-gradient-to-r from-[#d4af37] to-[#8b5e3c] text-white font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- 🌀 Animation Styles -->
 <style>
+<!-- ✨ Additional Styles -->
+<style>
     @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(15px);
+            transform: translateY(10px);
         }
-
         to {
             opacity: 1;
             transform: translateY(0);
@@ -97,12 +129,11 @@
     }
 
     .animate-fade-in {
-        animation: fadeIn 0.9s ease forwards;
-        opacity: 0;
+        animation: fadeIn 0.4s ease forwards;
     }
 
-    .delay-500 {
-        animation-delay: 0.5s;
+    .shadow-gold {
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
     }
 </style>
 @endsection
@@ -110,6 +141,15 @@
 @section('scripts')
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
+<script>
+    AOS.init({
+        once: true,
+        duration: 1000,
+        easing: 'ease-in-out'
+    });
+</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -125,7 +165,7 @@
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        events: '/events/data',
+        events: 'events/data',
         timeZone: 'UTC',
         views: {
             dayGridYear: {

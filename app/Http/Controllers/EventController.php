@@ -49,6 +49,31 @@ class EventController extends Controller
         return response()->json($events);
     }
 
+        public function fetchEvents(Request $request)
+    {
+        $start = $request->query('start');
+        $end = $request->query('end');
+
+        $query = Event::query();
+
+        if ($start && $end) {
+            $query->whereBetween('start_date', [$start, $end]);
+        }
+
+        $events = $query->get()->map(function ($event) {
+            return [
+                'id' => $event->id,
+                'title' => $event->title,
+                'start' => $event->start_date->toIso8601String(),
+                'end' => $event->end_date ? $event->end_date->toIso8601String() : null,
+                'description' => $event->description,
+                'type' => $event->type,
+            ];
+        });
+
+        return response()->json($events);
+    }
+
 
     /**
      * Show the form for creating a new resource.
