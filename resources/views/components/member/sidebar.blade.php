@@ -20,7 +20,7 @@
 
 
     <a href="{{ route('events.page') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('member.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+       class="flex items-center justify-between my-4 {{ request()->routeIs('events.page') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">event</span>
             Events
@@ -37,14 +37,6 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="{{ route('admin.documents') }}"
-       class="flex items-center justify-between my-4 {{ request()->routeIs('admin.documents') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
-        <span class="flex items-center">
-            <span class="material-icons-outlined pr-2">description</span>
-            Documents
-        </span>
-        <span class="material-icons-outlined">keyboard_arrow_right</span>
-    </a>
 </div>
 
 
@@ -60,7 +52,7 @@
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="inline">
         @csrf
         <button type="button" id="logout-button"
-            class="flex items-center justify-between text-gray-600 hover:text-black my-4 bg-transparent border-none p-0 m-0 cursor-pointer">
+            class="flex items-center justify-between text-red-600 hover:text-white my-4 bg-transparent border-none p-0 m-0 cursor-pointer">
             <span class="flex items-center">
                 <span class="material-icons-outlined pr-2">power_settings_new</span>
                 Log out
