@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal backdrop -->
+
     <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <!-- Modal box -->
         <div class="bg-white rounded-lg p-8 w-[600px] max-w-full max-h-[90vh] overflow-auto relative">

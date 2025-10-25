@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,8 @@ class AuthUserController extends Controller
      */
     public function index()
     {
-        //
+        $events = Event::all();
+        return view('welcome', compact('events'));
     }
 
     /**

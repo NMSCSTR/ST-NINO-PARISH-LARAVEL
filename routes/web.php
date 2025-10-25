@@ -8,9 +8,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthUserController::class, 'index'])->name('welcome');
 
 Route::get('/login', function () {
     return view('login');
