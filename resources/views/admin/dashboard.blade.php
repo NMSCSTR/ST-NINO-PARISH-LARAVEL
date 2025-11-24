@@ -18,7 +18,7 @@
             </div>
 
             {{-- Main Content --}}
-            <div class="lg:w-10/12 w-full">
+            <div class="lg:w-10/12 w-full">e
                 <div class="flex flex-col lg:flex-row gap-6 mb-6" data-aos="zoom-in">
                     {{-- Welcome Card --}}
                     <div

@@ -31,7 +31,6 @@ class EventController extends Controller
         $query = Event::query();
 
         if ($start && $end) {
-            // Filter events where start_date falls between the calendar's requested range
             $query->whereBetween('start_date', [$start, $end]);
         }
 
