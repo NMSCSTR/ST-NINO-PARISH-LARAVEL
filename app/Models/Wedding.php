@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Weddings extends Model
+class Wedding extends Model
 {
     protected $fillable = [
         'husband_user_id',
