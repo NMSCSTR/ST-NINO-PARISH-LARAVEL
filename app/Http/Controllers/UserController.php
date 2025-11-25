@@ -40,7 +40,7 @@ class UserController extends Controller
 
         $user = UserModel::create([
             'firstname' => $validated['firstname'],
-            'lastname'  => $validated['lastname'],s
+            'lastname'  => $validated['lastname'],
             'email'     => $validated['email'],
             'password'  => Hash::make($validated['password']),
             'role'      => $validated['role'],
