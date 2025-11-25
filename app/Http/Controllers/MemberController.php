@@ -15,7 +15,7 @@ class MemberController extends Controller
     public function index()
     {
         $members = Member::all();
-        return view('member.dashboard', compact('members'));
+        return view('admin.dashboard', compact('members'));
         // return $members;
     }
 
