@@ -25,7 +25,7 @@ Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
 
 Route::middleware('auth')->group(function () {
 
-    Route::prefix('admin')->middleware('user_Role:staff,admin')->group(function () {
+    Route::prefix('admin')->middleware('user_role:staff,admin')->group(function () {
         Route::get('/dashboard', [RouteController::class, 'admin'])->name('admin.dashboard');
 
         Route::get('/users', [User::class, 'index'])->name('admin.users');
@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-    Route::prefix('member')->middleware('user_Role:member')->group(function () {
+    Route::prefix('member')->middleware('user_role:member')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
         Route::get('/reservation', [MemberController::class, 'reservation'])->name('member.reservation');
         Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('member.makeReservation');
