@@ -1,17 +1,21 @@
 <?php
-
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Member;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class MembersSeeder extends Seeder
 {
     public function run(): void
     {
-        // Attach to the created member user
-        $memberUser = User::where('email', 'john@nmsc.com')->first();
+        $memberUser = User::firstOrCreate(
+            ['email' => 'john@example.com'],
+            [
+                'name'     => 'John Doe',
+                'password' => bcrypt('password'),
+            ]
+        );
 
         Member::create([
             'user_id'        => $memberUser->id,
@@ -21,5 +25,6 @@ class MembersSeeder extends Seeder
             'address'        => '123 Main St',
             'contact_number' => '09123456789',
         ]);
+
     }
 }
