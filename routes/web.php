@@ -1,12 +1,13 @@
 <?php
 use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\RouteController;
-use App\Http\Controllers\User;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [AuthUserController::class, 'index'])->name('welcome');
 Route::get('/events/data', [EventController::class, 'fetchEvents'])->name('events.welcome');
@@ -19,7 +20,7 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
-Route::post('/register', [User::class, 'store'])->name('user.store');
+Route::post('/register', [UserController::class, 'store'])->name('user.store');
 Route::post('/login', [AuthUserController::class, 'auth'])->name('user.login');
 Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
 
@@ -28,10 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->middleware('user_role:staff,admin')->group(function () {
         Route::get('/dashboard', [RouteController::class, 'admin'])->name('admin.dashboard');
 
-        Route::get('/users', [User::class, 'index'])->name('admin.users');
-        Route::get('/users/{id}/edit', [User::class, 'edit'])->name('users.edit');
-        Route::put('/users/{id}', [User::class, 'update'])->name('users.update');
-        Route::delete('/users/{id}', [User::class, 'destroy'])->name('users.destroy');
+        Route::get('/users', [UserController::class, 'index'])->name('admin.users');
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('/reservations', [ReservationController::class, 'index'])->name('admin.reservations');
         Route::post('/reservations/{id}/approve', [ReservationController::class, 'approve'])->name('reservations.approve');

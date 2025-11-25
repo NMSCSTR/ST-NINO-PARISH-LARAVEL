@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
-class User extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.

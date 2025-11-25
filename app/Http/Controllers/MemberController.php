@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Models\Event;
-use App\Models\User;
+use App\Models\UserController;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
