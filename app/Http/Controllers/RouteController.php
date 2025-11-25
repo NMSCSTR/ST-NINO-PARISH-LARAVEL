@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\UserController;
+use App\Models\User;
 use App\Models\Event;
 use App\Models\Member;
 use App\Models\Payment;
@@ -18,7 +18,7 @@ class RouteController extends Controller
      */
     public function admin()
     {
-        $users = UserController::all();
+        $users = User::all();
         $events = Event::all();
         $reservations = Reservation::all();
         return view('admin.dashboard', compact('users','events','reservations'));
@@ -32,7 +32,7 @@ class RouteController extends Controller
 
     public function users()
     {
-        $users = UserController::all();
+        $users = User::all();
         return view('admin.users', compact('users'));
     }
 
