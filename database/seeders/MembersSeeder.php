@@ -11,7 +11,7 @@ class MembersSeeder extends Seeder
     public function run(): void
     {
         // Attach to the created member user
-        $memberUser = User::where('email', 'john@example.com')->first();
+        $memberUser = User::where('email', 'john@nmsc.com')->first();
 
         Member::create([
             'user_id'        => $memberUser->id,
