@@ -18,7 +18,7 @@
             </div>
 
             {{-- Main Content --}}
-            <div class="lg:w-10/12 w-full">e
+            <div class="lg:w-10/12 w-full">
                 <div class="flex flex-col lg:flex-row gap-6 mb-6" data-aos="zoom-in">
                     {{-- Welcome Card --}}
                     <div
@@ -67,7 +67,7 @@
                     <div class="bg-white rounded-xl shadow-lg px-6 py-6 flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Total Members</p>
-                            <h3 class="text-3xl font-semibold text-indigo-900">{{ $users->where('role', '!=', 'admin')->count() }}</h3>
+                            {{-- <h3 class="text-3xl font-semibold text-indigo-900">{{ $users->where('role', '!=', 'admin')->count() }}</h3> --}}
                         </div>
                         <span class="material-icons-outlined text-4xl text-blue-500">group</span>
                     </div>
