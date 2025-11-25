@@ -60,8 +60,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6" data-aos="fade-up">
                     <!-- Total Members -->
                     <div class="bg-white rounded-xl shadow-lg px-6 py-6 flex items-center justify-between">
@@ -95,6 +93,4 @@
         </div>
     </div>
 </section>
-
-
 @endsection
