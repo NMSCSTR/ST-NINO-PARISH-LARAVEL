@@ -18,7 +18,7 @@ class RouteController extends Controller
      */
     public function admin()
     {
-        $users = User::all();
+        $users = UserController::all();
         $events = Event::all();
         $reservations = Reservation::all();
         return view('admin.dashboard', compact('users','events','reservations'));
@@ -32,7 +32,7 @@ class RouteController extends Controller
 
     public function users()
     {
-        $users = User::all();
+        $users = UserController::all();
         return view('admin.users', compact('users'));
     }
 
