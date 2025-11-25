@@ -28,5 +28,13 @@ class EventsSeeder extends Seeder
             'end_date'   => '2026-08-02 10:00:00',
             'type'       => 'mass',
         ]);
+        Event::create([
+            'user_id'    => $staff->id,
+            'title'      => 'KASALAN NG BAYAN',
+            'description'=> 'Monthly mass.',
+            'start_date' => '2026-07-02 08:00:00',
+            'end_date'   => '2026-08-02 10:00:00',
+            'type'       => 'WEDDING',
+        ]);
     }
 }
