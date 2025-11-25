@@ -24,7 +24,7 @@
             Reservations
             <span
                 class="inline-flex items-right justify-center w-4 h-4 ms-2 text-xs font-semibold text-gray-100 bg-red-800 rounded-full">
-                {{ $reservations->where('status', '=', 'pending')->count() }}
+                {{-- {{ $reservations->where('status', '=', 'pending')->count() }} --}}
             </span>
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
