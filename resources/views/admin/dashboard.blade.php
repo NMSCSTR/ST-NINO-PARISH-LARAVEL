@@ -76,7 +76,7 @@
                     <div class="bg-white rounded-xl shadow-lg px-6 py-6 flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Upcoming Events</p>
-                            <h3 class="text-3xl font-semibold text-indigo-900">{{ $events->count() }}</h3>
+                            {{-- <h3 class="text-3xl font-semibold text-indigo-900">{{ $events->count() }}</h3> --}}
                         </div>
                         <span class="material-icons-outlined text-4xl text-orange-500">event</span>
                     </div>
@@ -85,7 +85,7 @@
                     <div class="bg-white rounded-xl shadow-lg px-6 py-6 flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">New Reservations</p>
-                            <h3 class="text-3xl font-semibold text-indigo-900">{{ $reservations->count() }}</h3>
+                            {{-- <h3 class="text-3xl font-semibold text-indigo-900">{{ $reservations->count() }}</h3> --}}
                         </div>
                         <span class="material-icons-outlined text-4xl text-green-500">event_available</span>
                     </div>
