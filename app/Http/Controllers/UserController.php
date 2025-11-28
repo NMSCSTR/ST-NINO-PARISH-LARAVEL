@@ -51,6 +51,28 @@ class UserController extends Controller
         ->with('success', 'User added successfully!');
     }
 
+    public function stores(Request $request)
+    {
+        $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname'  => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|min:6|confirmed',
+            'role'      => 'required|in:admin,staff,member',
+        ]);
+
+        User::create([
+            'firstname' => $request->firstname,
+            'lastname'  => $request->lastname,
+            'email'     => $request->email,
+            'password'  => bcrypt($request->password),
+            'role'      => $request->role,
+        ]);
+
+        return redirect()->route('admin.users')->with('success', 'User added successfully!');
+    }
+
+
     /**
      * Display the specified resource.
      */
