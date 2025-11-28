@@ -226,7 +226,7 @@
                 </div>
 
                 <!-- Modal Form -->
-                <form action="{{ route('users.store') }}" method="POST" class="space-y-4">
+                <form action="{{ route('users.stores') }}" method="POST" class="space-y-4">
                     @csrf
 
                     <div>
