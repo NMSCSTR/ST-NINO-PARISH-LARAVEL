@@ -63,6 +63,23 @@
                             </ol>
                         </nav>
 
+                        <div class="flex justify-end py-2">
+                            <button id="defaultModalButton" data-modal-target="defaultModal"
+                                data-modal-toggle="defaultModal" class="flex items-center gap-2 text-white bg-blue-600 hover:bg-blue-700
+                                    focus:ring-4 focus:outline-none focus:ring-blue-300
+                                    font-medium rounded-lg text-sm px-5 py-2.5 shadow-md hover:shadow-lg transition">
+
+                                <!-- Plus Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+
+                                Add User
+                            </button>
+                        </div>
+
+
                     </div>
 
                     <div class="relative overflow-x-auto sm:rounded-lg  px-6 py-6">
