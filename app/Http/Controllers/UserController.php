@@ -61,7 +61,7 @@ class UserController extends Controller
             'role'      => 'required|in:admin,staff,member',
         ]);
 
-        User::create([
+        UserModel::create([
             'firstname' => $request->firstname,
             'lastname'  => $request->lastname,
             'email'     => $request->email,
