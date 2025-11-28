@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [RouteController::class, 'admin'])->name('admin.dashboard');
 
         Route::get('/users', [UserController::class, 'index'])->name('admin.users');
-        Route::post('/users', [UserController::class, 'store'])->name('users.stores');
+        Route::post('/users', [UserController::class, 'addUser'])->name('users.stores');
         Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');

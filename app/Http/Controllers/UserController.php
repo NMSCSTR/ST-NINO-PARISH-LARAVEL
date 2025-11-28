@@ -51,7 +51,7 @@ class UserController extends Controller
         ->with('success', 'User added successfully!');
     }
 
-    public function stores(Request $request)
+    public function addUser(Request $request)
     {
         $request->validate([
             'firstname' => 'required|string|max:255',
