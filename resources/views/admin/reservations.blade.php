@@ -64,175 +64,108 @@
                         </nav>
                     </div>
 
-                    <div class="relative overflow-x-auto sm:rounded-lg  px-6 py-6">
-                        <table id="datatable"
-                            class="w-full text-sm text-left rtl:text-right text-gray-200 dark:text-gray-200">
-                            <thead
-                                class="text-xs text-gray-200 uppercase bg-gray-50 dark:bg-gray-200 dark:text-gray-200">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                            Member Id
-                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                                                </svg></a>
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                            Event Id
-                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                                                </svg></a>
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                            Status
-                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                                                </svg></a>
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                            Reservation Date
-                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                                                </svg></a>
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                            Remarks
-                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                                                </svg></a>
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                            Approved By
-                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                                                </svg></a>
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                            Actions
-                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
-                                                </svg></a>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($reservations as $reservation)
-                                <tr
-                                    class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ $reservation->member->user->firstname }} {{
-                                        $reservation->member->user->lastname }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $reservation->type }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                         @if ($reservation->status === 'approved')
-                                            <span class="text-green-600 font-semibold">Approved</span>
-                                        @elseif ($reservation->status === 'pending')
-                                            <span class="text-yellow-600 font-semibold">Pending</span>
-                                        @elseif ($reservation->status === 'cancel')
-                                            <span class="text-red-600 font-semibold">Cancelled</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $reservation->reservation_date->format('F j, Y \a\t g:i A') }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $reservation->remarks ?? 'No remarks yet' }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $reservation->approvedBy?->firstname . ' ' . $reservation->approvedBy?->lastname ?? 'Not yet approved' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <a href="#" data-id="{{ $reservation->id }}"
-                                            class="delete-reservation-btn inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                            <svg class="w-4 h-4 text-white me-2" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                                                aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19 7L5 7M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M10 11v6M14 11v6M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
-                                            </svg>
-                                            Delete
-                                        </a>
-                                        @if ($reservation->status !== 'cancel')
-                                        <a href="{{ route('reservations.edit', ['id' => $reservation->id]) }}"
-                                            class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                            <svg class="w-4 h-4 text-white me-2" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                                                aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M16 7l-8 8H4v-4l8-8 4 4z" />
-                                            </svg>
-                                            Edit
-                                        </a>
-                                        @endif
+                    <div class="relative overflow-x-auto sm:rounded-xl bg-white dark:bg-gray-900 shadow-xl px-6 py-6">
 
-                                        @if (!$reservation->approved_by)
-                                        <form action="{{ route('reservations.approve', $reservation->id) }}"
-                                            method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit"
-                                                class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-900">
-                                                <svg class="w-4 h-4 text-white me-2" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                    stroke-width="2" aria-hidden="true">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                Approve
-                                            </button>
-                                        </form>
-                                        @endif
+    <table id="datatable" class="w-full text-sm text-left text-gray-700 dark:text-gray-200">
 
+        <!-- TABLE HEADER -->
+        <thead class="text-xs uppercase bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+            <tr class="[&>th]:px-6 [&>th]:py-4 [&>th]:font-semibold border-b dark:border-gray-700">
 
-                                        <form id="delete-reservation-form" method="POST" style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
+                <th class="tracking-wide">Member Name</th>
+                <th class="tracking-wide">Event Id</th>
+                <th class="tracking-wide">Status</th>
+                <th class="tracking-wide">Reservation Date</th>
+                <th class="tracking-wide">Remarks</th>
+                <th class="tracking-wide">Approved By</th>
+                <th class="tracking-wide text-right">Actions</th>
+            </tr>
+        </thead>
 
+        <!-- TABLE BODY -->
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
 
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+            @foreach ($reservations as $reservation)
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+
+                <!-- Member Name -->
+                <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                    {{ $reservation->member->user->firstname }} {{ $reservation->member->user->lastname }}
+                </td>
+
+                <!-- Event -->
+                <td class="px-6 py-4">
+                    <span class="text-gray-700 dark:text-gray-300">{{ $reservation->type }}</span>
+                </td>
+
+                <!-- Status with clean pill badges -->
+                <td class="px-6 py-4">
+                    @if ($reservation->status === 'approved')
+                        <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 dark:bg-green-700 dark:text-white">
+                            Approved
+                        </span>
+                    @elseif ($reservation->status === 'pending')
+                        <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-600 dark:text-white">
+                            Pending
+                        </span>
+                    @elseif ($reservation->status === 'cancel')
+                        <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700 dark:bg-red-700 dark:text-white">
+                            Cancelled
+                        </span>
+                    @endif
+                </td>
+
+                <!-- Date -->
+                <td class="px-6 py-4">
+                    {{ $reservation->reservation_date->format('F j, Y \a\t g:i A') }}
+                </td>
+
+                <!-- Remarks -->
+                <td class="px-6 py-4 text-gray-600 dark:text-gray-300">
+                    {{ $reservation->remarks ?? '—' }}
+                </td>
+
+                <!-- Approved By -->
+                <td class="px-6 py-4 text-gray-700 dark:text-gray-300">
+                    {{ $reservation->approvedBy?->firstname . ' ' . $reservation->approvedBy?->lastname ?? 'Not yet approved' }}
+                </td>
+
+                <!-- Actions -->
+                <td class="px-6 py-4 text-right space-x-2">
+
+                    <!-- Delete -->
+                    <a href="#" data-id="{{ $reservation->id }}"
+                        class="delete-reservation-btn inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition">
+                        Delete
+                    </a>
+
+                    @if ($reservation->status !== 'cancel')
+                    <!-- Edit -->
+                    <a href="{{ route('reservations.edit', ['id' => $reservation->id]) }}"
+                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
+                        Edit
+                    </a>
+                    @endif
+
+                    @if (!$reservation->approved_by)
+                    <!-- Approve -->
+                    <form action="{{ route('reservations.approve', $reservation->id) }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition">
+                            Approve
+                        </button>
+                    </form>
+                    @endif
+
+                </td>
+            </tr>
+            @endforeach
+
+        </tbody>
+    </table>
+</div>
+
                 </div>
             </div>
         </div>
