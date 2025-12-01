@@ -68,7 +68,7 @@
                         <table id="datatable"
                             class="w-full text-sm text-left rtl:text-right text-gray-200 dark:text-gray-200">
                             <thead
-                                class="text-xs text-gray-200 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                class="text-xs text-gray-200 uppercase bg-gray-50 dark:bg-gray-200 dark:text-gray-200">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         <div class="flex items-center">
