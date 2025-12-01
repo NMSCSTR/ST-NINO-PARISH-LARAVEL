@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -10,7 +9,7 @@ class UsersSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin User
+        // 1 Admin
         User::create([
             'firstname' => 'Admin',
             'lastname'  => 'User',
@@ -19,22 +18,26 @@ class UsersSeeder extends Seeder
             'role'      => 'admin',
         ]);
 
-        // Staff User
-        User::create([
-            'firstname' => 'Staff',
-            'lastname'  => 'Member',
-            'email'     => 'staff@nmsc.com',
-            'password'  => Hash::make('password'),
-            'role'      => 'staff',
-        ]);
+        // 2 Staff
+        for ($i = 1; $i <= 2; $i++) {
+            User::create([
+                'firstname' => "Staff{$i}",
+                'lastname'  => 'Member',
+                'email'     => "staff{$i}@nmsc.com",
+                'password'  => Hash::make('password'),
+                'role'      => 'staff',
+            ]);
+        }
 
-        // Member User
-        User::create([
-            'firstname' => 'John',
-            'lastname'  => 'Doe',
-            'email'     => 'john@enmsc.com',
-            'password'  => Hash::make('password'),
-            'role'      => 'member',
-        ]);
+        // 2 Members
+        for ($i = 1; $i <= 2; $i++) {
+            User::create([
+                'firstname' => "Member{$i}",
+                'lastname'  => 'User',
+                'email'     => "member{$i}@nmsc.com",
+                'password'  => Hash::make('password'),
+                'role'      => 'member',
+            ]);
+        }
     }
 }

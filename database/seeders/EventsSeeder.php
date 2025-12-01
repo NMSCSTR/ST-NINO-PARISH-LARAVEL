@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -10,31 +9,17 @@ class EventsSeeder extends Seeder
 {
     public function run(): void
     {
-        $staff = User::where('role', 'staff')->first();
+        $staffUsers = User::where('role', 'staff')->get();
 
-        Event::create([
-            'user_id'    => $staff->id,
-            'title'      => 'Sunday Mass',
-            'description'=> 'Regular Sunday mass.',
-            'start_date' => '2026-06-02 08:00:00',
-            'end_date'   => '2026-06-02 10:00:00',
-            'type'       => 'mass',
-        ]);
-        Event::create([
-            'user_id'    => $staff->id,
-            'title'      => 'Monthly Mass & Wedding Orientations',
-            'description'=> 'Monthly mass.',
-            'start_date' => '2026-07-02 08:00:00',
-            'end_date'   => '2026-08-02 10:00:00',
-            'type'       => 'mass',
-        ]);
-        Event::create([
-            'user_id'    => $staff->id,
-            'title'      => 'KASALAN NG BAYAN',
-            'description'=> 'Monthly mass.',
-            'start_date' => '2026-07-02 08:00:00',
-            'end_date'   => '2026-08-02 10:00:00',
-            'type'       => 'WEDDING',
-        ]);
+        for ($i = 1; $i <= 5; $i++) {
+            Event::create([
+                'user_id'    => $staffUsers->random()->id,
+                'title'      => "Event {$i}",
+                'description'=> "Description for Event {$i}",
+                'start_date' => now()->addDays($i),
+                'end_date'   => now()->addDays($i)->addHours(2),
+                'type'       => 'general',
+            ]);
+        }
     }
 }

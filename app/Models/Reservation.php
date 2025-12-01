@@ -29,6 +29,11 @@ class Reservation extends Model
         return $this->belongsTo(Event::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');

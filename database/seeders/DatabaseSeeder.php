@@ -11,11 +11,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersSeeder::class,
             MembersSeeder::class,
-            BaptismsSeeder::class,
-            WeddingsSeeder::class,
             EventsSeeder::class,
             ReservationsSeeder::class,
             PaymentsSeeder::class,
+            BaptismsSeeder::class,
+            WeddingsSeeder::class,
         ]);
     }
 }
