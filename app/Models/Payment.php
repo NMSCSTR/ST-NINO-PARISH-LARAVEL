@@ -17,7 +17,7 @@ class Payment extends Model
         'receipt_path',
     ];
 
-    public function reservations() {
+    public function reservation() {
         return $this->belongsTo(Reservation::class);
     }
     public function member() {

@@ -24,8 +24,13 @@ class Reservation extends Model
         return $this->belongsTo(Member::class);
     }
 
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
 
-    public function approvedBy() {
+    public function approvedBy()
+    {
         return $this->belongsTo(User::class, 'approved_by');
     }
 }
