@@ -143,13 +143,14 @@
 
                                         @if ($reservation->status !== 'approved')
                                         <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
-                                            method="POST" class="inline">
+                                            method="POST" class="inline approve-form">
                                             @csrf
-                                            <button type="submit"
-                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium
-                                                    text-white bg-green-600 rounded-lg hover:bg-green-700 transition">
+                                            <button type="button"
+                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition approve-btn">
                                                 Approve
                                             </button>
+                                        </form>
+
                                         </form>
                                         @else
                                             <span class="inline-flex items-center px-3 py-1.5 text-xs font-medium
@@ -198,4 +199,27 @@
         });
     });
 </script>
+<script>
+    document.querySelectorAll('.approve-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            let form = this.closest('form'); // get the parent form
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to approve this reservation.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // submit the form if confirmed
+                }
+            });
+        });
+    });
+</script>
+
 @endpush
