@@ -1,10 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Reservation;
 use App\Models\Member;
-use App\Models\Event;
-use App\Models\Sacrament;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,28 +28,27 @@ class ReservationController extends Controller
     public function makeReservation(Request $request)
     {
 
-        $userId = Auth::user()->id ?? null;
+        $userId   = Auth::user()->id ?? null;
         $memberId = Member::where('user_id', $userId)->value('id');
 
-
-        if (!$memberId) {
+        if (! $memberId) {
             return redirect()->back()->withErrors(['member_id' => 'You do not have a valid member account.']);
         }
 
         $validated = $request->validate([
-            'type' => 'required',
+            'type'             => 'required',
             'reservation_date' => 'nullable|date',
-            'remarks' => 'nullable|string|max:1000',
+            'remarks'          => 'nullable|string|max:1000',
 
         ]);
 
         Reservation::create([
-            'member_id' => $memberId,
-            'type' => $validated['type'],
-            'status' => 'pending',
+            'member_id'        => $memberId,
+            'type'             => $validated['type'],
+            'status'           => 'pending',
             'reservation_date' => $validated['reservation_date'] ?? now(),
-            'remarks' => $validated['remarks'] ?? null,
-            'approved_by' => null,
+            'remarks'          => $validated['remarks'] ?? null,
+            'approved_by'      => null,
         ]);
 
         return redirect()->back()->with('success', 'Reservation submitted successfully!');
@@ -61,12 +58,9 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::findOrFail($id);
 
-        if (! $reservation->approved_by) {
-            $reservation->approved_by = Auth::id();
-            $reservation->status      = 'approved';
-            $reservation->remarks     = 'approved';
-            $reservation->save();
-        }
+        $reservation->status      = 'approved';
+        $reservation->approved_by = auth()->user()->id;
+        $reservation->save();
 
         return redirect()->back()->with('success', 'Reservation approved successfully.');
     }
@@ -108,7 +102,6 @@ class ReservationController extends Controller
             'reservation_date' => 'date',
             'remarks'          => 'nullable|string',
         ]);
-
 
         $reservation->status           = $request->status;
         $reservation->reservation_date = $request->reservation_date;

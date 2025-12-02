@@ -121,9 +121,13 @@
                                     </td>
 
                                     <td class="px-6 py-4">
-                                        {{ $reservation->approvedBy?->firstname . ' ' .
-                                        $reservation->approvedBy?->lastname ?? 'Not yet approved' }}
+                                        @if ($reservation->approvedBy)
+                                            {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}
+                                        @else
+                                            <span class="text-gray-400">Not yet approved</span>
+                                        @endif
                                     </td>
+
 
                                     <td class="px-6 py-4 text-right space-x-2">
 
@@ -202,7 +206,7 @@
 <script>
     document.querySelectorAll('.approve-btn').forEach(button => {
         button.addEventListener('click', function() {
-            let form = this.closest('form'); // get the parent form
+            let form = this.closest('form');
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -215,7 +219,7 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    form.submit(); // submit the form if confirmed
+                    form.submit();
                 }
             });
         });
