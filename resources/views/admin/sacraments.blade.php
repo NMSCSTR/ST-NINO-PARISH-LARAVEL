@@ -82,13 +82,17 @@
                                         <button
                                             onclick="openEditModal({{ $sacrament->id }}, '{{ $sacrament->sacrament_type }}', '{{ $sacrament->fee }}')"
                                             class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
-                                        <form action="{{ route('admin.sacraments.destroy', $sacrament->id) }}"
-                                            method="POST" onsubmit="return confirm('Are you sure?');">
+                                        {{-- Delete Button --}}
+                                        <button data-id="{{ $sacrament->id }}" class="delete-sacrament-btn bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                                            Delete
+                                        </button>
+
+                                        {{-- Hidden Form --}}
+                                        <form id="delete-sacrament-form" method="POST" style="display:none;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
-                                                class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
                                         </form>
+
                                     </td>
                                 </tr>
                                 @endforeach
@@ -163,4 +167,32 @@ function closeModal(){
 
 document.getElementById('openSacramentModal').addEventListener('click', openAddModal);
 </script>
+@push('scripts')
+@include('components.alerts')
+<script>
+    document.querySelectorAll('.delete-sacrament-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            const sacramentId = this.getAttribute('data-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This sacrament will be deleted permanently!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('delete-sacrament-form');
+                    form.setAttribute('action', `/admin/sacraments/${sacramentId}`);
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
+
 @endsection
