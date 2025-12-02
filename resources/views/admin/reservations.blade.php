@@ -74,7 +74,8 @@
                             <thead class="text-xs uppercase bg-white border-b border-gray-200 text-gray-600">
                                 <tr>
                                     <th class="px-6 py-3">Member</th>
-                                    <th class="px-6 py-3">Event</th>
+                                    <th class="px-6 py-3">Sacrament</th>
+                                    <th class="px-6 py-3">Fee</th>
                                     <th class="px-6 py-3">Status</th>
                                     <th class="px-6 py-3">Reservation Date</th>
                                     <th class="px-6 py-3">Remarks</th>
@@ -95,6 +96,10 @@
 
                                     <td class="px-6 py-4">
                                         {{ $reservation->type }}
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        {{ number_format($reservation->fee, 2) }}
                                     </td>
 
                                     <td class="px-6 py-4">
