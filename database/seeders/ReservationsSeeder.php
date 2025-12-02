@@ -1,12 +1,11 @@
 <?php
-
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Reservation;
 use App\Models\Member;
-use App\Models\User;
+use App\Models\Reservation;
 use App\Models\Sacrament;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class ReservationsSeeder extends Seeder
 {
@@ -26,14 +25,14 @@ class ReservationsSeeder extends Seeder
 
             Reservation::create([
                 'member_id'        => $members->random()->id,
-                'sacrament_id'     => $sacrament->id, // NEW
-                'type'             => $sacrament->sacrament_type,
+                'sacrament_id'     => $sacrament->id,
                 'fee'              => $sacrament->fee,
                 'status'           => 'approved',
                 'reservation_date' => now()->addDays($i),
                 'remarks'          => "Reservation {$i} approved",
-                'approved_by'      => $staff?->id,
+                'approved_by' => $staff?->id,
             ]);
+
         }
     }
 }

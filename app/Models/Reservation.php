@@ -9,7 +9,6 @@ class Reservation extends Model
     protected $fillable = [
         'member_id',
         'sacrament_id',
-        'type',
         'fee',
         'status',
         'reservation_date',
@@ -25,6 +24,7 @@ class Reservation extends Model
     {
         return $this->belongsTo(Member::class);
     }
+
 
     public function sacrament()
     {
