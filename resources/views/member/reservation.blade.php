@@ -84,10 +84,10 @@
                                                 Select Sacrament Type
                                             </label>
 
-                                            <select id="type" id="sacrament_id" name="sacrament_id" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-               focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
-               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-               dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            <select id="sacrament_id" name="sacrament_id" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+           focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
+           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+           dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
                                                 <option value="">-- Choose sacrament type --</option>
 
@@ -98,6 +98,7 @@
                                                 @endforeach
 
                                             </select>
+
                                         </div>
 
                                         <!-- Fee Display -->
@@ -175,22 +176,22 @@
 @include('components.alerts')
 
 <script>
-    // convert sacraments from PHP → JavaScript
     const sacraments = @json($sacraments);
 
-    document.getElementById('type').addEventListener('change', function () {
-        let selected = this.value;
+document.getElementById('sacrament_id').addEventListener('change', function () {
+    let selectedId = parseInt(this.value);
 
-        // Find matching sacrament
-        let found = sacraments.find(item => item.sacrament_type === selected);
+    // Find matching sacrament by id
+    let found = sacraments.find(item => item.id === selectedId);
 
-        // Update fee field
-        if (found) {
-            document.getElementById('fee').value = "₱ " + parseFloat(found.fee).toFixed(2);
-        } else {
-            document.getElementById('fee').value = "";
-        }
-    });
+    // Update fee field
+    if (found) {
+        document.getElementById('fee').value = "₱ " + parseFloat(found.fee).toFixed(2);
+    } else {
+        document.getElementById('fee').value = "";
+    }
+});
+
 </script>
 
 <script>
