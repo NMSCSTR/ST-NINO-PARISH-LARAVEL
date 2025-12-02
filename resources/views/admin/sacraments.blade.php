@@ -52,15 +52,6 @@
                         </nav>
                     </div>
 
-                    {{-- Success Message --}}
-                    @if(session('success'))
-                    <div class="px-6 py-2">
-                        <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
-                            {{ session('success') }}
-                        </div>
-                    </div>
-                    @endif
-
                     {{-- Sacraments Table --}}
                     <div class="relative overflow-x-auto sm:rounded-lg px-6 py-6">
                         <table class="w-full text-sm text-left text-gray-700">
