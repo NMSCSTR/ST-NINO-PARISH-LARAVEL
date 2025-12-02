@@ -106,7 +106,7 @@
 function openUploadModal(paymentId) {
     const modal = document.getElementById('uploadModal');
     const form = document.getElementById('uploadForm');
-    form.action = `/payments/${paymentId}/pay-now`; // Set the form action dynamically
+    form.action = `/member/payments/${paymentId}/pay-now`;
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 }
