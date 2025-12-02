@@ -48,22 +48,14 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    @php
-        $user = auth()->user();
-    @endphp
-
-    @if($user && in_array($user->role, ['staff','admin']))
-        <a href="{{ route('admin.sacraments.index') }}"
+    <a href="{{ route('admin.sacraments.index') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.sacraments.*') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
-            <span class="flex items-center">
-                <span class="material-icons-outlined pr-2">auto_stories</span>
-                Sacraments
-            </span>
-            <span class="material-icons-outlined">keyboard_arrow_right</span>
-        </a>
-    @endif
-
-
+        <span class="flex items-center">
+            <span class="material-icons-outlined pr-2">auto_stories</span>
+            Sacraments
+        </span>
+        <span class="material-icons-outlined">keyboard_arrow_right</span>
+    </a>
 
 
     <a href="{{ route('admin.payments') }}"

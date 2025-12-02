@@ -62,16 +62,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/events', [EventController::class, 'index'])->name('events');
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
-        
-        Route::prefix('sacraments')->name('sacraments.')->group(function () {
-            Route::get('/', [SacramentController::class, 'index'])->name('index');
-            Route::get('/create', [SacramentController::class, 'create'])->name('create');
-            Route::post('/', [SacramentController::class, 'store'])->name('store');
-            Route::get('/{sacrament}', [SacramentController::class, 'show'])->name('show');
-            Route::get('/{sacrament}/edit', [SacramentController::class, 'edit'])->name('edit');
-            Route::put('/{sacrament}', [SacramentController::class, 'update'])->name('update');
-            Route::delete('/{sacrament}', [SacramentController::class, 'destroy'])->name('destroy');
-        });
+
+        Route::resource('sacraments', SacramentController::class)->names('admin.sacraments');
+
+
 
     });
 
