@@ -1,13 +1,14 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    //
     protected $fillable = [
         'member_id',
+        'sacrament_id',
         'type',
         'fee',
         'status',
@@ -25,9 +26,9 @@ class Reservation extends Model
         return $this->belongsTo(Member::class);
     }
 
-    public function event()
+    public function sacrament()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Sacrament::class);
     }
 
     public function payments()

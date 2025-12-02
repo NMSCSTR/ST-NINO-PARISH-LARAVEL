@@ -12,7 +12,7 @@ class SacramentSeeder extends Seeder
         $data = [
             ['sacrament_type' => 'wedding', 'fee' => 1000.00],
             ['sacrament_type' => 'baptism', 'fee' => 500.00],
-            ['sacrament_type' => 'pamesa sa patay', 'fee' => 200.00],
+            ['sacrament_type' => 'Burial Mass', 'fee' => 200.00],
         ];
 
         foreach ($data as $item) {
