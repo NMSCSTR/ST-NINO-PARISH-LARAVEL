@@ -122,9 +122,10 @@
 
                                     <td class="px-6 py-4">
                                         @if ($reservation->approvedBy)
-                                            {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}
+                                        {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname
+                                        }}
                                         @else
-                                            <span class="text-gray-400">Not yet approved</span>
+                                        <span class="text-gray-400">Not yet approved</span>
                                         @endif
                                     </td>
 
@@ -163,10 +164,11 @@
 
                                         </form>
                                         @else
-                                            <span class="inline-flex items-center px-3 py-1.5 text-xs font-medium
+                                        <span
+                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium
                                                         text-green-700 bg-green-100 border border-green-200 rounded-lg">
-                                                Approved
-                                            </span>
+                                            Approved
+                                        </span>
                                         @endif
                                     </td>
 
@@ -187,27 +189,28 @@
 @include('components.alerts')
 <script>
     document.querySelectorAll('.delete-reservation-btn').forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-            const reservationId = this.getAttribute('data-id');
+    button.addEventListener('click', function (e) {
+        e.preventDefault();
+        const reservationId = this.getAttribute('data-id');
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "This reservation will be deleted permanently!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = document.getElementById('delete-reservation-form');
-                    form.setAttribute('action', "{{ route('admin.reservations.destroy', ['reservation' => '']) }}" + reservationId);
-                    form.submit();
-                }
-            });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This reservation will be deleted permanently!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('delete-reservation-form');
+                form.setAttribute('action', `/admin/reservations/${reservationId}`);
+                form.submit();
+            }
         });
     });
+});
+
 </script>
 <script>
     document.querySelectorAll('.approve-btn').forEach(button => {
