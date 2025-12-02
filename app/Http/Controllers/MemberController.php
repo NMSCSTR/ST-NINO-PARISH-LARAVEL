@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Member;
 use App\Models\Event;
-use App\Models\User;
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -15,8 +13,33 @@ class MemberController extends Controller
     public function index()
     {
         $members = Member::with('user')->get();
-        return view('member.dashboard', compact('members'));
-        // return $members;
+
+
+        $events = Event::where('start_date', '>=', now())
+            ->orderBy('start_date', 'asc')
+            ->take(5)
+            ->get();
+
+
+        $totalMembers = Member::count();
+
+
+        $eventCount = Event::count();
+
+
+        $reservationCount = auth()->user()
+            ->events()
+            ->withCount('reservations')
+            ->get()
+            ->sum('reservations_count');
+
+        return view('member.dashboard', compact(
+            'members',
+            'events',
+            'totalMembers',
+            'eventCount',
+            'reservationCount'
+        ));
     }
 
     public function reservation()
