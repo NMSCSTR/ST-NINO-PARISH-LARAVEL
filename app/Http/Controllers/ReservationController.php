@@ -39,7 +39,7 @@ class ReservationController extends Controller
             'member_id'        => auth()->user()->member->id,
             'event_id'         => $request->event_id,
             'type'             => $request->type,
-            'fee'              => $request->fee, // fetch fee from sacrament/event
+            'fee' => preg_replace('/[^\d.]/', '', $request->fee),
             'reservation_date' => $request->reservation_date,
             'remarks'          => $request->remarks,
             'status'           => 'pending',
