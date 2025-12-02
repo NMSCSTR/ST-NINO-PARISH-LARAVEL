@@ -26,7 +26,6 @@ Route::post('/register', [UserController::class, 'store'])->name('user.store');
 Route::post('/login', [AuthUserController::class, 'auth'])->name('user.login');
 Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
 
-
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes
@@ -63,9 +62,22 @@ Route::middleware('auth')->group(function () {
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
 
-        Route::resource('sacraments', SacramentController::class)->names('admin.sacraments');
+        Route::prefix('admin')->middleware('user_role:staff,admin')->name('admin.')->group(function () {
 
+            Route::get('/dashboard', [RouteController::class, 'admin'])->name('dashboard');
 
+            // Sacrament Routes
+            Route::prefix('sacraments')->name('sacraments.')->group(function () {
+                Route::get('/', [SacramentController::class, 'index'])->name('index');
+                Route::get('/create', [SacramentController::class, 'create'])->name('create');
+                Route::post('/', [SacramentController::class, 'store'])->name('store');
+                Route::get('/{sacrament}', [SacramentController::class, 'show'])->name('show');
+                Route::get('/{sacrament}/edit', [SacramentController::class, 'edit'])->name('edit');
+                Route::put('/{sacrament}', [SacramentController::class, 'update'])->name('update');
+                Route::delete('/{sacrament}', [SacramentController::class, 'destroy'])->name('destroy');
+            });
+
+        });
 
     });
 
