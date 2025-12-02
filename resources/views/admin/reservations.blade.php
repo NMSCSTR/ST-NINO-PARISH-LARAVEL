@@ -141,22 +141,23 @@
                                         </a>
                                         @endif
 
-                                        <!-- Approve -->
                                         @if ($reservation->status !== 'approved')
                                         <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
                                             method="POST" class="inline">
                                             @csrf
                                             <button type="submit"
-                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition">
+                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium
+                                                    text-white bg-green-600 rounded-lg hover:bg-green-700 transition">
                                                 Approve
                                             </button>
                                         </form>
                                         @else
-                                        <span class="inline-flex items-center px-3 py-1.5 text-xs font-medium
-                     text-green-700 bg-green-100 border border-green-200 rounded-lg">
-                                            Approved
-                                        </span>
+                                            <span class="inline-flex items-center px-3 py-1.5 text-xs font-medium
+                                                        text-green-700 bg-green-100 border border-green-200 rounded-lg">
+                                                Approved
+                                            </span>
                                         @endif
+
 
                                     </td>
 
