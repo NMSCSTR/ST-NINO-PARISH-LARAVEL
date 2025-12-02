@@ -59,6 +59,7 @@
 
 
 
+
     <a href="{{ route('admin.payments') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.payments') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
