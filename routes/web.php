@@ -53,9 +53,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations');
         Route::post('/reservations/{id}/approve', [ReservationController::class, 'approve'])->name('reservations.approve');
         Route::get('/reservations/{id}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
+        Route::delete('/admin/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
         Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');
-Route::delete('/admin/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
-
 
         // Members, Events, Payments, Documents
         Route::get('/members', [MemberController::class, 'index'])->name('members');
