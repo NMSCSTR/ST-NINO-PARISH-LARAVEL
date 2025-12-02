@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Sacrament;
 use App\Models\Member;
 use Illuminate\Http\Request;
 
@@ -80,8 +81,9 @@ class MemberController extends Controller
 
     public function reservation()
     {
+        $sacraments = Sacrament::all();
         $events = Event::with('user')->get();
-        return view('member.reservation', compact('events'));
+        return view('member.reservation', compact('events','sacraments'));
     }
 
     /**
