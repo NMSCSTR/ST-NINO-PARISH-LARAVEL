@@ -19,7 +19,7 @@ class MemberController extends Controller
             ->orderBy('start_date', 'asc')
             ->take(5)
             ->get();
-        
+
         $nextEvent = Event::where('start_date', '>=', now())
                    ->orderBy('start_date', 'asc')
                    ->first();
@@ -35,6 +35,40 @@ class MemberController extends Controller
             ->sum('reservations_count');
 
         return view('member.dashboard', compact(
+            'members',
+            'events',
+            'totalMembers',
+            'eventCount',
+            'reservationCount',
+            'nextEvent'
+        ));
+    }
+
+        public function adminMemberView()
+    {
+        $members = Member::with('user')->get();
+
+
+        $events = Event::where('start_date', '>=', now())
+            ->orderBy('start_date', 'asc')
+            ->take(5)
+            ->get();
+
+        $nextEvent = Event::where('start_date', '>=', now())
+                   ->orderBy('start_date', 'asc')
+                   ->first();
+
+        $totalMembers = Member::count();
+        $eventCount = Event::count();
+
+
+        $reservationCount = auth()->user()
+            ->events()
+            ->withCount('reservations')
+            ->get()
+            ->sum('reservations_count');
+
+        return view('admin.dashboard', compact(
             'members',
             'events',
             'totalMembers',
