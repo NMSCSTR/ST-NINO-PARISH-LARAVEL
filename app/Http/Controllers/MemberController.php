@@ -20,6 +20,11 @@ class MemberController extends Controller
             ->take(5)
             ->get();
 
+        $nextEvent = Event::where('start_date', '>=', now())
+                   ->orderBy('start_date', 'asc')
+                   ->first();
+
+
 
         $totalMembers = Member::count();
 
@@ -38,7 +43,8 @@ class MemberController extends Controller
             'events',
             'totalMembers',
             'eventCount',
-            'reservationCount'
+            'reservationCount',
+            'nextEvent'
         ));
     }
 

@@ -78,7 +78,11 @@
                             <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ $eventCount }}</h3>
                             <p class="text-xs text-blue-500 mt-2 flex items-center">
                                 <span class="material-icons-outlined text-sm mr-1">event_available</span>
-                                <span>Next: Sunday Mass</span>
+                                <span>
+                                    Next:
+                                    {{ $nextEvent ? $nextEvent->title : 'No upcoming events' }}
+                                </span>
+
                             </p>
                         </div>
                         <div class="w-14 h-14 rounded-full bg-orange-50 flex items-center justify-center">
@@ -89,7 +93,7 @@
                     <!-- New Reservations -->
                     <div class="bg-white rounded-xl px-6 py-6 flex items-center justify-between shadow-2xl">
                         <div>
-                            <p class="text-gray-600 text-sm">New Reservations</p>
+                            <p class="text-gray-600 text-sm">Your Total Reservations</p>
                             <h3 class="text-3xl font-semibold text-indigo-900">{{ $reservationCount }}</h3>
                         </div>
                         <span class="material-icons-outlined text-4xl text-green-500">event_available</span>
