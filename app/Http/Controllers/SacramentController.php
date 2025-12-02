@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Sacrament;
 use Illuminate\Http\Request;
 
 class SacramentController extends Controller
