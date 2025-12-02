@@ -12,20 +12,13 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('member_id')->constrained()->onDelete('cascade');
             $table->foreignId('sacrament_id')->constrained()->onDelete('cascade');
-            $table->string('type'); 
             $table->decimal('fee', 8, 2)->nullable();
-
             $table->string('status')->default('pending');
             $table->dateTime('reservation_date')->nullable();
             $table->text('remarks')->nullable();
-
-            $table->foreignId('approved_by')->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
-
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
 
