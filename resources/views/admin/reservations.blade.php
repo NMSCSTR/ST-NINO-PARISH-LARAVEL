@@ -137,6 +137,12 @@
                                             Delete
                                         </a>
 
+                                        <form id="delete-reservation-form" method="POST" style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+
+
                                         <!-- Edit -->
                                         @if ($reservation->status !== 'cancel')
                                         <a href="{{ route('admin.reservations.edit', ['id' => $reservation->id]) }}"
