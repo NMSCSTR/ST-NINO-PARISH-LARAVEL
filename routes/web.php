@@ -62,8 +62,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/events', [EventController::class, 'index'])->name('events');
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
-
-        // Sacraments
+        
         Route::prefix('sacraments')->name('sacraments.')->group(function () {
             Route::get('/', [SacramentController::class, 'index'])->name('index');
             Route::get('/create', [SacramentController::class, 'create'])->name('create');
@@ -73,6 +72,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/{sacrament}', [SacramentController::class, 'update'])->name('update');
             Route::delete('/{sacrament}', [SacramentController::class, 'destroy'])->name('destroy');
         });
+
     });
 
     /*

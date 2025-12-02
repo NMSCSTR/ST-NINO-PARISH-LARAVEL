@@ -115,16 +115,16 @@
     document.getElementById('formMethod').value = 'PUT';
 }
 
-function openAddModal(){
-    const modal = document.getElementById('sacramentModal');
-    modal.classList.remove('hidden');
-    document.getElementById('modalTitle').innerText = 'Add Sacrament';
-    document.getElementById('sacrament_type').value = '';
-    document.getElementById('fee').value = '';
-    const form = document.getElementById('sacramentForm');
-    form.action = "{{ route('sacraments.store') }}";
-    document.getElementById('formMethod').value = 'POST';
-}
+// function openAddModal(){
+//     const modal = document.getElementById('sacramentModal');
+//     modal.classList.remove('hidden');
+//     document.getElementById('modalTitle').innerText = 'Add Sacrament';
+//     document.getElementById('sacrament_type').value = '';
+//     document.getElementById('fee').value = '';
+//     const form = document.getElementById('sacramentForm');
+//     form.action = "{{ route('sacraments.store') }}";
+//     document.getElementById('formMethod').value = 'POST';
+// }
 
 function closeModal(){
     document.getElementById('sacramentModal').classList.add('hidden');
