@@ -90,5 +90,10 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/events', fn() => view('member.events'))->name('events.page');
         Route::get('/events/data', [EventController::class, 'fetchEventsData'])->name('events.data');
+
+        Route::post('/member/pay-now/{payment}', [PaymentController::class, 'payNow'])->name('member.pay_now');
+
+        Route::get('/payments', [PaymentController::class, 'index'])->name('member.payments');
+
     });
 });

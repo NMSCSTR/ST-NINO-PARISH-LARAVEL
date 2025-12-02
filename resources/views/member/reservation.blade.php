@@ -133,6 +133,27 @@
                                         </div>
                                     </div>
 
+                                    <div class="sm:col-span-2">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                            Payment Option
+                                        </label>
+
+                                        <select name="payment_option" id="payment_option" required
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5">
+                                            <option value="">-- Choose Payment Option --</option>
+                                            <option value="pay_now">Pay Now</option>
+                                            <option value="pay_later">Pay Later</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="sm:col-span-2" id="receipt_upload_div" style="display:none;">
+                                        <label for="receipt"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload
+                                            Payment Receipt</label>
+                                        <input type="file" name="receipt" id="receipt" accept="image/*"
+                                            class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5">
+                                    </div>
+
                                     <!-- Submit Button -->
                                     <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-gray-900 bg-dark-700
                      rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
@@ -168,6 +189,19 @@
             document.getElementById('fee').value = "₱ " + parseFloat(found.fee).toFixed(2);
         } else {
             document.getElementById('fee').value = "";
+        }
+    });
+</script>
+
+<script>
+    const paymentSelect = document.getElementById('payment_option');
+    const receiptDiv = document.getElementById('receipt_upload_div');
+
+    paymentSelect.addEventListener('change', () => {
+        if(paymentSelect.value === 'pay_now') {
+            receiptDiv.style.display = 'block';
+        } else {
+            receiptDiv.style.display = 'none';
         }
     });
 </script>

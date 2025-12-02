@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
@@ -22,6 +21,23 @@ class PaymentController extends Controller
     public function create()
     {
         //
+    }
+
+    public function payNow(Request $request, Payment $payment)
+    {
+        $request->validate([
+            'receipt' => 'required|image|max:2048',
+        ]);
+
+        $path = $request->file('receipt')->store('receipts', 'public');
+
+        $payment->update([
+            'receipt_path' => $path,
+            'method'       => 'GCash',
+            'status'       => 'pending',
+        ]);
+
+        return redirect()->route('member.member.payments')->with('success', 'Payment receipt uploaded successfully.');
     }
 
     /**

@@ -27,31 +27,51 @@ class ReservationController extends Controller
 
     public function makeReservation(Request $request)
     {
+        $request->validate([
+            'type'             => 'required|string',
+            'reservation_date' => 'nullable|date',
+            'remarks'          => 'nullable|string',
+            'payment_option'   => 'required|in:pay_now,pay_later',
+            'receipt'          => 'nullable|image|max:2048',
+        ]);
 
-        $userId   = Auth::user()->id ?? null;
-        $memberId = Member::where('user_id', $userId)->value('id');
+        $reservation = Reservation::create([
+            'member_id'        => auth()->user()->member->id,
+            'event_id'         => $request->event_id,
+            'type'             => $request->type,
+            'fee'              => $request->fee, // fetch fee from sacrament/event
+            'reservation_date' => $request->reservation_date,
+            'remarks'          => $request->remarks,
+            'status'           => 'pending',
+        ]);
 
-        if (! $memberId) {
-            return redirect()->back()->withErrors(['member_id' => 'You do not have a valid member account.']);
+        // Handle payment
+        if ($request->payment_option === 'pay_now' && $request->hasFile('receipt')) {
+            $path = $request->file('receipt')->store('receipts', 'public');
+
+            Payment::create([
+                'reservation_id' => $reservation->id,
+                'member_id'      => auth()->user()->member->id,
+                'amount'         => $reservation->fee,
+                'method'         => 'GCash',
+                'status'         => 'pending',
+                'receipt_path'   => $path,
+            ]);
         }
 
-        $validated = $request->validate([
-            'type'             => 'required',
-            'reservation_date' => 'nullable|date',
-            'remarks'          => 'nullable|string|max:1000',
+        // If pay_later, create a pending payment with null receipt
+        if ($request->payment_option === 'pay_later') {
+            Payment::create([
+                'reservation_id' => $reservation->id,
+                'member_id'      => auth()->user()->member->id,
+                'amount'         => $reservation->fee,
+                'method'         => null,
+                'status'         => 'pending',
+                'receipt_path'   => null,
+            ]);
+        }
 
-        ]);
-
-        Reservation::create([
-            'member_id'        => $memberId,
-            'type'             => $validated['type'],
-            'status'           => 'pending',
-            'reservation_date' => $validated['reservation_date'] ?? now(),
-            'remarks'          => $validated['remarks'] ?? null,
-            'approved_by'      => null,
-        ]);
-
-        return redirect()->back()->with('success', 'Reservation submitted successfully!');
+        return redirect()->route('member.reservation')->with('success', 'Reservation created successfully.');
     }
 
     public function approve($id)
