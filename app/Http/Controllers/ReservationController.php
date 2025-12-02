@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Models\Reservation;
+use App\Models\Sacrament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,6 +29,7 @@ class ReservationController extends Controller
     public function makeReservation(Request $request)
     {
         $request->validate([
+            'sacrament_id'     => 'required|exists:sacraments,id',
             'reservation_date' => 'nullable|date',
             'remarks'          => 'nullable|string',
             'payment_option'   => 'required|in:pay_now,pay_later',
@@ -36,7 +38,7 @@ class ReservationController extends Controller
 
         $reservation = Reservation::create([
             'member_id'        => auth()->user()->member->id,
-            'event_id'         => $request->event_id,
+            'sacrament_id'  => $request->sacrament_id,
             'fee' => preg_replace('/[^\d.]/', '', $request->fee),
             'reservation_date' => $request->reservation_date,
             'remarks'          => $request->remarks,
