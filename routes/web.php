@@ -6,8 +6,10 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SacramentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 
 Route::get('/', [AuthUserController::class, 'index'])->name('welcome');
 Route::get('/events/data', [EventController::class, 'fetchEvents'])->name('events.welcome');
@@ -45,8 +47,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/events', [EventController::class, 'index'])->name('admin.events');
         Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
+
+        Route::apiResource('sacraments', SacramentController::class);
     });
- 
+
 
     Route::prefix('member')->middleware('user_role:member')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
