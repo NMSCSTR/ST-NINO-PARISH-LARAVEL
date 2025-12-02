@@ -46,15 +46,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
 
-        Route::resource('sacraments', SacramentController::class)->names([
-            'index'   => 'sacraments.index',
-            'create'  => 'sacraments.create',
-            'store'   => 'sacraments.store',
-            'show'    => 'sacraments.show',
-            'edit'    => 'sacraments.edit',
-            'update'  => 'sacraments.update',
-            'destroy' => 'sacraments.destroy',
-        ]);
+
+        Route::get('/sacraments', [SacramentController::class, 'index'])->name('admin.sacraments.index');
+        Route::get('/sacraments/create', [SacramentController::class, 'create'])->name('admin.sacraments.create');
+        Route::post('/sacraments', [SacramentController::class, 'store'])->name('admin.sacraments.store');
+        Route::get('/sacraments/{sacrament}', [SacramentController::class, 'show'])->name('admin.sacraments.show');
+        Route::get('/sacraments/{sacrament}/edit', [SacramentController::class, 'edit'])->name('admin.sacraments.edit');
+        Route::put('/sacraments/{sacrament}', [SacramentController::class, 'update'])->name('admin.sacraments.update');
+        Route::delete('/sacraments/{sacrament}', [SacramentController::class, 'destroy'])->name('admin.sacraments.destroy');
+
 
     });
 
