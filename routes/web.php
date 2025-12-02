@@ -93,7 +93,9 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/member/pay-now/{payment}', [PaymentController::class, 'payNow'])->name('member.pay_now');
 
-        Route::get('/payments', [PaymentController::class, 'index'])->name('member.payments');
+        Route::get('/payments', [PaymentController::class, 'showPaymentMember'])->name('member.payments');
+        Route::post('/payments/{payment}/pay-now', [PaymentController::class, 'payNow'])->name('member.payNow');
+
 
     });
 });

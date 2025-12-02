@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
-use Illuminate\Http\Auth;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -18,7 +18,13 @@ class PaymentController extends Controller
 
     public function showPaymentMember()
     {
+        $memberId = Auth::user()->member->id;
+        $payments = Payment::with('reservation.sacrament')
+            ->where('member_id', $memberId)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
+        return view('member.payments', compact('payments'));
     }
 
     /**
