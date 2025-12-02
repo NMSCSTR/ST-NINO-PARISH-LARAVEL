@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
 
         Route::apiResource('sacraments', SacramentController::class);
+        Route::get('/sacraments', [SacramentController::class, 'index'])->name('sacraments.index');
     });
 
 
