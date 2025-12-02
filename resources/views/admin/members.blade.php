@@ -109,7 +109,7 @@
                                         </a>
 
                                         <!-- Edit -->
-                                        <a href="{{ route('users.edit', ['id' => $member->id]) }}"
+                                        <a href="{{ route('admin.users.edit', ['id' => $member->id]) }}"
                                             class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                                             Edit
                                         </a>

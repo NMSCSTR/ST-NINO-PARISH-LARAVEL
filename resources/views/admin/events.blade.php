@@ -124,7 +124,7 @@
                                             Delete
                                         </a>
 
-                                        <a href="{{ route('users.edit', ['id' => $event->id]) }}"
+                                        <a href="{{ route('admin.users.edit', ['id' => $event->id]) }}"
                                             class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800">
                                             <svg class="w-4 h-4 text-white me-2" xmlns="http://www.w3.org/2000/svg"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

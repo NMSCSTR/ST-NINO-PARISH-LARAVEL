@@ -130,7 +130,7 @@
 
                                         <!-- Edit -->
                                         @if ($reservation->status !== 'cancel')
-                                        <a href="{{ route('reservations.edit', ['id' => $reservation->id]) }}"
+                                        <a href="{{ route('admin.reservations.edit', ['id' => $reservation->id]) }}"
                                             class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                                             Edit
                                         </a>
@@ -138,7 +138,7 @@
 
                                         <!-- Approve -->
                                         @if (!$reservation->approved_by)
-                                        <form action="{{ route('reservations.approve', $reservation->id) }}"
+                                        <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
                                             method="POST" class="inline">
                                             @csrf
                                             <button type="submit"
