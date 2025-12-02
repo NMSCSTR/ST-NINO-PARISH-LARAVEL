@@ -122,7 +122,7 @@ function openAddModal(){
     document.getElementById('sacrament_type').value = '';
     document.getElementById('fee').value = '';
     const form = document.getElementById('sacramentForm');
-    form.action = "{{ route('sacraments.store') }}";
+    form.action = "{{ route('admin.admin.sacraments.store') }}";
     document.getElementById('formMethod').value = 'POST';
 }
 
