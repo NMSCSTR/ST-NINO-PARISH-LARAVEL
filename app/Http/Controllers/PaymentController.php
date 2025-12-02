@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Http\Auth;
 
 class PaymentController extends Controller
 {
@@ -13,6 +14,11 @@ class PaymentController extends Controller
     {
         $payments = Payment::all();
         return view('admin.payments', compact('payments'));
+    }
+
+    public function showPaymentMember()
+    {
+
     }
 
     /**

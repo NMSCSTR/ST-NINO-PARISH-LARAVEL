@@ -2,8 +2,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\Sacrament;
 use App\Models\Member;
+use App\Models\Sacrament;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -15,25 +15,22 @@ class MemberController extends Controller
     {
         $members = Member::with('user')->get();
 
-
         $events = Event::where('start_date', '>=', now())
             ->orderBy('start_date', 'asc')
             ->take(5)
             ->get();
 
         $nextEvent = Event::where('start_date', '>=', now())
-                   ->orderBy('start_date', 'asc')
-                   ->first();
+            ->orderBy('start_date', 'asc')
+            ->first();
 
         $totalMembers = Member::count();
-        $eventCount = Event::count();
+        $eventCount   = Event::count();
 
+        $reservationCount = auth()->user()->member
+            ? auth()->user()->member->reservations()->count()
+            : 0;
 
-        $reservationCount = auth()->user()
-            ->events()
-            ->withCount('reservations')
-            ->get()
-            ->sum('reservations_count');
 
         return view('member.dashboard', compact(
             'members',
@@ -45,10 +42,9 @@ class MemberController extends Controller
         ));
     }
 
-        public function adminMemberView()
+    public function adminMemberView()
     {
         $members = Member::with('user')->get();
-
 
         $events = Event::where('start_date', '>=', now())
             ->orderBy('start_date', 'asc')
@@ -56,12 +52,11 @@ class MemberController extends Controller
             ->get();
 
         $nextEvent = Event::where('start_date', '>=', now())
-                   ->orderBy('start_date', 'asc')
-                   ->first();
+            ->orderBy('start_date', 'asc')
+            ->first();
 
         $totalMembers = Member::count();
-        $eventCount = Event::count();
-
+        $eventCount   = Event::count();
 
         $reservationCount = auth()->user()
             ->events()
@@ -82,8 +77,8 @@ class MemberController extends Controller
     public function reservation()
     {
         $sacraments = Sacrament::all();
-        $events = Event::with('user')->get();
-        return view('member.reservation', compact('events','sacraments'));
+        $events     = Event::with('user')->get();
+        return view('member.reservation', compact('events', 'sacraments'));
     }
 
     /**
