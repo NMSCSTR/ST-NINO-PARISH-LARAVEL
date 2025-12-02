@@ -79,8 +79,8 @@
                             <p class="text-xs text-blue-500 mt-2 flex items-center">
                                 <span class="material-icons-outlined text-sm mr-1">event_available</span>
                                 <span>
-                                    Next:
-                                    {{ $nextEvent ? $nextEvent->title : 'No upcoming events' }}
+                                    Next: {{ $nextEvent ? $nextEvent->title . ' (' . $nextEvent->start_date->format('M
+                                    d, Y') . ')' : 'No upcoming events' }}
                                 </span>
 
                             </p>
@@ -150,11 +150,25 @@
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap">
+                                            @php
+                                            $today = now()->startOfDay();
+                                            $eventDate = $event->start_date->startOfDay();
+
+                                            if ($eventDate->equalTo($today)) {
+                                            $status = ['Today', 'bg-green-100 text-green-800'];
+                                            } elseif ($eventDate->greaterThan($today)) {
+                                            $status = ['Upcoming', 'bg-blue-100 text-blue-800'];
+                                            } else {
+                                            $status = ['Done', 'bg-gray-100 text-gray-800'];
+                                            }
+                                            @endphp
+
                                             <span
-                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                Upcoming
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $status[1] }}">
+                                                {{ $status[0] }}
                                             </span>
                                         </td>
+
                                     </tr>
                                     @empty
                                     <tr>
