@@ -22,7 +22,7 @@
                     <div class="px-6 py-6">
 
                         <div>
-                            <form action="{{ route('reservations.update', ['id' => $reservations->id]) }}"
+                            <form action="{{ route('admin.reservations.update', ['id' => $reservations->id]) }}"
                                 method="POST">
                                 @csrf
                                 @method('PUT')

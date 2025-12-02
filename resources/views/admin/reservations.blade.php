@@ -157,8 +157,6 @@
                                                 Approved
                                             </span>
                                         @endif
-
-
                                     </td>
 
                                 </tr>

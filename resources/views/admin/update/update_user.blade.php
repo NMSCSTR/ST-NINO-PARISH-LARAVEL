@@ -22,7 +22,7 @@
                     <div class="px-6 py-6">
 
                         <div>
-                            <form action="{{ route('users.update', ['id' => $user->id]) }}" method="POST">
+                            <form action="{{ route('admin.users.update', ['id' => $user->id]) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
