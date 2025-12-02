@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,15 +39,21 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password'          => 'hashed',
     ];
 
-    // Relationships
-    public function events() {
+    public function member()
+    {
+        return $this->hasOne(Member::class);
+    }
+
+    public function events()
+    {
         return $this->hasMany(Event::class);
     }
 
-    public function approvedReservations() {
+    public function approvedReservations()
+    {
         return $this->hasMany(Reservation::class, 'approved_by');
     }
 }
