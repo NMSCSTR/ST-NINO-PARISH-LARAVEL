@@ -66,7 +66,7 @@ class ReservationController extends Controller
                 'reservation_id' => $reservation->id,
                 'member_id'      => auth()->user()->member->id,
                 'amount'         => $reservation->fee,
-                'method'         => null,
+                'method'         => 'Pay-later',
                 'status'         => 'pending',
                 'receipt_path'   => null,
             ]);
