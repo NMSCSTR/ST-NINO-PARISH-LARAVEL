@@ -28,7 +28,6 @@ class ReservationController extends Controller
     public function makeReservation(Request $request)
     {
         $request->validate([
-            'type'             => 'required|string',
             'reservation_date' => 'nullable|date',
             'remarks'          => 'nullable|string',
             'payment_option'   => 'required|in:pay_now,pay_later',
@@ -38,7 +37,6 @@ class ReservationController extends Controller
         $reservation = Reservation::create([
             'member_id'        => auth()->user()->member->id,
             'event_id'         => $request->event_id,
-            'type'             => $request->type,
             'fee' => preg_replace('/[^\d.]/', '', $request->fee),
             'reservation_date' => $request->reservation_date,
             'remarks'          => $request->remarks,
