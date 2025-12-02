@@ -1,15 +1,13 @@
 <?php
 use App\Http\Controllers\AuthUserController;
-use App\Http\Controllers\RouteController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\MemberController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SacramentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-
 
 Route::get('/', [AuthUserController::class, 'index'])->name('welcome');
 Route::get('/events/data', [EventController::class, 'fetchEvents'])->name('events.welcome');
@@ -48,10 +46,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('admin.documents');
 
-        Route::apiResource('sacraments', SacramentController::class);
-        Route::get('/sacraments', [SacramentController::class, 'index'])->name('sacraments.index');
-    });
+        Route::resource('sacraments', SacramentController::class)->names([
+            'index'   => 'sacraments.index',
+            'create'  => 'sacraments.create',
+            'store'   => 'sacraments.store',
+            'show'    => 'sacraments.show',
+            'edit'    => 'sacraments.edit',
+            'update'  => 'sacraments.update',
+            'destroy' => 'sacraments.destroy',
+        ]);
 
+    });
 
     Route::prefix('member')->middleware('user_role:member')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
