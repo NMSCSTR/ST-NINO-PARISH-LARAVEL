@@ -202,7 +202,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     const form = document.getElementById('delete-reservation-form');
-                    form.setAttribute('action', `/reservations/${reservationId}`);
+                    form.setAttribute('action', `/admin/reservations/${reservationId}`);
                     form.submit();
                 }
             });
