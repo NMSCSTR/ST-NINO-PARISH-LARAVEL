@@ -50,7 +50,7 @@
                                         class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
 
                                     <!-- Delete Form -->
-                                    <form action="{{ route('admin.admin.sacraments.destroy', $sacrament->id) }}" method="POST"
+                                    <form action="{{ route('admin.sacraments.destroy', $sacrament->id) }}" method="POST"
                                         onsubmit="return confirm('Are you sure?');">
                                         @csrf
                                         @method('DELETE')
@@ -122,7 +122,7 @@ function openAddModal(){
     document.getElementById('sacrament_type').value = '';
     document.getElementById('fee').value = '';
     const form = document.getElementById('sacramentForm');
-    form.action = "{{ route('admin.admin.sacraments.store') }}";
+    form.action = "{{ route('admin.sacraments.store') }}";
     document.getElementById('formMethod').value = 'POST';
 }
 
