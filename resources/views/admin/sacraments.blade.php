@@ -5,70 +5,103 @@
 @section('content')
 <section>
     <div class="min-h-screen pt-24">
-        @include('components.member.topnav')
+        @include('components.admin.bg')
+        @include('components.admin.topnav')
 
         <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-4 gap-6">
+            {{-- Sidebar --}}
             <div class="lg:w-2/12 w-full">
-                @include('components.member.sidebar')
+                @include('components.admin.sidebar')
             </div>
 
+            {{-- Main Content --}}
             <div class="lg:w-10/12 w-full">
+                <div class="bg-white rounded-xl shadow-lg">
+                    <div class="px-6 py-6 flex justify-between items-center">
+                        <h1 class="text-2xl font-bold">Sacraments</h1>
+                        <button id="openSacramentModal"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            Add Sacrament
+                        </button>
+                    </div>
 
-                <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-2xl font-bold">Sacraments</h1>
-                    <button id="openSacramentModal"
-                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Sacrament</button>
-                </div>
+                    {{-- Breadcrumb --}}
+                    <div class="px-6 py-2">
+                        <nav class="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
+                            aria-label="Breadcrumb">
+                            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                                <li class="inline-flex items-center">
+                                    <a href="#"
+                                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+                                        Admin
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="flex items-center">
+                                        <svg class="rtl:rotate-180 w-3 h-3 mx-1 text-gray-400" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m1 9 4-4-4-4" />
+                                        </svg>
+                                        <span class="ms-1 text-sm font-medium text-gray-500">
+                                            Sacraments
+                                        </span>
+                                    </div>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
 
-                @if(session('success'))
-                <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
-                    {{ session('success') }}
-                </div>
-                @endif
+                    {{-- Success Message --}}
+                    @if(session('success'))
+                    <div class="px-6 py-2">
+                        <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
+                            {{ session('success') }}
+                        </div>
+                    </div>
+                    @endif
 
-                <!-- Sacraments Table -->
-                <div class="overflow-auto bg-white rounded shadow p-4">
-                    <table class="w-full table-auto border border-gray-200">
-                        <thead>
-                            <tr class="bg-gray-100 text-left">
-                                <th class="px-4 py-2 border">ID</th>
-                                <th class="px-4 py-2 border">Sacrament Type</th>
-                                <th class="px-4 py-2 border">Fee</th>
-                                <th class="px-4 py-2 border">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($sacraments as $sacrament)
-                            <tr class="border-t">
-                                <td class="px-4 py-2 border">{{ $sacrament->id }}</td>
-                                <td class="px-4 py-2 border">{{ $sacrament->sacrament_type }}</td>
-                                <td class="px-4 py-2 border">{{ number_format($sacrament->fee, 2) }}</td>
-                                <td class="px-4 py-2 border flex gap-2">
-                                    <!-- Edit Button triggers modal -->
-                                    <button
-                                        onclick="openEditModal({{ $sacrament->id }}, '{{ $sacrament->sacrament_type }}', '{{ $sacrament->fee }}')"
-                                        class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
-
-                                    <!-- Delete Form -->
-                                    <form action="{{ route('admin.sacraments.destroy', $sacrament->id) }}" method="POST"
-                                        onsubmit="return confirm('Are you sure?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    {{-- Sacraments Table --}}
+                    <div class="relative overflow-x-auto sm:rounded-lg px-6 py-6">
+                        <table class="w-full text-sm text-left text-gray-700">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-3">ID</th>
+                                    <th class="px-6 py-3">Sacrament Type</th>
+                                    <th class="px-6 py-3">Fee</th>
+                                    <th class="px-6 py-3 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($sacraments as $sacrament)
+                                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+                                    <td class="px-6 py-4">{{ $sacrament->id }}</td>
+                                    <td class="px-6 py-4">{{ $sacrament->sacrament_type }}</td>
+                                    <td class="px-6 py-4">{{ number_format($sacrament->fee, 2) }}</td>
+                                    <td class="px-6 py-4 text-center flex gap-2 justify-center">
+                                        <button
+                                            onclick="openEditModal({{ $sacrament->id }}, '{{ $sacrament->sacrament_type }}', '{{ $sacrament->fee }}')"
+                                            class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
+                                        <form action="{{ route('admin.sacraments.destroy', $sacrament->id) }}"
+                                            method="POST" onsubmit="return confirm('Are you sure?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!-- Add/Edit Sacrament Modal -->
+    {{-- Add/Edit Sacrament Modal --}}
     <div id="sacramentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg p-8 w-[500px] max-w-full max-h-[90vh] overflow-auto relative">
             <button onclick="closeModal()"
@@ -78,7 +111,6 @@
             <form id="sacramentForm" method="POST">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
-
                 <div class="mb-4">
                     <label class="block font-medium mb-1">Sacrament Type</label>
                     <input type="text" name="sacrament_type" id="sacrament_type" class="w-full border rounded px-3 py-2"
@@ -96,7 +128,6 @@
             </form>
         </div>
     </div>
-
 </section>
 @endsection
 
@@ -130,7 +161,6 @@ function closeModal(){
     document.getElementById('sacramentModal').classList.add('hidden');
 }
 
-// Open modal for Add button
 document.getElementById('openSacramentModal').addEventListener('click', openAddModal);
 </script>
 @endsection
