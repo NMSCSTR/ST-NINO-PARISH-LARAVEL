@@ -100,6 +100,16 @@
                                             </select>
                                         </div>
 
+                                        <!-- Fee Display -->
+                                        <div class="sm:col-span-2">
+                                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Fee
+                                            </label>
+                                            <input type="text" id="fee" name="fee" readonly class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5
+               dark:bg-gray-600 dark:border-gray-500 dark:text-white" placeholder="Select a sacrament first">
+                                        </div>
+
+
 
                                         <!-- Reservation Date -->
                                         <div class="sm:col-span-2">
@@ -142,5 +152,25 @@
 @endsection
 @push('scripts')
 @include('components.alerts')
+
+<script>
+    // convert sacraments from PHP → JavaScript
+    const sacraments = @json($sacraments);
+
+    document.getElementById('type').addEventListener('change', function () {
+        let selected = this.value;
+
+        // Find matching sacrament
+        let found = sacraments.find(item => item.sacrament_type === selected);
+
+        // Update fee field
+        if (found) {
+            document.getElementById('fee').value = "₱ " + parseFloat(found.fee).toFixed(2);
+        } else {
+            document.getElementById('fee').value = "";
+        }
+    });
+</script>
+
 
 @endpush
