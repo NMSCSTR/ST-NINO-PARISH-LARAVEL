@@ -19,16 +19,12 @@ class MemberController extends Controller
             ->orderBy('start_date', 'asc')
             ->take(5)
             ->get();
-
+        
         $nextEvent = Event::where('start_date', '>=', now())
                    ->orderBy('start_date', 'asc')
                    ->first();
 
-
-
         $totalMembers = Member::count();
-
-
         $eventCount = Event::count();
 
 
