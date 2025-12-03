@@ -91,6 +91,7 @@
                                     <th class="px-6 py-3">Lastname</th>
                                     <th class="px-6 py-3">Email</th>
                                     <th class="px-6 py-3">Role</th>
+                                    <th class="px-6 py-3">Contact Number</th>
                                     <th class="px-6 py-3 text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -114,6 +115,11 @@
                                     <td class="px-6 py-4">
                                         {{ ucfirst($user->role) }}
                                     </td>
+                                    
+                                    <td class="px-6 py-4">
+                                        {{ $user->phone_number ?? 'N/A' }}
+                                    </td>
+
 
                                     <td class="px-6 py-4 text-right flex gap-2">
 
@@ -212,6 +218,7 @@
                             <option value="admin">Admin</option>
                             <option value="staff">Staff</option>
                             <option value="member">Member</option>
+                            <option value="priest">Priest</option>
                         </select>
                     </div>
 

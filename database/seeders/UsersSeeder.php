@@ -55,3 +55,4 @@ class UsersSeeder extends Seeder
         ]);
     }
 }
+
