@@ -127,10 +127,12 @@
                                                 id="menu-button-{{ $user->id }}" aria-expanded="true"
                                                 aria-haspopup="true">
                                                 <!-- Three dots icon -->
-                                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path
-                                                        d="M6 10a2 2 0 114 0 2 2 0 01-4 0zm4-6a2 2 0 100 4 2 2 0 000-4zm0 12a2 2 0 100 4 2 2 0 000-4z" />
-                                                </svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+  <circle cx="5" cy="12" r="2"/>
+  <circle cx="12" cy="12" r="2"/>
+  <circle cx="19" cy="12" r="2"/>
+</svg>
+
                                             </button>
 
                                             <!-- Dropdown panel -->
