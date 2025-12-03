@@ -72,6 +72,12 @@ class MemberController extends Controller
         ));
     }
 
+    public function memberList()
+    {
+        $members = Member::with('user')->get();
+        return view('admin.members', compact('members'));
+    }
+
     public function reservation()
     {
         $sacraments = Sacrament::all();
