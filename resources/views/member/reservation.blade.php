@@ -69,7 +69,7 @@
                     <div class="relative overflow-x-auto sm:rounded-lg  px-6 py-6">
                         <section class="bg-white dark:bg-gray-900">
                             <div class="mx-auto">
-                                <form method="POST" action="{{ route('member.makeReservation') }}">
+                                <form method="POST" action="{{ route('member.makeReservation') }}" enctype="multipart/form-data">>
                                     @csrf
 
                                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -155,6 +155,26 @@
                                             class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5">
                                     </div>
 
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-900">Requirement Submission
+                                            Method</label>
+                                        <select name="submission_method" id="submission_method" required
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5">
+                                            <option value="">-- Choose Method --</option>
+                                            <option value="online">Submit Online</option>
+                                            <option value="walkin">Walk-in</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="sm:col-span-2" id="document_upload_div" style="display:none;">
+                                        <label class="block text-sm font-medium text-gray-900">Upload Required
+                                            Documents</label>
+                                        <input type="file" name="documents[]" accept="image/*" multiple
+                                            class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5">
+                                    </div>
+
+
+
                                     <!-- Submit Button -->
                                     <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-gray-900 bg-dark-700
                      rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
@@ -205,6 +225,16 @@ document.getElementById('sacrament_id').addEventListener('change', function () {
             receiptDiv.style.display = 'none';
         }
     });
+</script>
+
+<script>
+    const submissionSelect = document.getElementById('submission_method');
+const documentDiv = document.getElementById('document_upload_div');
+
+submissionSelect.addEventListener('change', () => {
+    documentDiv.style.display = submissionSelect.value === 'online' ? 'block' : 'none';
+});
+
 </script>
 
 

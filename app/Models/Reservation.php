@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +24,6 @@ class Reservation extends Model
         return $this->belongsTo(Member::class);
     }
 
-
     public function sacrament()
     {
         return $this->belongsTo(Sacrament::class);
@@ -34,6 +32,11 @@ class Reservation extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(ReservationDocument::class);
     }
 
     public function approvedBy()

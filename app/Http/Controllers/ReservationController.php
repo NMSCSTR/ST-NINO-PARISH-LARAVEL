@@ -29,11 +29,13 @@ class ReservationController extends Controller
     public function makeReservation(Request $request)
     {
         $request->validate([
-            'sacrament_id'     => 'required|exists:sacraments,id',
-            'reservation_date' => 'nullable|date',
-            'remarks'          => 'nullable|string',
-            'payment_option'   => 'required|in:pay_now,pay_later',
-            'receipt'          => 'nullable|image|max:2048',
+            'sacrament_id'      => 'required|exists:sacraments,id',
+            'reservation_date'  => 'nullable|date',
+            'remarks'           => 'nullable|string',
+            'payment_option'    => 'required|in:pay_now,pay_later',
+            'receipt'           => 'nullable|image|max:2048',
+            'submission_method' => 'required|in:online,walkin',
+            'documents.*'       => 'nullable|image|max:2048',
         ]);
 
         $reservation = Reservation::create([
@@ -45,8 +47,9 @@ class ReservationController extends Controller
             'status'           => 'pending',
         ]);
 
-        // Handle payment
+        // Handle Payment
         if ($request->payment_option === 'pay_now' && $request->hasFile('receipt')) {
+
             $path = $request->file('receipt')->store('receipts', 'public');
 
             Payment::create([
@@ -59,7 +62,6 @@ class ReservationController extends Controller
             ]);
         }
 
-        // If pay_later, create a pending payment with null receipt
         if ($request->payment_option === 'pay_later') {
             Payment::create([
                 'reservation_id' => $reservation->id,
@@ -71,7 +73,22 @@ class ReservationController extends Controller
             ]);
         }
 
-        return redirect()->route('member.reservation')->with('success', 'Reservation created successfully.');
+        // Handle Uploaded Documents
+        if ($request->submission_method === 'online' && $request->hasFile('documents')) {
+
+            foreach ($request->file('documents') as $file) {
+
+                $path = $file->store('documents', 'public');
+
+                ReservationDocument::create([
+                    'reservation_id' => $reservation->id,
+                    'file_path'      => $path,
+                ]);
+            }
+        }
+
+        return redirect()->route('member.reservation')
+            ->with('success', 'Reservation created successfully.');
     }
 
     public function approve($id)
