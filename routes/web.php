@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     */
     Route::prefix('admin')->middleware('user_role:staff,admin')->name('admin.')->group(function () {
 
-        Route::get('/dashboard', [RouteController::class, 'admin'])->name('dashboard.view');
+        Route::get('/dashboard', [RouteController::class, 'admin'])->name('dashboard');
 
         // Users
         Route::get('/users', [UserController::class, 'index'])->name('users');
