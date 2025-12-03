@@ -123,6 +123,22 @@ class ReservationController extends Controller
         ]);
     }
 
+    public function getDocuments($id)
+    {
+        $reservation = Reservation::with('documents', 'member.user', 'sacrament')->findOrFail($id);
+
+        return response()->json([
+            'member'    => $reservation->member->user->firstname . ' ' . $reservation->member->user->lastname,
+            'sacrament' => $reservation->sacrament->sacrament_type,
+            'documents' => $reservation->documents->map(function ($doc) {
+                return [
+                    'id'  => $doc->id,
+                    'url' => asset('storage/' . $doc->file_path),
+                ];
+            }),
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

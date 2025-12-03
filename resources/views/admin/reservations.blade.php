@@ -134,6 +134,13 @@
                                             Payments
                                         </button>
 
+                                        <!-- Documents -->
+                                        <button onclick="openDocumentsModal({{ $reservation->id }})"
+                                            class="px-3 py-1.5 text-xs bg-purple-600 text-white rounded hover:bg-purple-700">
+                                            Documents
+                                        </button>
+
+
 
                                         <!-- Pay Now -->
                                         <button onclick="openPaymentModal({{ $reservation->id }})"
@@ -165,40 +172,59 @@
         </div>
     </div>
 
-    <!-- PAYMENTS LIST MODAL -->
-<div id="paymentListModal"
-    class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
+    <!-- DOCUMENTS MODAL -->
+    <div id="documentsModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
 
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 overflow-auto max-h-[90vh]">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 max-h-[90vh] overflow-auto">
 
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Payment History</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Submitted Documents</h2>
 
-        <!-- Dynamic Reservation Info -->
-        <p id="paymentListReservationInfo" class="text-sm text-gray-600 mb-3"></p>
+            <p id="documentsReservationInfo" class="text-sm text-gray-600 mb-3"></p>
 
-        <!-- Payment Table -->
-        <table class="w-full text-sm border rounded-lg">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="px-3 py-2 text-left">Amount</th>
-                    <th class="px-3 py-2 text-left">Method</th>
-                    <th class="px-3 py-2 text-left">Status</th>
-                    <th class="px-3 py-2 text-left">Receipt</th>
-                    <th class="px-3 py-2 text-left">Date</th>
-                </tr>
-            </thead>
+            <div id="documentsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-            <tbody id="paymentListBody"></tbody>
-        </table>
+            <button onclick="closeDocumentsModal()"
+                class="mt-5 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
+                Close
+            </button>
 
-        <!-- Close Button -->
-        <button onclick="closePaymentListModal()"
-            class="mt-5 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
-            Close
-        </button>
-
+        </div>
     </div>
-</div>
+
+
+    <!-- PAYMENTS LIST MODAL -->
+    <div id="paymentListModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
+
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 overflow-auto max-h-[90vh]">
+
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Payment History</h2>
+
+            <!-- Dynamic Reservation Info -->
+            <p id="paymentListReservationInfo" class="text-sm text-gray-600 mb-3"></p>
+
+            <!-- Payment Table -->
+            <table class="w-full text-sm border rounded-lg">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-3 py-2 text-left">Amount</th>
+                        <th class="px-3 py-2 text-left">Method</th>
+                        <th class="px-3 py-2 text-left">Status</th>
+                        <th class="px-3 py-2 text-left">Receipt</th>
+                        <th class="px-3 py-2 text-left">Date</th>
+                    </tr>
+                </thead>
+
+                <tbody id="paymentListBody"></tbody>
+            </table>
+
+            <!-- Close Button -->
+            <button onclick="closePaymentListModal()"
+                class="mt-5 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
+                Close
+            </button>
+
+        </div>
+    </div>
 
 
     <!-- RECEIPT MODAL -->
@@ -270,6 +296,48 @@
 });
 
 </script>
+
+<script>
+    function openDocumentsModal(reservationId) {
+
+    fetch(`/admin/reservations/${reservationId}/documents`)
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById("documentsReservationInfo").innerHTML =
+                `Reservation for <strong>${data.member}</strong> — <span class="text-gray-700">${data.sacrament}</span>`;
+
+            let html = "";
+
+            if (data.documents.length === 0) {
+                html = `<p class="text-gray-400 text-center">No documents uploaded.</p>`;
+            } else {
+                data.documents.forEach(doc => {
+                    html += `
+                        <div class="border rounded-lg shadow p-2 bg-white">
+                            <img src="${doc.url}"
+                                 class="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-80"
+                                 onclick="showReceipt('${doc.url}')">
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById("documentsContainer").innerHTML = html;
+
+            const modal = document.getElementById("documentsModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        });
+}
+
+function closeDocumentsModal() {
+    const modal = document.getElementById("documentsModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+
+</script>
 <script>
     document.querySelectorAll('.approve-btn').forEach(button => {
         button.addEventListener('click', function() {
@@ -326,7 +394,7 @@ function closePaymentModal() {
 </script>
 
 <script>
-function openPaymentListModal(reservationId) {
+    function openPaymentListModal(reservationId) {
     fetch(`/admin/reservations/${reservationId}/payments`)
         .then(response => response.json())
         .then(data => {

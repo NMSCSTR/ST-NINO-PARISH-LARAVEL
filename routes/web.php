@@ -63,6 +63,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/events', [EventController::class, 'index'])->name('events');
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
+        Route::get('/reservations/{reservation}/documents',
+            [ReservationController::class, 'getDocuments']);
+
         Route::post('/payments/{reservation}/pay-now', [PaymentController::class, 'adminPayNow'])
             ->name('admin.payNow');
         Route::get('/reservations/{id}/payments', [ReservationController::class, 'fetchPayments']);

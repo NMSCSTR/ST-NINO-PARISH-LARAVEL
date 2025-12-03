@@ -69,7 +69,7 @@
                     <div class="relative overflow-x-auto sm:rounded-lg  px-6 py-6">
                         <section class="bg-white dark:bg-gray-900">
                             <div class="mx-auto">
-                                <form method="POST" action="{{ route('member.makeReservation') }}" enctype="multipart/form-data">>
+                                <form method="POST" action="{{ route('member.makeReservation') }}" enctype="multipart/form-data">
                                     @csrf
 
                                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
