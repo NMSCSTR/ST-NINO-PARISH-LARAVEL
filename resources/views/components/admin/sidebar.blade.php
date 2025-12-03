@@ -57,7 +57,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-
+{{-- 
     <a href="{{ route('admin.payments') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.payments') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
@@ -65,7 +65,7 @@
             Payments
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
-    </a>
+    </a> --}}
 
     <a href="{{ route('admin.documents') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.documents') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
