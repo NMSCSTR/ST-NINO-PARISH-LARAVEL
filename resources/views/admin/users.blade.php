@@ -119,7 +119,7 @@
                                     <td class="px-6 py-4">
                                         {{ $user->phone_number ?? 'N/A' }}
                                     </td>
-
+<td>
 <div class="flex flex-wrap justify-end gap-2">
     <a href="{{ route('admin.users.edit', ['id' => $user->id]) }}"
         class="flex items-center justify-center w-24 gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 transition shadow-sm">
