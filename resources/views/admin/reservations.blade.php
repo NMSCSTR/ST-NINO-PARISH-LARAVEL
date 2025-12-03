@@ -159,6 +159,11 @@
                                             class="delete-reservation-btn px-3 py-1.5 text-xs bg-red-600 text-white rounded hover:bg-red-700">
                                             Delete
                                         </a>
+                                        <form id="delete-reservation-form" method="POST" style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+
 
                                     </td>
                                 </tr>
