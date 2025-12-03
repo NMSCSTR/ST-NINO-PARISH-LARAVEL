@@ -89,19 +89,23 @@
                                 @foreach($reservations as $reservation)
                                 <tr class="hover:bg-gray-50 transition">
 
+                                    <!-- Member -->
                                     <td class="px-6 py-4 font-medium text-gray-900">
-                                        {{ $reservation->member->user->firstname }} {{
-                                        $reservation->member->user->lastname }}
+                                        {{ $reservation->member->user->firstname }}
+                                        {{ $reservation->member->user->lastname }}
                                     </td>
 
+                                    <!-- Sacrament -->
                                     <td class="px-6 py-4">
-                                        {{ $reservation->type }}
+                                        {{ $reservation->sacrament->sacrament_type ?? 'N/A' }}
                                     </td>
 
+                                    <!-- Fee -->
                                     <td class="px-6 py-4">
-                                        {{ number_format($reservation->fee, 2) }}
+                                        ₱{{ number_format($reservation->fee, 2) }}
                                     </td>
 
+                                    <!-- Reservation Status -->
                                     <td class="px-6 py-4">
                                         @if ($reservation->status === 'approved')
                                         <span class="text-green-600 font-semibold">Approved</span>
@@ -112,14 +116,17 @@
                                         @endif
                                     </td>
 
+                                    <!-- Reservation Date -->
                                     <td class="px-6 py-4">
                                         {{ $reservation->reservation_date->format('F j, Y \a\t g:i A') }}
                                     </td>
 
+                                    <!-- Remarks -->
                                     <td class="px-6 py-4 text-gray-500">
                                         {{ $reservation->remarks ?? 'No remarks yet' }}
                                     </td>
 
+                                    <!-- Approved By -->
                                     <td class="px-6 py-4">
                                         @if ($reservation->approvedBy)
                                         {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname
@@ -129,52 +136,106 @@
                                         @endif
                                     </td>
 
-
+                                    <!-- ACTIONS -->
                                     <td class="px-6 py-4 text-right space-x-2">
 
-                                        <!-- Delete -->
+                                        {{-- DELETE BUTTON --}}
                                         <a href="#" data-id="{{ $reservation->id }}"
-                                            class="delete-reservation-btn inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition">
+                                            class="delete-reservation-btn inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-500 rounded-lg hover:bg-red-600">
                                             Delete
                                         </a>
 
-                                        <form id="delete-reservation-form" method="POST" style="display:none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-
-
-                                        <!-- Edit -->
+                                        {{-- EDIT --}}
                                         @if ($reservation->status !== 'cancel')
-                                        <a href="{{ route('admin.reservations.edit', ['id' => $reservation->id]) }}"
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                                        <a href="{{ route('admin.reservations.edit', $reservation->id) }}"
+                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                                             Edit
                                         </a>
                                         @endif
 
+                                        {{-- APPROVE --}}
                                         @if ($reservation->status !== 'approved')
                                         <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
                                             method="POST" class="inline approve-form">
                                             @csrf
-                                            <button type="button"
-                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition approve-btn">
+                                            <button type="submit"
+                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
                                                 Approve
                                             </button>
                                         </form>
-
-                                        </form>
                                         @else
                                         <span
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium
-                                                        text-green-700 bg-green-100 border border-green-200 rounded-lg">
+                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 border border-green-200 rounded-lg">
                                             Approved
                                         </span>
                                         @endif
                                     </td>
-
                                 </tr>
+
+                                {{-- PAYMENT DETAILS ROW --}}
+                                <tr class="bg-gray-50">
+                                    <td colspan="8" class="px-6 py-4">
+
+                                        <h3 class="text-sm font-semibold mb-2 text-gray-700">Payment Information</h3>
+
+                                        @if($reservation->payments->isEmpty())
+                                        <p class="text-gray-500 text-sm">No payments submitted yet.</p>
+                                        @else
+                                        <table class="w-full text-xs border">
+                                            <thead class="bg-gray-200">
+                                                <tr>
+                                                    <th class="px-3 py-2">Amount</th>
+                                                    <th class="px-3 py-2">Method</th>
+                                                    <th class="px-3 py-2">Status</th>
+                                                    <th class="px-3 py-2">Receipt</th>
+                                                    <th class="px-3 py-2">Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($reservation->payments as $payment)
+                                                <tr class="border-b">
+
+                                                    <td class="px-3 py-2">
+                                                        ₱{{ number_format($payment->amount, 2) }}
+                                                    </td>
+
+                                                    <td class="px-3 py-2">
+                                                        {{ $payment->method ?? '-' }}
+                                                    </td>
+
+                                                    <td class="px-3 py-2">
+                                                        <span
+                                                            class="{{ $payment->status === 'paid' ? 'text-green-600' : 'text-yellow-600' }}">
+                                                            {{ ucfirst($payment->status) }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td class="px-3 py-2">
+                                                        @if($payment->receipt_path)
+                                                        <a href="{{ asset('storage/' . $payment->receipt_path) }}"
+                                                            class="text-blue-600 underline" target="_blank">View
+                                                            Receipt</a>
+                                                        @else
+                                                        -
+                                                        @endif
+                                                    </td>
+
+                                                    <td class="px-3 py-2">
+                                                        {{ $payment->created_at->format('M d, Y') }}
+                                                    </td>
+
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        @endif
+
+                                    </td>
+                                </tr>
+
                                 @endforeach
                             </tbody>
+
 
                         </table>
                     </div>
