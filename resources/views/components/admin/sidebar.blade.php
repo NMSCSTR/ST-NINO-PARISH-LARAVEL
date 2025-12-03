@@ -30,7 +30,7 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="{{ route('admin.members') }}"
+    <a href="{{ route('admin.admin.members') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.members') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">group</span>
