@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthUserController;
+use App\Http\Controllers\PriestController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentController;
@@ -102,5 +103,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/payments', [PaymentController::class, 'showPaymentMember'])->name('member.payments');
         Route::post('/payments/{payment}/pay-now', [PaymentController::class, 'payNow'])->name('member.payNow');
 
+    });
+
+    Route::prefix('priest')->middleware('user_role:priest')->name('priest.')->group(function () {
+        Route::get('/dashboard', [PriestController::class, 'index'])->name('dashboard');
     });
 });

@@ -45,6 +45,9 @@ class AuthUserController extends Controller
 
             if ($user->role === 'admin' || $user->role === 'staff') {
                 return redirect()->intended(route('admin.dashboard'));
+
+            } elseif ($user->role === 'priest') {
+                return redirect()->intended(route('priest.dashboard'));
             } else {
                 return redirect()->intended(route('member.dashboard'));
             }
