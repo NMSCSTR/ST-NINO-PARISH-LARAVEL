@@ -161,19 +161,25 @@
                                 <div id="memberModal{{ $user->id }}" tabindex="-1" aria-hidden="true"
                                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
 
-                                    <div class="relative w-full max-w-xl p-4 animate-fadeIn">
+                                    <div class="relative w-full max-w-2xl p-4 animate-fadeIn">
                                         <div
-                                            class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
+                                            class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
 
                                             <!-- Header -->
                                             <div
-                                                class="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
-                                                <h3 class="text-xl font-semibold text-gray-800">
+                                                class="flex items-center justify-between px-6 py-4 bg-blue-50 border-b">
+                                                <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.79.597 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    </svg>
                                                     Member Information
                                                 </h3>
 
                                                 <button type="button" data-modal-toggle="memberModal{{ $user->id }}"
-                                                    class="text-gray-400 hover:text-gray-600 transition p-2 rounded-full hover:bg-gray-200">
+                                                    class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200 transition">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                         class="w-6 h-6">
@@ -184,43 +190,116 @@
                                             </div>
 
                                             <!-- Body -->
-                                            <div class="px-6 py-5 space-y-4">
+                                            <div class="px-6 py-6 space-y-6">
 
-                                                <!-- Personal Info -->
-                                                <div>
-                                                    <h4 class="text-lg font-medium text-gray-700 mb-2">Personal Details
+                                                <!-- Personal Details Card -->
+                                                <div class="bg-gray-50 rounded-lg p-4 shadow-inner">
+                                                    <h4
+                                                        class="text-lg font-medium text-gray-700 mb-4 flex items-center gap-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-gray-600" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.79.597 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        </svg>
+                                                        Personal Details
                                                     </h4>
                                                     <div class="grid grid-cols-2 gap-4 text-sm">
-                                                        <p><strong class="text-gray-600">First Name:</strong> {{
-                                                            $user->firstname }}</p>
-                                                        <p><strong class="text-gray-600">Last Name:</strong> {{
-                                                            $user->lastname }}</p>
-                                                        <p><strong class="text-gray-600">Email:</strong> {{ $user->email
-                                                            }}</p>
-                                                        <p><strong class="text-gray-600">Phone:</strong> {{
-                                                            $user->phone_number ?? 'N/A' }}</p>
+                                                        <p class="flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.79.597 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z">
+                                                                </path>
+                                                            </svg> <strong>First Name:</strong> {{ $user->firstname }}
+                                                        </p>
+                                                        <p class="flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M12 4v1m0 14v1m8-8h1M3 12H2m15.364-6.364l.707.707M6.343 17.657l-.707.707M17.657 17.657l.707-.707M6.343 6.343l-.707-.707">
+                                                                </path>
+                                                            </svg> <strong>Last Name:</strong> {{ $user->lastname }}</p>
+                                                        <p class="flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M16 12H8m0 0H4m8 0h4m0 0h4M12 4v16">
+                                                                </path>
+                                                            </svg> <strong>Email:</strong> {{ $user->email }}</p>
+                                                        <p class="flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M3 5a2 2 0 012-2h3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z">
+                                                                </path>
+                                                            </svg> <strong>Phone:</strong> {{ $user->phone_number ??
+                                                            'N/A' }}</p>
                                                     </div>
                                                 </div>
 
-                                                <!-- Member Profile Info -->
+                                                <!-- Member Profile Card -->
                                                 @if($user->member)
-                                                <div>
-                                                    <h4 class="text-lg font-medium text-gray-700 mb-2">Member Profile
+                                                <div class="bg-gray-50 rounded-lg p-4 shadow-inner">
+                                                    <h4
+                                                        class="text-lg font-medium text-gray-700 mb-4 flex items-center gap-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-gray-600" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M3 10h4l3 6H5l-2 4h16l-2-4h-5l3-6h4">
+                                                            </path>
+                                                        </svg>
+                                                        Member Profile
                                                     </h4>
                                                     <div class="grid grid-cols-2 gap-4 text-sm">
-                                                        <p><strong class="text-gray-600">Middle Name:</strong> {{
+                                                        <p class="flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M12 4v16m8-8H4"></path>
+                                                            </svg> <strong>Middle Name:</strong> {{
                                                             $user->member->middle_name ?? 'N/A' }}</p>
-                                                        <p><strong class="text-gray-600">Birth Date:</strong> {{
+                                                        <p class="flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M8 7V3m8 4V3M4 11h16M5 21h14M12 17v4">
+                                                                </path>
+                                                            </svg> <strong>Birth Date:</strong> {{
                                                             $user->member->birth_date ?? 'N/A' }}</p>
-                                                        <p class="col-span-2"><strong class="text-gray-600">Place of
-                                                                Birth:</strong> {{ $user->member->place_of_birth ??
-                                                            'N/A' }}</p>
-                                                        <p class="col-span-2"><strong
-                                                                class="text-gray-600">Address:</strong> {{
-                                                            $user->member->address ?? 'N/A' }}</p>
-                                                        <p class="col-span-2"><strong class="text-gray-600">Contact
-                                                                Number:</strong> {{ $user->member->contact_number ??
-                                                            'N/A' }}</p>
+                                                        <p class="col-span-2 flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M17 20h5v-2a2 2 0 00-2-2h-3v4zM3 20h5v-4H5a2 2 0 00-2 2v2z">
+                                                                </path>
+                                                            </svg> <strong>Place of Birth:</strong> {{
+                                                            $user->member->place_of_birth ?? 'N/A' }}</p>
+                                                        <p class="col-span-2 flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7H3z"></path>
+                                                            </svg> <strong>Address:</strong> {{ $user->member->address
+                                                            ?? 'N/A' }}</p>
+                                                        <p class="col-span-2 flex items-center gap-2"><svg
+                                                                class="w-4 h-4 text-gray-500" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18">
+                                                                </path>
+                                                            </svg> <strong>Contact Number:</strong> {{
+                                                            $user->member->contact_number ?? 'N/A' }}</p>
                                                     </div>
                                                 </div>
                                                 @endif
@@ -230,7 +309,7 @@
                                             <!-- Footer -->
                                             <div class="px-6 py-4 border-t bg-gray-50 flex justify-end">
                                                 <button data-modal-toggle="memberModal{{ $user->id }}"
-                                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm shadow transition">
+                                                    class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow transition">
                                                     Close
                                                 </button>
                                             </div>
