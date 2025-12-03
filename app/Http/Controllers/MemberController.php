@@ -58,11 +58,9 @@ class MemberController extends Controller
         $totalMembers = Member::count();
         $eventCount   = Event::count();
 
-        $reservationCount = auth()->user()
-            ->events()
-            ->withCount('reservations')
-            ->get()
-            ->sum('reservations_count');
+        $reservationCount = auth()->user()->member
+            ? auth()->user()->member->reservations()->count()
+            : 0;
 
         return view('admin.dashboard', compact(
             'members',
