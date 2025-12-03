@@ -115,7 +115,7 @@
                                     <td class="px-6 py-4">
                                         {{ ucfirst($user->role) }}
                                     </td>
-                                    
+
                                     <td class="px-6 py-4">
                                         {{ $user->phone_number ?? 'N/A' }}
                                     </td>
@@ -142,6 +142,20 @@
                                             </svg>
                                             Edit
                                         </a>
+                                        @if($user->role === 'member')
+                                        <button data-modal-target="memberModal{{ $user->id }}"
+                                            data-modal-toggle="memberModal{{ $user->id }}"
+                                            class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
+                                            <svg class="w-4 h-4 text-white me-2" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            More Info
+                                        </button>
+                                        @endif
+
+
 
                                     </td>
 
@@ -156,6 +170,46 @@
             </div>
         </div>
     </div>
+
+    @if($user->role === 'member')
+    <!-- Member Modal -->
+    <div id="memberModal{{ $user->id }}" tabindex="-1" aria-hidden="true"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div class="relative w-full max-w-lg p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl p-6">
+
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between border-b pb-3 mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">Member Details</h3>
+                    <button type="button" data-modal-toggle="memberModal{{ $user->id }}"
+                        class="p-2 rounded-full hover:bg-gray-200 text-gray-500 hover:text-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="space-y-2">
+                    <p><strong>Full Name:</strong> {{ $user->firstname }} {{ $user->lastname }}</p>
+                    <p><strong>Email:</strong> {{ $user->email }}</p>
+                    <p><strong>Contact Number:</strong> {{ $user->phone_number ?? 'N/A' }}</p>
+
+                    @if($user->member)
+                    <p><strong>Middle Name:</strong> {{ $user->member->middle_name ?? 'N/A' }}</p>
+                    <p><strong>Birth Date:</strong> {{ $user->member->birth_date ?? 'N/A' }}</p>
+                    <p><strong>Place of Birth:</strong> {{ $user->member->place_of_birth ?? 'N/A' }}</p>
+                    <p><strong>Address:</strong> {{ $user->member->address ?? 'N/A' }}</p>
+                    <p><strong>Contact Number:</strong> {{ $user->member->contact_number ?? 'N/A' }}</p>
+                    @endif
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @endif
+
 
 
     <!-- Create User Modal -->

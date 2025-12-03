@@ -108,6 +108,13 @@ class MemberController extends Controller
     {
         //
     }
+    public function showMore($id)
+    {
+        $member = Member::where('user_id', $id)->firstOrFail();
+        return view('admin.users', compact('member'));
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.

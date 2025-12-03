@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/members', [MemberController::class, 'index'])->name('members');
         Route::get('/members', [MemberController::class, 'adminMemberView'])->name('admin.members');
         Route::get('/members', [MemberController::class, 'memberList'])->name('member.lists');
+        Route::get('/members/{id}', [MemberController::class, 'showMore'])->name('admin.members.show');
+
 
         Route::get('/events', [EventController::class, 'index'])->name('events');
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
