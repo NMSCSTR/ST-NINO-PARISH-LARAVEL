@@ -52,6 +52,26 @@ class PaymentController extends Controller
         return redirect()->route('member.member.payments')->with('success', 'Payment receipt uploaded successfully.');
     }
 
+    public function adminPayNow(Request $request, Reservation $reservation)
+    {
+        $request->validate([
+            'receipt' => 'required|image|max:2048',
+        ]);
+
+        $path = $request->file('receipt')->store('receipts', 'public');
+
+        Payment::create([
+            'reservation_id' => $reservation->id,
+            'member_id'      => $reservation->member_id,
+            'amount'         => $reservation->fee,
+            'method'         => 'Admin Upload',
+            'status'         => 'paid',
+            'receipt_path'   => $path,
+        ]);
+
+        return back()->with('success', 'Payment receipt uploaded successfully.');
+    }
+
     /**
      * Store a newly created resource in storage.
      */

@@ -63,6 +63,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/events', [EventController::class, 'index'])->name('events');
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
+        Route::post('/admin/payments/{reservation}/pay-now', [PaymentController::class, 'adminPayNow'])
+            ->name('admin.payNow');
 
         // Sacrament Routes
         Route::prefix('sacraments')->name('sacraments.')->group(function () {
@@ -95,7 +97,6 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/payments', [PaymentController::class, 'showPaymentMember'])->name('member.payments');
         Route::post('/payments/{payment}/pay-now', [PaymentController::class, 'payNow'])->name('member.payNow');
-
 
     });
 });

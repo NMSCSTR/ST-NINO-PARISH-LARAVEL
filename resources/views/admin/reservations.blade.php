@@ -68,10 +68,9 @@
 
                     <!-- Table -->
                     <div class="relative overflow-x-auto sm:rounded-lg px-6 pb-6">
-                        <table id="datatable" class="w-full text-sm text-gray-700">
+                        <table id="datatable" class="w-full text-sm text-gray-800">
 
-                            <!-- Table Header -->
-                            <thead class="text-xs uppercase bg-white border-b border-gray-200 text-gray-600">
+                            <thead class="bg-white border-b border-gray-200 text-gray-700 text-xs uppercase">
                                 <tr>
                                     <th class="px-6 py-3">Member</th>
                                     <th class="px-6 py-3">Sacrament</th>
@@ -84,49 +83,41 @@
                                 </tr>
                             </thead>
 
-                            <!-- Table Body -->
                             <tbody class="divide-y divide-gray-100">
+
                                 @foreach($reservations as $reservation)
                                 <tr class="hover:bg-gray-50 transition">
 
-                                    <!-- Member -->
                                     <td class="px-6 py-4 font-medium text-gray-900">
-                                        {{ $reservation->member->user->firstname }}
-                                        {{ $reservation->member->user->lastname }}
+                                        {{ $reservation->member->user->firstname }} {{
+                                        $reservation->member->user->lastname }}
                                     </td>
 
-                                    <!-- Sacrament -->
                                     <td class="px-6 py-4">
                                         {{ $reservation->sacrament->sacrament_type ?? 'N/A' }}
                                     </td>
 
-                                    <!-- Fee -->
                                     <td class="px-6 py-4">
                                         ₱{{ number_format($reservation->fee, 2) }}
                                     </td>
 
-                                    <!-- Reservation Status -->
                                     <td class="px-6 py-4">
-                                        @if ($reservation->status === 'approved')
-                                        <span class="text-green-600 font-semibold">Approved</span>
-                                        @elseif ($reservation->status === 'pending')
-                                        <span class="text-yellow-600 font-semibold">Pending</span>
-                                        @elseif ($reservation->status === 'cancel')
-                                        <span class="text-red-600 font-semibold">Cancelled</span>
-                                        @endif
+                                        <span class="
+                    @if($reservation->status=='approved') text-green-600
+                    @elseif($reservation->status=='pending') text-yellow-600
+                    @else text-red-600 @endif font-semibold">
+                                            {{ ucfirst($reservation->status) }}
+                                        </span>
                                     </td>
 
-                                    <!-- Reservation Date -->
                                     <td class="px-6 py-4">
-                                        {{ $reservation->reservation_date->format('F j, Y \a\t g:i A') }}
+                                        {{ $reservation->reservation_date->format('F j, Y g:i A') }}
                                     </td>
 
-                                    <!-- Remarks -->
                                     <td class="px-6 py-4 text-gray-500">
                                         {{ $reservation->remarks ?? 'No remarks yet' }}
                                     </td>
 
-                                    <!-- Approved By -->
                                     <td class="px-6 py-4">
                                         @if ($reservation->approvedBy)
                                         {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname
@@ -136,52 +127,45 @@
                                         @endif
                                     </td>
 
-                                    <!-- ACTIONS -->
                                     <td class="px-6 py-4 text-right space-x-2">
 
-                                        {{-- DELETE BUTTON --}}
-                                        <a href="#" data-id="{{ $reservation->id }}"
-                                            class="delete-reservation-btn inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-500 rounded-lg hover:bg-red-600">
-                                            Delete
-                                        </a>
+                                        <!-- Toggle Payments -->
+                                        <button onclick="togglePayments({{ $reservation->id }})"
+                                            class="px-3 py-1.5 text-xs bg-gray-700 text-white rounded hover:bg-black">
+                                            Payments
+                                        </button>
 
-                                        {{-- EDIT --}}
-                                        @if ($reservation->status !== 'cancel')
+                                        <!-- Pay Now -->
+                                        <button onclick="openPaymentModal({{ $reservation->id }})"
+                                            class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
+                                            Pay Now
+                                        </button>
+
+                                        <!-- Edit -->
                                         <a href="{{ route('admin.reservations.edit', $reservation->id) }}"
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                                            class="px-3 py-1.5 text-xs bg-green-600 text-white rounded hover:bg-green-700">
                                             Edit
                                         </a>
-                                        @endif
 
-                                        {{-- APPROVE --}}
-                                        @if ($reservation->status !== 'approved')
-                                        <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
-                                            method="POST" class="inline approve-form">
-                                            @csrf
-                                            <button type="submit"
-                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
-                                                Approve
-                                            </button>
-                                        </form>
-                                        @else
-                                        <span
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 border border-green-200 rounded-lg">
-                                            Approved
-                                        </span>
-                                        @endif
+                                        <!-- Delete -->
+                                        <a href="#" data-id="{{ $reservation->id }}"
+                                            class="delete-reservation-btn px-3 py-1.5 text-xs bg-red-600 text-white rounded hover:bg-red-700">
+                                            Delete
+                                        </a>
                                     </td>
                                 </tr>
 
-                                {{-- PAYMENT DETAILS ROW --}}
-                                <tr class="bg-gray-50">
+                                <!-- PAYMENT COLLAPSIBLE SECTION -->
+                                <tr id="payment-section-{{ $reservation->id }}" class="hidden bg-gray-50">
                                     <td colspan="8" class="px-6 py-4">
 
-                                        <h3 class="text-sm font-semibold mb-2 text-gray-700">Payment Information</h3>
+                                        <h3 class="text-sm font-semibold mb-2 text-gray-700">Payments</h3>
 
                                         @if($reservation->payments->isEmpty())
-                                        <p class="text-gray-500 text-sm">No payments submitted yet.</p>
+                                        <p class="text-gray-400 text-sm">No payments found.</p>
                                         @else
-                                        <table class="w-full text-xs border">
+
+                                        <table class="w-full text-xs border rounded-lg">
                                             <thead class="bg-gray-200">
                                                 <tr>
                                                     <th class="px-3 py-2">Amount</th>
@@ -191,30 +175,29 @@
                                                     <th class="px-3 py-2">Date</th>
                                                 </tr>
                                             </thead>
+
                                             <tbody>
-                                                @foreach($reservation->payments as $payment)
+                                                @foreach ($reservation->payments as $payment)
                                                 <tr class="border-b">
 
-                                                    <td class="px-3 py-2">
-                                                        ₱{{ number_format($payment->amount, 2) }}
-                                                    </td>
+                                                    <td class="px-3 py-2">₱{{ number_format($payment->amount, 2) }}</td>
 
-                                                    <td class="px-3 py-2">
-                                                        {{ $payment->method ?? '-' }}
-                                                    </td>
+                                                    <td class="px-3 py-2">{{ $payment->method ?? '-' }}</td>
 
                                                     <td class="px-3 py-2">
                                                         <span
-                                                            class="{{ $payment->status === 'paid' ? 'text-green-600' : 'text-yellow-600' }}">
+                                                            class="{{ $payment->status=='paid' ? 'text-green-600' : 'text-yellow-600' }}">
                                                             {{ ucfirst($payment->status) }}
                                                         </span>
                                                     </td>
 
                                                     <td class="px-3 py-2">
                                                         @if($payment->receipt_path)
-                                                        <a href="{{ asset('storage/' . $payment->receipt_path) }}"
-                                                            class="text-blue-600 underline" target="_blank">View
-                                                            Receipt</a>
+                                                        <button
+                                                            onclick="showReceipt('{{ asset('storage/'.$payment->receipt_path) }}')"
+                                                            class="text-blue-600 underline">
+                                                            View Receipt
+                                                        </button>
                                                         @else
                                                         -
                                                         @endif
@@ -228,6 +211,7 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+
                                         @endif
 
                                     </td>
@@ -235,15 +219,52 @@
 
                                 @endforeach
                             </tbody>
-
-
                         </table>
+
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+
+    <!-- RECEIPT MODAL -->
+    <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
+
+        <div class="bg-white rounded-lg p-4 max-w-lg w-full">
+            <h2 class="text-lg font-semibold mb-2">Payment Receipt</h2>
+
+            <img id="receiptImage" src="" class="w-full h-auto rounded shadow">
+
+            <button onclick="closeReceiptModal()" class="mt-4 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- ADMIN PAY NOW MODAL -->
+    <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
+
+        <div class="bg-white rounded-lg p-6 max-w-md w-full">
+            <h2 class="text-lg font-semibold mb-4">Upload Payment Receipt</h2>
+
+            <form id="adminPayNowForm" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="receipt" accept="image/*" required class="w-full border p-2 rounded mb-4">
+
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Upload Receipt
+                </button>
+
+                <button type="button" onclick="closePaymentModal()"
+                    class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 ml-2">
+                    Cancel
+                </button>
+            </form>
+        </div>
+    </div>
+
+
 </section>
 @endsection
 @push('scripts')
@@ -294,6 +315,38 @@
             });
         });
     });
+</script>
+
+<script>
+    function togglePayments(id) {
+    const section = document.getElementById(`payment-section-${id}`);
+    section.classList.toggle('hidden');
+}
+
+// Receipt Modal
+function showReceipt(url) {
+    document.getElementById('receiptImage').src = url;
+    document.getElementById('receiptModal').classList.remove('hidden');
+    document.getElementById('receiptModal').classList.add('flex');
+}
+
+function closeReceiptModal() {
+    document.getElementById('receiptModal').classList.add('hidden');
+    document.getElementById('receiptModal').classList.remove('flex');
+}
+
+// Admin Pay-Now Modal
+function openPaymentModal(reservationId) {
+    const form = document.getElementById('adminPayNowForm');
+    form.action = `/admin/payments/${reservationId}/pay-now`;
+    document.getElementById('paymentModal').classList.remove('hidden');
+    document.getElementById('paymentModal').classList.add('flex');
+}
+
+function closePaymentModal() {
+    document.getElementById('paymentModal').classList.add('hidden');
+    document.getElementById('paymentModal').classList.remove('flex');
+}
 </script>
 
 @endpush
