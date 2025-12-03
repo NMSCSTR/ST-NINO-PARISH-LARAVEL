@@ -83,8 +83,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody class="divide-y divide-gray-100">
-
+                            <tbody id="reservation-rows" class="divide-y divide-gray-100">
                                 @foreach($reservations as $reservation)
                                 <tr class="hover:bg-gray-50 transition">
 
@@ -103,9 +102,9 @@
 
                                     <td class="px-6 py-4">
                                         <span class="
-                    @if($reservation->status=='approved') text-green-600
-                    @elseif($reservation->status=='pending') text-yellow-600
-                    @else text-red-600 @endif font-semibold">
+                @if($reservation->status=='approved') text-green-600
+                @elseif($reservation->status=='pending') text-yellow-600
+                @else text-red-600 @endif font-semibold">
                                             {{ ucfirst($reservation->status) }}
                                         </span>
                                     </td>
@@ -152,10 +151,15 @@
                                             class="delete-reservation-btn px-3 py-1.5 text-xs bg-red-600 text-white rounded hover:bg-red-700">
                                             Delete
                                         </a>
+
                                     </td>
                                 </tr>
+                                @endforeach
+                            </tbody>
 
-                                <!-- PAYMENT COLLAPSIBLE SECTION -->
+                            <!-- SECOND TBODY FOR PAYMENT SECTIONS (IGNORED BY DATATABLES) -->
+                            <tbody id="payment-sections">
+                                @foreach($reservations as $reservation)
                                 <tr id="payment-section-{{ $reservation->id }}" class="hidden bg-gray-50">
                                     <td colspan="8" class="px-6 py-4">
 
@@ -216,9 +220,9 @@
 
                                     </td>
                                 </tr>
-
                                 @endforeach
                             </tbody>
+
                         </table>
 
                     </div>
@@ -230,22 +234,25 @@
 
     <!-- RECEIPT MODAL -->
     <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-4xl shadow-2xl">
+            <!-- Larger modal -->
+            <h2 class="text-xl font-semibold mb-4">Payment Receipt</h2>
 
-        <div class="bg-white rounded-lg p-4 max-w-lg w-full">
-            <h2 class="text-lg font-semibold mb-2">Payment Receipt</h2>
+            <img id="receiptImage" class="w-full max-h-[80vh] object-contain rounded-lg shadow-lg border">
 
-            <img id="receiptImage" src="" class="w-full h-auto rounded shadow">
-
-            <button onclick="closeReceiptModal()" class="mt-4 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
-                Close
-            </button>
+            <div class="text-right mt-4">
+                <button onclick="closeReceiptModal()" class="px-5 py-2 bg-gray-700 text-white rounded hover:bg-black">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
+
 
     <!-- ADMIN PAY NOW MODAL -->
     <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
 
-        <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-2xl">
             <h2 class="text-lg font-semibold mb-4">Upload Payment Receipt</h2>
 
             <form id="adminPayNowForm" method="POST" enctype="multipart/form-data">
