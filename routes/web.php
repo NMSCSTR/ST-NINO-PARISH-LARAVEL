@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
         Route::post('/payments/{reservation}/pay-now', [PaymentController::class, 'adminPayNow'])
             ->name('admin.payNow');
+        Route::get('/reservations/{id}/payments', [ReservationController::class, 'fetchPayments']);
 
         // Sacrament Routes
         Route::prefix('sacraments')->name('sacraments.')->group(function () {

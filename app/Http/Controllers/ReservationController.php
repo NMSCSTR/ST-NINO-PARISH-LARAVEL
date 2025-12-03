@@ -85,6 +85,26 @@ class ReservationController extends Controller
         return redirect()->back()->with('success', 'Reservation approved successfully.');
     }
 
+    public function fetchPayments($id)
+    {
+        $reservation = Reservation::with(['payments', 'member.user', 'sacrament'])->findOrFail($id);
+
+        return response()->json([
+            'member'    => $reservation->member->user->firstname . ' ' . $reservation->member->user->lastname,
+            'sacrament' => $reservation->sacrament->sacrament_type ?? 'N/A',
+            'payments'  => $reservation->payments->map(function ($p) {
+                return [
+                    'amount'       => $p->amount,
+                    'method'       => $p->method,
+                    'status'       => $p->status,
+                    'receipt_path' => $p->receipt_path,
+                    'receipt_url'  => $p->receipt_path ? asset('storage/' . $p->receipt_path) : null,
+                    'date'         => $p->created_at->format('M d, Y'),
+                ];
+            }),
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

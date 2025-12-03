@@ -129,10 +129,11 @@
                                     <td class="px-6 py-4 text-right space-x-2">
 
                                         <!-- Toggle Payments -->
-                                        <button onclick="togglePayments({{ $reservation->id }})"
+                                        <button onclick="openPaymentListModal({{ $reservation->id }})"
                                             class="px-3 py-1.5 text-xs bg-gray-700 text-white rounded hover:bg-black">
                                             Payments
                                         </button>
+
 
                                         <!-- Pay Now -->
                                         <button onclick="openPaymentModal({{ $reservation->id }})"
@@ -156,81 +157,49 @@
                                 </tr>
                                 @endforeach
                             </tbody>
-
-                            <!-- SECOND TBODY FOR PAYMENT SECTIONS (IGNORED BY DATATABLES) -->
-                            <tbody id="payment-sections">
-                                @foreach($reservations as $reservation)
-                                <tr id="payment-section-{{ $reservation->id }}" class="hidden bg-gray-50">
-                                    <td colspan="8" class="px-6 py-4">
-
-                                        <h3 class="text-sm font-semibold mb-2 text-gray-700">Payments</h3>
-
-                                        @if($reservation->payments->isEmpty())
-                                        <p class="text-gray-400 text-sm">No payments found.</p>
-                                        @else
-
-                                        <table class="w-full text-xs border rounded-lg">
-                                            <thead class="bg-gray-200">
-                                                <tr>
-                                                    <th class="px-3 py-2">Amount</th>
-                                                    <th class="px-3 py-2">Method</th>
-                                                    <th class="px-3 py-2">Status</th>
-                                                    <th class="px-3 py-2">Receipt</th>
-                                                    <th class="px-3 py-2">Date</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                @foreach ($reservation->payments as $payment)
-                                                <tr class="border-b">
-
-                                                    <td class="px-3 py-2">₱{{ number_format($payment->amount, 2) }}</td>
-
-                                                    <td class="px-3 py-2">{{ $payment->method ?? '-' }}</td>
-
-                                                    <td class="px-3 py-2">
-                                                        <span
-                                                            class="{{ $payment->status=='paid' ? 'text-green-600' : 'text-yellow-600' }}">
-                                                            {{ ucfirst($payment->status) }}
-                                                        </span>
-                                                    </td>
-
-                                                    <td class="px-3 py-2">
-                                                        @if($payment->receipt_path)
-                                                        <button
-                                                            onclick="showReceipt('{{ asset('storage/'.$payment->receipt_path) }}')"
-                                                            class="text-blue-600 underline">
-                                                            View Receipt
-                                                        </button>
-                                                        @else
-                                                        -
-                                                        @endif
-                                                    </td>
-
-                                                    <td class="px-3 py-2">
-                                                        {{ $payment->created_at->format('M d, Y') }}
-                                                    </td>
-
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-
-                                        @endif
-
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-
                         </table>
-
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+
+    <!-- PAYMENTS LIST MODAL -->
+<div id="paymentListModal"
+    class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
+
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 overflow-auto max-h-[90vh]">
+
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Payment History</h2>
+
+        <!-- Dynamic Reservation Info -->
+        <p id="paymentListReservationInfo" class="text-sm text-gray-600 mb-3"></p>
+
+        <!-- Payment Table -->
+        <table class="w-full text-sm border rounded-lg">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-3 py-2 text-left">Amount</th>
+                    <th class="px-3 py-2 text-left">Method</th>
+                    <th class="px-3 py-2 text-left">Status</th>
+                    <th class="px-3 py-2 text-left">Receipt</th>
+                    <th class="px-3 py-2 text-left">Date</th>
+                </tr>
+            </thead>
+
+            <tbody id="paymentListBody"></tbody>
+        </table>
+
+        <!-- Close Button -->
+        <button onclick="closePaymentListModal()"
+            class="mt-5 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
+            Close
+        </button>
+
+    </div>
+</div>
+
 
     <!-- RECEIPT MODAL -->
     <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
@@ -355,5 +324,59 @@ function closePaymentModal() {
     document.getElementById('paymentModal').classList.remove('flex');
 }
 </script>
+
+<script>
+function openPaymentListModal(reservationId) {
+    fetch(`/admin/reservations/${reservationId}/payments`)
+        .then(response => response.json())
+        .then(data => {
+
+            // Update Modal Header
+            document.getElementById("paymentListReservationInfo").innerHTML =
+                `Reservation for <strong>${data.member}</strong> — <span class="text-gray-700">${data.sacrament}</span>`;
+
+            // Build the payment rows
+            let rows = "";
+
+            if (data.payments.length === 0) {
+                rows = `<tr><td colspan="5" class="px-3 py-3 text-center text-gray-400">No payments found.</td></tr>`;
+            } else {
+                data.payments.forEach(payment => {
+                    rows += `
+                        <tr class="border-b">
+                            <td class="px-3 py-2">₱${parseFloat(payment.amount).toFixed(2)}</td>
+                            <td class="px-3 py-2">${payment.method ?? '-'}</td>
+                            <td class="px-3 py-2">
+                                <span class="${payment.status === 'paid' ? 'text-green-600' : 'text-yellow-600'}">
+                                    ${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                                </span>
+                            </td>
+                            <td class="px-3 py-2">
+                                ${payment.receipt_path ?
+                                    `<button onclick="showReceipt('${payment.receipt_url}')"
+                                        class="text-blue-600 underline">View</button>` : '-'}
+                            </td>
+                            <td class="px-3 py-2">${payment.date}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById("paymentListBody").innerHTML = rows;
+
+            // Show modal
+            const modal = document.getElementById("paymentListModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        });
+}
+
+function closePaymentListModal() {
+    const modal = document.getElementById("paymentListModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+</script>
+
 
 @endpush
