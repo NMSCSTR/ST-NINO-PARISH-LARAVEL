@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     */
     Route::prefix('admin')->middleware('user_role:staff,admin')->name('admin.')->group(function () {
 
-        Route::get('/dashboard', [RouteController::class, 'admin'])->name('dashboard');
+        Route::get('/dashboard', [RouteController::class, 'admin'])->name('dashboard.view');
 
         // Users
         Route::get('/users', [UserController::class, 'index'])->name('users');
@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
             ->name('admin.payNow');
         Route::get('/reservations/{id}/payments', [ReservationController::class, 'fetchPayments']);
 
-        Route::get('/dashboard', [PriestController::class, 'index'])->name('dashboard');
+        Route::get('/priest', [PriestController::class, 'index'])->name('priest');
 
         // Sacrament Routes
         Route::prefix('sacraments')->name('sacraments.')->group(function () {
