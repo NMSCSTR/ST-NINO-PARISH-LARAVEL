@@ -119,41 +119,62 @@
                                     <td class="px-6 py-4">
                                         {{ $user->phone_number ?? 'N/A' }}
                                     </td>
-<td>
-<div class="flex flex-wrap justify-end gap-2">
-    <a href="{{ route('admin.users.edit', ['id' => $user->id]) }}"
-        class="flex items-center justify-center w-24 gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 transition shadow-sm">
-        <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16 7l-8 8H4v-4l8-8 4 4z" />
-        </svg>
-        Edit
-    </a>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="relative inline-block text-left">
+                                            <!-- Dropdown button -->
+                                            <button type="button"
+                                                class="inline-flex justify-center w-10 h-10 text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                id="menu-button-{{ $user->id }}" aria-expanded="true"
+                                                aria-haspopup="true">
+                                                <!-- Three dots icon -->
+                                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M6 10a2 2 0 114 0 2 2 0 01-4 0zm4-6a2 2 0 100 4 2 2 0 000-4zm0 12a2 2 0 100 4 2 2 0 000-4z" />
+                                                </svg>
+                                            </button>
 
-    <a href="#" data-id="{{ $user->id }}"
-        class="flex items-center justify-center w-24 gap-2 px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition shadow-sm delete-user-btn">
-        <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M19 7L5 7M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M10 11v6M14 11v6M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
-        </svg>
-        Delete
-    </a>
+                                            <!-- Dropdown panel -->
+                                            <div class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+                                                role="menu" aria-orientation="vertical"
+                                                aria-labelledby="menu-button-{{ $user->id }}"
+                                                id="dropdown-{{ $user->id }}">
+                                                <div class="py-1">
+                                                    <a href="{{ route('admin.users.edit', ['id' => $user->id]) }}"
+                                                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                            stroke-width="2" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M16 7l-8 8H4v-4l8-8 4 4z" />
+                                                        </svg>
+                                                        Edit
+                                                    </a>
+                                                    <a href="#" data-id="{{ $user->id }}"
+                                                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 delete-user-btn">
+                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                            stroke-width="2" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M19 7L5 7M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7M10 11v6M14 11v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                                                        </svg>
+                                                        Delete
+                                                    </a>
+                                                    @if($user->role === 'member')
+                                                    <button data-modal-target="memberModal{{ $user->id }}"
+                                                        data-modal-toggle="memberModal{{ $user->id }}"
+                                                        class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                            stroke-width="2" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        More Info
+                                                    </button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
 
-    @if($user->role === 'member')
-    <button data-modal-target="memberModal{{ $user->id }}" data-modal-toggle="memberModal{{ $user->id }}"
-        class="flex items-center justify-center w-24 gap-2 px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition shadow-sm">
-        <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        More Info
-    </button>
-    @endif
-</div>
-</td>
+
 
                                 </tr>
                                 @if($user->role === 'member')
@@ -435,5 +456,23 @@
             });
         });
     });
+</script>
+<script>
+    document.querySelectorAll('[id^="menu-button-"]').forEach(button => {
+    const id = button.id.split('-')[2];
+    const dropdown = document.getElementById(`dropdown-${id}`);
+
+    button.addEventListener('click', () => {
+        dropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+});
+
 </script>
 @endpush
