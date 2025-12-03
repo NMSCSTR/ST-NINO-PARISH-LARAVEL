@@ -16,6 +16,12 @@ class PriestController extends Controller
         return view('priest.dashboard', compact('priest'));
     }
 
+    public function priestList()
+    {
+        $priest = Priest::all();
+        return view('admin.priest', compact('priest'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
