@@ -159,14 +159,21 @@
                                 @if($user->role === 'member')
                                 <!-- Member Modal -->
                                 <div id="memberModal{{ $user->id }}" tabindex="-1" aria-hidden="true"
-                                    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                                    <div class="relative w-full max-w-lg p-4">
-                                        <div class="relative bg-white rounded-2xl shadow-2xl p-6">
+                                    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
 
-                                            <div class="flex items-center justify-between border-b pb-3 mb-4">
-                                                <h3 class="text-xl font-bold text-gray-800">Member Details</h3>
+                                    <div class="relative w-full max-w-xl p-4 animate-fadeIn">
+                                        <div
+                                            class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
+
+                                            <!-- Header -->
+                                            <div
+                                                class="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
+                                                <h3 class="text-xl font-semibold text-gray-800">
+                                                    Member Information
+                                                </h3>
+
                                                 <button type="button" data-modal-toggle="memberModal{{ $user->id }}"
-                                                    class="p-2 rounded-full hover:bg-gray-200 text-gray-500 hover:text-gray-800">
+                                                    class="text-gray-400 hover:text-gray-600 transition p-2 rounded-full hover:bg-gray-200">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                         class="w-6 h-6">
@@ -176,29 +183,63 @@
                                                 </button>
                                             </div>
 
-                                            <div class="space-y-2">
-                                                <p><strong>Full Name:</strong> {{ $user->firstname }} {{ $user->lastname
-                                                    }}</p>
-                                                <p><strong>Email:</strong> {{ $user->email }}</p>
-                                                <p><strong>Contact Number:</strong> {{ $user->phone_number ?? 'N/A' }}
-                                                </p>
+                                            <!-- Body -->
+                                            <div class="px-6 py-5 space-y-4">
+
+                                                <!-- Personal Info -->
+                                                <div>
+                                                    <h4 class="text-lg font-medium text-gray-700 mb-2">Personal Details
+                                                    </h4>
+                                                    <div class="grid grid-cols-2 gap-4 text-sm">
+                                                        <p><strong class="text-gray-600">First Name:</strong> {{
+                                                            $user->firstname }}</p>
+                                                        <p><strong class="text-gray-600">Last Name:</strong> {{
+                                                            $user->lastname }}</p>
+                                                        <p><strong class="text-gray-600">Email:</strong> {{ $user->email
+                                                            }}</p>
+                                                        <p><strong class="text-gray-600">Phone:</strong> {{
+                                                            $user->phone_number ?? 'N/A' }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Member Profile Info -->
                                                 @if($user->member)
-                                                <p><strong>Middle Name:</strong> {{ $user->member->middle_name ?? 'N/A'
-                                                    }}</p>
-                                                <p><strong>Birth Date:</strong> {{ $user->member->birth_date ?? 'N/A' }}
-                                                </p>
-                                                <p><strong>Place of Birth:</strong> {{ $user->member->place_of_birth ??
-                                                    'N/A' }}</p>
-                                                <p><strong>Address:</strong> {{ $user->member->address ?? 'N/A' }}</p>
-                                                <p><strong>Contact Number:</strong> {{ $user->member->contact_number ??
-                                                    'N/A' }}</p>
+                                                <div>
+                                                    <h4 class="text-lg font-medium text-gray-700 mb-2">Member Profile
+                                                    </h4>
+                                                    <div class="grid grid-cols-2 gap-4 text-sm">
+                                                        <p><strong class="text-gray-600">Middle Name:</strong> {{
+                                                            $user->member->middle_name ?? 'N/A' }}</p>
+                                                        <p><strong class="text-gray-600">Birth Date:</strong> {{
+                                                            $user->member->birth_date ?? 'N/A' }}</p>
+                                                        <p class="col-span-2"><strong class="text-gray-600">Place of
+                                                                Birth:</strong> {{ $user->member->place_of_birth ??
+                                                            'N/A' }}</p>
+                                                        <p class="col-span-2"><strong
+                                                                class="text-gray-600">Address:</strong> {{
+                                                            $user->member->address ?? 'N/A' }}</p>
+                                                        <p class="col-span-2"><strong class="text-gray-600">Contact
+                                                                Number:</strong> {{ $user->member->contact_number ??
+                                                            'N/A' }}</p>
+                                                    </div>
+                                                </div>
                                                 @endif
+
+                                            </div>
+
+                                            <!-- Footer -->
+                                            <div class="px-6 py-4 border-t bg-gray-50 flex justify-end">
+                                                <button data-modal-toggle="memberModal{{ $user->id }}"
+                                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm shadow transition">
+                                                    Close
+                                                </button>
                                             </div>
 
                                         </div>
                                     </div>
                                 </div>
                                 @endif
+
                                 @endforeach
                             </tbody>
 
