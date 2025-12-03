@@ -153,7 +153,7 @@
     </button>
     @endif
 </div>
-
+</td>
 
                                 </tr>
                                 @if($user->role === 'member')
