@@ -8,8 +8,9 @@
 
 <div class="p-6">
 
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">My Reservations</h2>
+    {{-- Header with Back Button --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-6">
+        <h2 class="text-2xl font-bold mb-3 md:mb-0">My Reservations</h2>
 
         <a href="{{ route('member.reservation') }}"
             class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">
@@ -17,6 +18,7 @@
         </a>
     </div>
 
+    {{-- Reservations Table --}}
     <div class="bg-white shadow-lg rounded-lg p-4 overflow-x-auto">
 
         @if($reservations->isEmpty())
@@ -25,9 +27,9 @@
         <table class="w-full text-sm text-gray-700">
             <thead>
                 <tr class="border-b bg-gray-100">
-                    <th class="p-3">Sacrament</th>
-                    <th class="p-3">Reservation Date</th>
-                    <th class="p-3">Status</th>
+                    <th class="p-3 text-left">Sacrament</th>
+                    <th class="p-3 text-left">Reservation Date</th>
+                    <th class="p-3 text-left">Status</th>
                     <th class="p-3 text-center">Actions</th>
                 </tr>
             </thead>
@@ -63,7 +65,7 @@
 
 {{-- MODAL --}}
 <div id="detailsModal"
-    class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+    class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
 
     <div class="bg-white w-full max-w-xl rounded-lg shadow-2xl p-6 relative animate-fadeIn">
 
