@@ -142,7 +142,7 @@ class MemberController extends Controller
             'lastname'       => 'required|string|max:255',
             'phone_number'   => 'nullable|string|max:20',
 
-            // Member table fields
+            
             'middle_name'    => 'nullable|string|max:255',
             'birth_date'     => 'nullable|date',
             'place_of_birth' => 'nullable|string|max:255',
@@ -152,14 +152,14 @@ class MemberController extends Controller
 
         $user = auth()->user();
 
-        // Update user data
+
         $user->update([
             'firstname'    => $request->firstname,
             'lastname'     => $request->lastname,
             'phone_number' => $request->phone_number,
         ]);
 
-        // Update member data
+
         $user->member->update([
             'middle_name'    => $request->middle_name,
             'birth_date'     => $request->birth_date,
@@ -180,12 +180,12 @@ class MemberController extends Controller
 
         $user = auth()->user();
 
-        // Check if the current password is correct
+
         if (! \Hash::check($request->current_password, $user->password)) {
             return back()->with('error', 'Current password is incorrect.');
         }
 
-        // Update password
+
         $user->password = bcrypt($request->new_password);
         $user->save();
 

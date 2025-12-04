@@ -27,6 +27,18 @@ class ReservationController extends Controller
         //
     }
 
+    public function memberReservations()
+    {
+        $memberId = auth()->user()->member->id;
+
+        $reservations = Reservation::with(['sacrament', 'payments'])
+            ->where('member_id', $memberId)
+            ->latest()
+            ->get();
+
+        return view('member.reservation_history', compact('reservations'));
+    }
+
     public function makeReservation(Request $request)
     {
         $request->validate([
