@@ -110,6 +110,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/profile', [MemberController::class, 'profile'])->name('profile');
         Route::post('/member/profile/update', [MemberController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/member/profile/change-password', [MemberController::class, 'changePassword'])->name('profile.changePassword');
 
     });
 

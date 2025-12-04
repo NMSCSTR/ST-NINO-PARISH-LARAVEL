@@ -171,6 +171,27 @@ class MemberController extends Controller
         return back()->with('success', 'Profile updated successfully!');
     }
 
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password'     => 'required|min:6|confirmed',
+        ]);
+
+        $user = auth()->user();
+
+        // Check if the current password is correct
+        if (! \Hash::check($request->current_password, $user->password)) {
+            return back()->with('error', 'Current password is incorrect.');
+        }
+
+        // Update password
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Password updated successfully!');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
