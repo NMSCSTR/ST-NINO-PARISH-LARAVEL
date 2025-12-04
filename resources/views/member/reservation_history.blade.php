@@ -9,11 +9,11 @@
 <div class="p-6">
 
     {{-- Header with Back Button --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-10">
         <h2 class="text-2xl font-bold mb-3 md:mb-0">My Reservations</h2>
 
         <a href="{{ route('member.reservation') }}"
-            class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">
+            class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 mt-5">
             ← Back to Reservation Form
         </a>
     </div>
