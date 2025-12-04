@@ -99,7 +99,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [MemberController::class, 'index'])->name('dashboard');
         Route::get('/reservation', [MemberController::class, 'reservation'])->name('reservation');
         Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('makeReservation');
-        Route::get('/member/reservations/history', [ReservationController::class, 'memberReservations'])->name('reservations.history');
+        Route::get('/reservations/history', [ReservationController::class, 'memberReservations'])->name('reservations.history');
 
 
         Route::get('/events', fn() => view('member.events'))->name('events.page');
