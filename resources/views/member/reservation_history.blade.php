@@ -6,56 +6,51 @@
 
 @include('components.member.topnav')
 
-<div class="flex flex-col items-center mt-10 px-4">
+<div class="p-6">
 
     {{-- Header with Back Button --}}
-    <div class="w-full max-w-4xl flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h2 class="text-3xl font-bold mb-3 md:mb-0 mt-2 flex items-center space-x-2">
-            <span class="material-icons text-blue-600 text-4xl">event_note</span>
-            <span>My Reservations</span>
-        </h2>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-10">
+        <h2 class="text-3xl font-bold mb-3 md:mb-0 mt-2">My Reservations</h2>
 
         <a href="{{ route('member.reservation') }}"
-            class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 mt-4 md:mt-0 flex items-center space-x-1">
-            <span class="material-icons text-white">arrow_back</span>
-            <span>Back to Reservation Form</span>
+            class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 mt-8">
+            ← Back to Reservation Form
         </a>
     </div>
 
     {{-- Reservations Table --}}
-    <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-4xl overflow-x-auto">
+    <div class="bg-white shadow-lg rounded-lg p-4 overflow-x-auto">
 
         @if($reservations->isEmpty())
-            <p class="text-gray-600 text-center py-6 text-lg">No reservations found.</p>
+            <p class="text-gray-600 text-center py-4 text-lg">No reservations found.</p>
         @else
-        <table class="w-full text-lg text-gray-700 table-auto">
+        <table class="w-full text-sm text-gray-700">
             <thead>
                 <tr class="border-b bg-gray-100">
-                    <th class="p-4 text-left flex items-center space-x-1"><span class="material-icons text-blue-600">church</span>Sacrament</th>
-                    <th class="p-4 text-left flex items-center space-x-1"><span class="material-icons text-green-600">calendar_today</span>Reservation Date</th>
-                    <th class="p-4 text-left flex items-center space-x-1"><span class="material-icons text-yellow-600">info</span>Status</th>
-                    <th class="p-4 text-center"><span class="material-icons text-purple-600">visibility</span>Actions</th>
+                    <th class="p-3 text-left">Sacrament</th>
+                    <th class="p-3 text-left">Reservation Date</th>
+                    <th class="p-3 text-left">Status</th>
+                    <th class="p-3 text-center">Actions</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($reservations as $res)
                 <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="p-4 text-lg">{{ ucfirst($res->sacrament->sacrament_type) }}</td>
-                    <td class="p-4 text-lg">{{ $res->reservation_date?->format('M d, Y') }}</td>
-                    <td class="p-4">
+                    <td class="p-3 text-lg">{{ ucfirst($res->sacrament->sacrament_type) }}</td>
+                    <td class="p-3 text-lg">{{ $res->reservation_date?->format('M d, Y') }}</td>
+                    <td class="p-3">
                         <span class="px-3 py-1 rounded text-white text-lg
                             {{ $res->status == 'approved' ? 'bg-green-600' :
                                ($res->status == 'pending' ? 'bg-yellow-500' : 'bg-red-600') }}">
                             {{ ucfirst($res->status) }}
                         </span>
                     </td>
-                    <td class="p-4 text-center">
+                    <td class="p-3 text-center">
                         <button
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg detailBtn shadow text-lg flex items-center justify-center space-x-1"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg detailBtn shadow text-lg"
                             data-id="{{ $res->id }}">
-                            <span class="material-icons text-white">visibility</span>
-                            <span>View Details</span>
+                            View Details
                         </button>
                     </td>
                 </tr>
@@ -72,16 +67,16 @@
 <div id="detailsModal"
     class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50 overflow-y-auto">
 
-    <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl p-6 relative animate-fadeIn">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl p-6 relative animate-fadeIn">
 
         <button id="closeModal" class="absolute top-3 right-4 text-3xl hover:text-red-600">&times;</button>
 
-        <h2 class="text-2xl font-bold mb-6 border-b pb-2 flex items-center space-x-3">
-            <span class="material-icons text-blue-600 text-4xl">event_note</span>
+        <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center space-x-2">
+            <span class="material-icons text-blue-600">event_note</span>
             <span>Reservation Details</span>
         </h2>
 
-        <div id="modalContent" class="text-gray-800 space-y-6 text-lg">
+        <div id="modalContent" class="text-gray-800 space-y-4 text-lg">
             <p class="text-center py-6 text-gray-500 text-xl">Loading details...</p>
         </div>
 
@@ -121,24 +116,22 @@
                 })
                 .then(data => {
                     let html = `
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-3 p-4 border rounded-xl bg-gray-50 shadow-sm">
-                                <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">person</span> <strong>Member:</strong> ${data.member}</p>
-                                <p class="flex items-center space-x-2"><span class="material-icons text-green-600">church</span> <strong>Sacrament:</strong> ${data.sacrament}</p>
-                            </div>
+                        <div class="space-y-3">
+                            <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">person</span> <strong>Member:</strong> ${data.member}</p>
+                            <p class="flex items-center space-x-2"><span class="material-icons text-green-600">church</span> <strong>Sacrament:</strong> ${data.sacrament}</p>
+                        </div>
 
-                            <div class="space-y-3 p-4 border rounded-xl bg-gray-50 shadow-sm">
-                                <h3 class="text-xl font-semibold flex items-center space-x-2 mb-2">
-                                    <span class="material-icons text-yellow-600">payment</span>
-                                    <span>Payments</span>
-                                </h3>
+                        <h3 class="mt-6 text-xl font-semibold flex items-center space-x-2">
+                            <span class="material-icons text-yellow-600">payment</span>
+                            <span>Payments</span>
+                        </h3>
                     `;
 
                     if (data.payments.length > 0) {
                         html += `
-                            <div class="space-y-4 mt-2">
+                            <div class="space-y-4 mt-4">
                                 ${data.payments.map(p => `
-                                    <div class="p-4 border rounded-lg bg-white shadow-sm space-y-2">
+                                    <div class="p-4 border rounded-lg bg-gray-50 shadow-sm space-y-2">
                                         <p class="flex items-center space-x-2"><span class="material-icons text-green-600">attach_money</span> <strong>Amount:</strong> ₱${p.amount}</p>
                                         <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">credit_card</span> <strong>Method:</strong> ${p.method}</p>
                                         <p class="flex items-center space-x-2"><span class="material-icons text-purple-600">info</span> <strong>Status:</strong> <span class="font-semibold">${p.status}</span></p>
@@ -155,10 +148,8 @@
                             </div>
                         `;
                     } else {
-                        html += `<p class="text-gray-500 mt-2 text-lg">No payments found.</p>`;
+                        html += `<p class="text-gray-500 mt-4 text-lg">No payments found.</p>`;
                     }
-
-                    html += `</div></div>`; // Close grid columns
 
                     modalContent.innerHTML = html;
                 })
@@ -194,8 +185,9 @@
         to { opacity: 1; transform: scale(1); }
     }
 
+    /* Optional: increase icon size */
     .material-icons {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
     }
 </style>
 @endpush
