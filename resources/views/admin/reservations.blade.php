@@ -26,9 +26,12 @@
                             aria-label="Breadcrumb">
                             <ol class="inline-flex items-center space-x-1 md:space-x-2">
                                 <li class="inline-flex items-center">
-                                    <a href="#" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-blue-600">
-                                        <svg class="w-3 h-3 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                                    <a href="#"
+                                        class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-blue-600">
+                                        <svg class="w-3 h-3 me-2.5" xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                                         </svg>
                                         Admin
                                     </a>
@@ -39,9 +42,10 @@
                                         <svg class="w-3 h-3 mx-1 text-gray-400" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 6 10">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4"/>
+                                                stroke-width="2" d="m1 9 4-4-4-4" />
                                         </svg>
-                                        <a href="#" class="text-sm font-medium text-gray-600 hover:text-blue-600">Dashboard</a>
+                                        <a href="#"
+                                            class="text-sm font-medium text-gray-600 hover:text-blue-600">Dashboard</a>
                                     </div>
                                 </li>
 
@@ -50,7 +54,7 @@
                                         <svg class="w-3 h-3 mx-1 text-gray-400" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 6 10">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4"/>
+                                                stroke-width="2" d="m1 9 4-4-4-4" />
                                         </svg>
                                         <span class="text-sm font-medium text-gray-400">Reservations</span>
                                     </div>
@@ -101,34 +105,35 @@
                                     <td class="px-6 py-4">
                                         <span class="
                                             @if($reservation->status=='approved') text-green-600
-                                            @elseif($reservation->status=='forwarded') text-blue-600
+                                            @elseif($reservation->status=='forwarded_to_priest') text-blue-600
                                             @elseif($reservation->status=='pending') text-yellow-600
                                             @else text-red-600 @endif font-semibold">
-                                            {{ ucfirst($reservation->status) }}
+                                            {{ ucfirst(str_replace('_', ' ', $reservation->status)) }}
                                         </span>
                                     </td>
 
                                     <!-- Forwarded Info -->
                                     <td class="px-6 py-4 text-gray-700">
                                         @if($reservation->forwarded_by)
-                                            <div>
-                                                <strong>By:</strong> {{ $reservation->forwardedByUser->firstname }}
-                                                {{ $reservation->forwardedByUser->lastname }}
-                                            </div>
-                                            <div class="text-xs text-gray-500">
-                                                {{ $reservation->forwarded_at->format('M d, Y g:i A') }}
-                                            </div>
+                                        <div>
+                                            <strong>By:</strong> {{ $reservation->forwardedByUser->firstname }}
+                                            {{ $reservation->forwardedByUser->lastname }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            {{ $reservation->forwarded_at->format('M d, Y g:i A') }}
+                                        </div>
                                         @else
-                                            <span class="text-gray-400">Not forwarded</span>
+                                        <span class="text-gray-400">Not forwarded</span>
                                         @endif
                                     </td>
 
                                     <!-- Approved By -->
                                     <td class="px-6 py-4">
                                         @if ($reservation->approved_by)
-                                            {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}
+                                        {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname
+                                        }}
                                         @else
-                                            <span class="text-gray-400">Not yet approved</span>
+                                        <span class="text-gray-400">Not yet approved</span>
                                         @endif
                                     </td>
 
@@ -157,28 +162,29 @@
                                             Documents
                                         </button>
 
-                                        <!-- FORWARD BUTTON (Staff only) -->
+                                        <!-- FORWARD BUTTON (Staff only, if pending) -->
                                         @if(auth()->user()->role === 'staff' && $reservation->status == 'pending')
-                                            <form action="{{ route('admin.reservations.forward', $reservation->id) }}"
-                                                  method="POST" class="inline-block">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
-                                                    Forward
-                                                </button>
-                                            </form>
+                                        <form action="{{ route('admin.reservations.forward', $reservation->id) }}"
+                                            method="POST" class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                Forward to Priest
+                                            </button>
+                                        </form>
                                         @endif
 
-                                        <!-- APPROVE BUTTON (Priest only) -->
-                                        @if(auth()->user()->role === 'priest' && $reservation->status == 'forwarded')
-                                            <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
-                                                  method="POST" class="inline-block">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="px-3 py-1.5 text-xs bg-green-600 text-white rounded hover:bg-green-700">
-                                                    Approve
-                                                </button>
-                                            </form>
+                                        <!-- APPROVE BUTTON (Priest only, if forwarded) -->
+                                        @if(auth()->user()->role === 'priest' && $reservation->status ==
+                                        'forwarded_to_priest')
+                                        <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
+                                            method="POST" class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="px-3 py-1.5 text-xs bg-green-600 text-white rounded hover:bg-green-700">
+                                                Approve
+                                            </button>
+                                        </form>
                                         @endif
 
                                         <!-- Pay Now -->
@@ -220,35 +226,22 @@
 
     <!-- DOCUMENTS MODAL -->
     <div id="documentsModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
-
         <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 max-h-[90vh] overflow-auto">
-
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Submitted Documents</h2>
-
             <p id="documentsReservationInfo" class="text-sm text-gray-600 mb-3"></p>
-
             <div id="documentsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
             <button onclick="closeDocumentsModal()"
                 class="mt-5 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
                 Close
             </button>
-
         </div>
     </div>
 
-
     <!-- PAYMENTS LIST MODAL -->
     <div id="paymentListModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
-
         <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 overflow-auto max-h-[90vh]">
-
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Payment History</h2>
-
-            <!-- Dynamic Reservation Info -->
             <p id="paymentListReservationInfo" class="text-sm text-gray-600 mb-3"></p>
-
-            <!-- Payment Table -->
             <table class="w-full text-sm border rounded-lg">
                 <thead class="bg-gray-100">
                     <tr>
@@ -259,28 +252,20 @@
                         <th class="px-3 py-2 text-left">Date</th>
                     </tr>
                 </thead>
-
                 <tbody id="paymentListBody"></tbody>
             </table>
-
-            <!-- Close Button -->
             <button onclick="closePaymentListModal()"
                 class="mt-5 px-4 py-2 bg-gray-700 text-white rounded hover:bg-black">
                 Close
             </button>
-
         </div>
     </div>
-
 
     <!-- RECEIPT MODAL -->
     <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
         <div class="bg-white rounded-xl p-6 w-full max-w-4xl shadow-2xl">
-            <!-- Larger modal -->
             <h2 class="text-xl font-semibold mb-4">Payment Receipt</h2>
-
             <img id="receiptImage" class="w-full max-h-[80vh] object-contain rounded-lg shadow-lg border">
-
             <div class="text-right mt-4">
                 <button onclick="closeReceiptModal()" class="px-5 py-2 bg-gray-700 text-white rounded hover:bg-black">
                     Close
@@ -289,21 +274,16 @@
         </div>
     </div>
 
-
     <!-- ADMIN PAY NOW MODAL -->
     <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
-
         <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-2xl">
             <h2 class="text-lg font-semibold mb-4">Upload Payment Receipt</h2>
-
             <form id="adminPayNowForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="file" name="receipt" accept="image/*" required class="w-full border p-2 rounded mb-4">
-
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                     Upload Receipt
                 </button>
-
                 <button type="button" onclick="closePaymentModal()"
                     class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 ml-2">
                     Cancel
@@ -311,7 +291,6 @@
             </form>
         </div>
     </div>
-
 
 </section>
 @endsection
