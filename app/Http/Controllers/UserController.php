@@ -31,19 +31,21 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'firstname' => 'required|string|max:100',
-            'lastname'  => 'required|string|max:100',
-            'email'     => 'required|string|email|max:255|unique:users,email',
-            'password'  => 'required|string|min:8|confirmed',
-            'role'      => 'required',
+            'firstname'    => 'required|string|max:100',
+            'lastname'     => 'required|string|max:100',
+            'phone_number' => 'nullable|string|max:20',
+            'email'        => 'required|string|email|max:255|unique:users,email',
+            'password'     => 'required|string|min:8|confirmed',
+            'role'         => 'required',
         ]);
 
-        $user = UserModel::create([
-            'firstname' => $validated['firstname'],
-            'lastname'  => $validated['lastname'],
-            'email'     => $validated['email'],
-            'password'  => Hash::make($validated['password']),
-            'role'      => $validated['role'],
+        UserModel::create([
+            'firstname'    => $validated['firstname'],
+            'lastname'     => $validated['lastname'],
+            'phone_number' => $validated['phone_number'] ?? null,
+            'email'        => $validated['email'],
+            'password'     => Hash::make($validated['password']),
+            'role'         => $validated['role'],
         ]);
 
         return redirect()
