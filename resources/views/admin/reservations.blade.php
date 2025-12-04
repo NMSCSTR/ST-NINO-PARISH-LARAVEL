@@ -7,32 +7,28 @@
 <section>
     <div class="min-h-screen pt-24">
         @include('components.admin.bg')
-        {{-- Include Top Navigation --}}
         @include('components.admin.topnav')
+
         <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-4 gap-6">
 
-            {{-- Include Sidebar --}}
+            <!-- Sidebar -->
             <div class="lg:w-2/12 w-full">
                 @include('components.admin.sidebar')
             </div>
 
-            {{-- Main Content --}}
+            <!-- Main Content -->
             <div class="lg:w-10/12 w-full">
-
                 <div class="bg-white rounded-2xl shadow-xl">
-                    <div class="px-6 py-6">
 
+                    <div class="px-6 py-6">
                         <!-- Breadcrumb -->
                         <nav class="flex px-5 py-3 text-gray-600 border border-gray-200 rounded-lg bg-white"
                             aria-label="Breadcrumb">
-                            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                            <ol class="inline-flex items-center space-x-1 md:space-x-2">
                                 <li class="inline-flex items-center">
-                                    <a href="#"
-                                        class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-blue-600">
-                                        <svg class="w-3 h-3 me-2.5" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                                    <a href="#" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-blue-600">
+                                        <svg class="w-3 h-3 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
                                         </svg>
                                         Admin
                                     </a>
@@ -40,26 +36,23 @@
 
                                 <li>
                                     <div class="flex items-center">
-                                        <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                        <svg class="w-3 h-3 mx-1 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 6 10">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4" />
+                                                stroke-width="2" d="m1 9 4-4-4-4"/>
                                         </svg>
-                                        <a href="#"
-                                            class="ms-1 text-sm font-medium text-gray-600 hover:text-blue-600 md:ms-2">
-                                            Dashboard
-                                        </a>
+                                        <a href="#" class="text-sm font-medium text-gray-600 hover:text-blue-600">Dashboard</a>
                                     </div>
                                 </li>
 
                                 <li aria-current="page">
                                     <div class="flex items-center">
-                                        <svg class="rtl:rotate-180 w-3 h-3 mx-1 text-gray-400" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                        <svg class="w-3 h-3 mx-1 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 6 10">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4" />
+                                                stroke-width="2" d="m1 9 4-4-4-4"/>
                                         </svg>
-                                        <span class="ms-1 text-sm font-medium text-gray-400 md:ms-2">Reservations</span>
+                                        <span class="text-sm font-medium text-gray-400">Reservations</span>
                                     </div>
                                 </li>
                             </ol>
@@ -76,59 +69,83 @@
                                     <th class="px-6 py-3">Sacrament</th>
                                     <th class="px-6 py-3">Fee</th>
                                     <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3">Forwarded Info</th>
+                                    <th class="px-6 py-3">Approved By</th>
                                     <th class="px-6 py-3">Reservation Date</th>
                                     <th class="px-6 py-3">Remarks</th>
-                                    <th class="px-6 py-3">Approved By</th>
                                     <th class="px-6 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
 
-                            <tbody id="reservation-rows" class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-gray-100">
                                 @foreach($reservations as $reservation)
                                 <tr class="hover:bg-gray-50 transition">
 
+                                    <!-- Member -->
                                     <td class="px-6 py-4 font-medium text-gray-900">
-                                        {{ $reservation->member->user->firstname }} {{
-                                        $reservation->member->user->lastname }}
+                                        {{ $reservation->member->user->firstname }}
+                                        {{ $reservation->member->user->lastname }}
                                     </td>
 
+                                    <!-- Sacrament -->
                                     <td class="px-6 py-4">
                                         {{ $reservation->sacrament->sacrament_type ?? 'N/A' }}
                                     </td>
 
+                                    <!-- Fee -->
                                     <td class="px-6 py-4">
                                         ₱{{ number_format($reservation->fee, 2) }}
                                     </td>
 
+                                    <!-- Status -->
                                     <td class="px-6 py-4">
                                         <span class="
-                @if($reservation->status=='approved') text-green-600
-                @elseif($reservation->status=='pending') text-yellow-600
-                @else text-red-600 @endif font-semibold">
+                                            @if($reservation->status=='approved') text-green-600
+                                            @elseif($reservation->status=='forwarded') text-blue-600
+                                            @elseif($reservation->status=='pending') text-yellow-600
+                                            @else text-red-600 @endif font-semibold">
                                             {{ ucfirst($reservation->status) }}
                                         </span>
                                     </td>
 
+                                    <!-- Forwarded Info -->
+                                    <td class="px-6 py-4 text-gray-700">
+                                        @if($reservation->forwarded_by)
+                                            <div>
+                                                <strong>By:</strong> {{ $reservation->forwardedByUser->firstname }}
+                                                {{ $reservation->forwardedByUser->lastname }}
+                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ $reservation->forwarded_at->format('M d, Y g:i A') }}
+                                            </div>
+                                        @else
+                                            <span class="text-gray-400">Not forwarded</span>
+                                        @endif
+                                    </td>
+
+                                    <!-- Approved By -->
+                                    <td class="px-6 py-4">
+                                        @if ($reservation->approved_by)
+                                            {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}
+                                        @else
+                                            <span class="text-gray-400">Not yet approved</span>
+                                        @endif
+                                    </td>
+
+                                    <!-- Reservation Date -->
                                     <td class="px-6 py-4">
                                         {{ $reservation->reservation_date->format('F j, Y g:i A') }}
                                     </td>
 
+                                    <!-- Remarks -->
                                     <td class="px-6 py-4 text-gray-500">
                                         {{ $reservation->remarks ?? 'No remarks yet' }}
                                     </td>
 
-                                    <td class="px-6 py-4">
-                                        @if ($reservation->approvedBy)
-                                        {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname
-                                        }}
-                                        @else
-                                        <span class="text-gray-400">Not yet approved</span>
-                                        @endif
-                                    </td>
-
+                                    <!-- Actions -->
                                     <td class="px-6 py-4 text-right space-x-2">
 
-                                        <!-- Toggle Payments -->
+                                        <!-- Payments -->
                                         <button onclick="openPaymentListModal({{ $reservation->id }})"
                                             class="px-3 py-1.5 text-xs bg-gray-700 text-white rounded hover:bg-black">
                                             Payments
@@ -140,7 +157,29 @@
                                             Documents
                                         </button>
 
+                                        <!-- FORWARD BUTTON (Staff only) -->
+                                        @if(auth()->user()->role === 'staff' && $reservation->status == 'pending')
+                                            <form action="{{ route('admin.reservations.forward', $reservation->id) }}"
+                                                  method="POST" class="inline-block">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                    Forward
+                                                </button>
+                                            </form>
+                                        @endif
 
+                                        <!-- APPROVE BUTTON (Priest only) -->
+                                        @if(auth()->user()->role === 'priest' && $reservation->status == 'forwarded')
+                                            <form action="{{ route('admin.reservations.approve', $reservation->id) }}"
+                                                  method="POST" class="inline-block">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="px-3 py-1.5 text-xs bg-green-600 text-white rounded hover:bg-green-700">
+                                                    Approve
+                                                </button>
+                                            </form>
+                                        @endif
 
                                         <!-- Pay Now -->
                                         <button onclick="openPaymentModal({{ $reservation->id }})"
@@ -159,21 +198,23 @@
                                             class="delete-reservation-btn px-3 py-1.5 text-xs bg-red-600 text-white rounded hover:bg-red-700">
                                             Delete
                                         </a>
+
                                         <form id="delete-reservation-form" method="POST" style="display:none;">
                                             @csrf
                                             @method('DELETE')
                                         </form>
 
-
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                     </div>
-                </div>
 
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -274,182 +315,8 @@
 
 </section>
 @endsection
+
 @push('scripts')
 @include('components.alerts')
-<script>
-    document.querySelectorAll('.delete-reservation-btn').forEach(button => {
-    button.addEventListener('click', function (e) {
-        e.preventDefault();
-        const reservationId = this.getAttribute('data-id');
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "This reservation will be deleted permanently!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.getElementById('delete-reservation-form');
-                form.setAttribute('action', `/admin/reservations/${reservationId}`);
-                form.submit();
-            }
-        });
-    });
-});
-
-</script>
-
-<script>
-    function openDocumentsModal(reservationId) {
-
-    fetch(`/admin/reservations/${reservationId}/documents`)
-        .then(response => response.json())
-        .then(data => {
-
-            document.getElementById("documentsReservationInfo").innerHTML =
-                `Reservation for <strong>${data.member}</strong> — <span class="text-gray-700">${data.sacrament}</span>`;
-
-            let html = "";
-
-            if (data.documents.length === 0) {
-                html = `<p class="text-gray-400 text-center">No documents uploaded.</p>`;
-            } else {
-                data.documents.forEach(doc => {
-                    html += `
-                        <div class="border rounded-lg shadow p-2 bg-white">
-                            <img src="${doc.url}"
-                                 class="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-80"
-                                 onclick="showReceipt('${doc.url}')">
-                        </div>
-                    `;
-                });
-            }
-
-            document.getElementById("documentsContainer").innerHTML = html;
-
-            const modal = document.getElementById("documentsModal");
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
-        });
-}
-
-function closeDocumentsModal() {
-    const modal = document.getElementById("documentsModal");
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-}
-
-</script>
-<script>
-    document.querySelectorAll('.approve-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            let form = this.closest('form');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You are about to approve this reservation.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, approve it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
-</script>
-
-<script>
-    function togglePayments(id) {
-    const section = document.getElementById(`payment-section-${id}`);
-    section.classList.toggle('hidden');
-}
-
-// Receipt Modal
-function showReceipt(url) {
-    document.getElementById('receiptImage').src = url;
-    document.getElementById('receiptModal').classList.remove('hidden');
-    document.getElementById('receiptModal').classList.add('flex');
-}
-
-function closeReceiptModal() {
-    document.getElementById('receiptModal').classList.add('hidden');
-    document.getElementById('receiptModal').classList.remove('flex');
-}
-
-// Admin Pay-Now Modal
-function openPaymentModal(reservationId) {
-    const form = document.getElementById('adminPayNowForm');
-    form.action = `/admin/payments/${reservationId}/pay-now`;
-    document.getElementById('paymentModal').classList.remove('hidden');
-    document.getElementById('paymentModal').classList.add('flex');
-}
-
-function closePaymentModal() {
-    document.getElementById('paymentModal').classList.add('hidden');
-    document.getElementById('paymentModal').classList.remove('flex');
-}
-</script>
-
-<script>
-    function openPaymentListModal(reservationId) {
-    fetch(`/admin/reservations/${reservationId}/payments`)
-        .then(response => response.json())
-        .then(data => {
-
-            // Update Modal Header
-            document.getElementById("paymentListReservationInfo").innerHTML =
-                `Reservation for <strong>${data.member}</strong> — <span class="text-gray-700">${data.sacrament}</span>`;
-
-            // Build the payment rows
-            let rows = "";
-
-            if (data.payments.length === 0) {
-                rows = `<tr><td colspan="5" class="px-3 py-3 text-center text-gray-400">No payments found.</td></tr>`;
-            } else {
-                data.payments.forEach(payment => {
-                    rows += `
-                        <tr class="border-b">
-                            <td class="px-3 py-2">₱${parseFloat(payment.amount).toFixed(2)}</td>
-                            <td class="px-3 py-2">${payment.method ?? '-'}</td>
-                            <td class="px-3 py-2">
-                                <span class="${payment.status === 'paid' ? 'text-green-600' : 'text-yellow-600'}">
-                                    ${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
-                                </span>
-                            </td>
-                            <td class="px-3 py-2">
-                                ${payment.receipt_path ?
-                                    `<button onclick="showReceipt('${payment.receipt_url}')"
-                                        class="text-blue-600 underline">View</button>` : '-'}
-                            </td>
-                            <td class="px-3 py-2">${payment.date}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            document.getElementById("paymentListBody").innerHTML = rows;
-
-            // Show modal
-            const modal = document.getElementById("paymentListModal");
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
-        });
-}
-
-function closePaymentListModal() {
-    const modal = document.getElementById("paymentListModal");
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-}
-</script>
-
-
+@include('admin.reservations-js')
 @endpush

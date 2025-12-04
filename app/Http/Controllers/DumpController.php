@@ -3,20 +3,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Models\Payment;
-use App\Models\User;
 use App\Models\Reservation;
 use App\Models\ReservationDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $reservations = Reservation::with([
-            'member.user', 'sacrament', 'payments', 'approvedBy', 'forwardedByUser'
-        ])->get();
-
+        $reservations = Reservation::with(['member.user', 'sacrament', 'payments'])->get();
         return view('admin.reservations', compact('reservations'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
     }
 
     public function memberReservations()
@@ -52,8 +60,9 @@ class ReservationController extends Controller
             'status'           => 'pending',
         ]);
 
-        // Payment handling (unchanged)
+        // Handle Payment
         if ($request->payment_option === 'pay_now' && $request->hasFile('receipt')) {
+
             $path = $request->file('receipt')->store('receipts', 'public');
 
             Payment::create([
@@ -77,9 +86,11 @@ class ReservationController extends Controller
             ]);
         }
 
-        // Document upload
+        // Handle Uploaded Documents
         if ($request->submission_method === 'online' && $request->hasFile('documents')) {
+
             foreach ($request->file('documents') as $file) {
+
                 $path = $file->store('documents', 'public');
 
                 ReservationDocument::create([
@@ -91,25 +102,6 @@ class ReservationController extends Controller
 
         return redirect()->route('member.reservation')
             ->with('success', 'Reservation created successfully.');
-    }
-
-    // NEW FORWARD METHOD
-    public function forward($id)
-    {
-        $reservation = Reservation::findOrFail($id);
-
-        // Cannot forward if already approved or forwarded
-        if (in_array($reservation->status, ['approved', 'forwarded'])) {
-            return back()->with('error', 'This reservation cannot be forwarded.');
-        }
-
-        $reservation->update([
-            'status'       => 'forwarded',
-            'forwarded_by' => auth()->user()->id,
-            'forwarded_at' => now(),
-        ]);
-
-        return back()->with('success', 'Reservation forwarded to the priest.');
     }
 
     public function approve($id)
@@ -159,12 +151,34 @@ class ReservationController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Reservation $reservation)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
         $reservations = Reservation::findOrFail($id);
         return view('admin.update.update_reservation', compact('reservations'));
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
@@ -185,10 +199,12 @@ class ReservationController extends Controller
 
         $reservation->save();
 
-        return redirect()->route('admin.reservations')
-            ->with('success', 'Reservation updated successfully.');
+        return redirect()->route('admin.reservations')->with('success', 'Reservation updated successfully.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Reservation $reservation)
     {
         $reservation->delete();
@@ -196,4 +212,5 @@ class ReservationController extends Controller
         return redirect()->route('admin.reservations')
             ->with('success', 'Reservation deleted successfully.');
     }
+
 }

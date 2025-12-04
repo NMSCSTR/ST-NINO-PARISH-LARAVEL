@@ -57,4 +57,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class, 'approved_by');
     }
+
+    public function reviewedReservations()
+    {
+        return $this->hasMany(Reservation::class, 'reviewed_by');
+    }
+
+    public function assignedReservations()
+    {
+        return $this->hasMany(Reservation::class, 'assigned_priest_id');
+    }
 }
