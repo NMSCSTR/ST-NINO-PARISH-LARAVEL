@@ -117,11 +117,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/reservations/{reservation}/documents', [ReservationController::class, 'getDocuments']);
 
     });
-
     Route::prefix('priest')->middleware('user_role:priest')->name('priest.')->group(function () {
         Route::get('/dashboard', [PriestController::class, 'index'])->name('dashboard');
-        
+
         Route::post('/reservations/{id}/approve', [ReservationController::class, 'priestApprove'])->name('reservations.approve');
         Route::post('/reservations/{id}/reject', [ReservationController::class, 'priestReject'])->name('reservations.reject');
+
+        // Profile routes
+        Route::get('/profile', [PriestController::class, 'editProfile'])->name('profile.edit');
+        Route::post('/profile', [PriestController::class, 'updateProfile'])->name('profile.update');
     });
+
 });

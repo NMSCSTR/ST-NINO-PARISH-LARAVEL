@@ -25,6 +25,12 @@ class PriestController extends Controller
         return view('admin.priest', compact('priest'));
     }
 
+    public function editProfile()
+    {
+        $priest = Auth::user();
+        return view('priest.profile', compact('priest'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -47,6 +53,35 @@ class PriestController extends Controller
     public function show(Priest $priest)
     {
         //
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validate input
+        $validated = $request->validate([
+            'firstname'    => ['required', 'string', 'max:255'],
+            'lastname'     => ['required', 'string', 'max:255'],
+            'email'        => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone_number' => ['nullable', 'string', 'max:20'],
+            'password'     => ['nullable', 'string', 'min:6', 'confirmed'], // password_confirmation field required
+        ]);
+
+        // Update fields
+        $user->firstname    = $validated['firstname'];
+        $user->lastname     = $validated['lastname'];
+        $user->email        = $validated['email'];
+        $user->phone_number = $validated['phone_number'] ?? $user->phone_number;
+
+        // Update password if provided
+        if (! empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('priest.profile.edit')->with('success', 'Profile updated successfully!');
     }
 
     /**
