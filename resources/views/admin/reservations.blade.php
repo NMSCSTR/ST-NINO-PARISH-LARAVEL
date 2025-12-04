@@ -167,8 +167,9 @@
                                             Documents
                                         </button>
 
-                                        <!-- FORWARD BUTTON (Staff only, if pending) -->
-                                        @if(auth()->user()->role === 'staff' && $reservation->status == 'pending')
+                                        <!-- FORWARD BUTTON (Staff or Admin, if pending) -->
+                                        @if(in_array(auth()->user()->role, ['staff', 'admin']) && $reservation->status
+                                        === 'pending')
                                         <form action="{{ route('admin.reservations.forward', $reservation->id) }}"
                                             method="POST" class="inline-block">
                                             @csrf
@@ -178,6 +179,7 @@
                                             </button>
                                         </form>
                                         @endif
+
 
                                         <!-- APPROVE BUTTON (Priest only, if forwarded) -->
                                         @if(auth()->user()->role === 'priest' && $reservation->status ==
