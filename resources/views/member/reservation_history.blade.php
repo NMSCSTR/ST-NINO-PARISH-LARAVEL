@@ -9,7 +9,7 @@
 <div class="p-6">
 
     {{-- Header with Back Button --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-8">
         <h2 class="text-2xl font-bold mb-3 md:mb-0">My Reservations</h2>
 
         <a href="{{ route('member.reservation') }}"
@@ -63,15 +63,13 @@
 
 </div>
 
-{{-- MODAL --}}
+{{-- RESERVATION DETAILS MODAL --}}
 <div id="detailsModal"
-    class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+    class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50 overflow-y-auto">
 
     <div class="bg-white w-full max-w-xl rounded-lg shadow-2xl p-6 relative animate-fadeIn">
 
-        <button id="closeModal" class="absolute top-2 right-3 text-2xl hover:text-red-600">
-            &times;
-        </button>
+        <button id="closeModal" class="absolute top-2 right-3 text-2xl hover:text-red-600">&times;</button>
 
         <h2 class="text-xl font-bold mb-4 border-b pb-2">Reservation Details</h2>
 
@@ -82,16 +80,24 @@
     </div>
 </div>
 
+{{-- RECEIPT IMAGE ZOOM MODAL --}}
+<div id="receiptModal"
+    class="fixed inset-0 bg-black bg-opacity-80 hidden flex items-center justify-center p-4 z-50 cursor-zoom-out overflow-auto">
+    <img id="receiptImage" src="" class="max-w-full max-h-full rounded-lg shadow-lg" alt="Receipt Image">
+</div>
+
 @endsection
 
 @push('scripts')
-
 <script>
     const modal = document.getElementById('detailsModal');
     const closeModal = document.getElementById('closeModal');
     const modalContent = document.getElementById('modalContent');
 
-    // OPEN MODAL
+    const receiptModal = document.getElementById('receiptModal');
+    const receiptImage = document.getElementById('receiptImage');
+
+    // OPEN RESERVATION DETAILS MODAL
     document.querySelectorAll('.detailBtn').forEach(btn => {
         btn.addEventListener('click', function () {
 
@@ -123,7 +129,9 @@
                                         <p><strong>Status:</strong> <span class="font-semibold">${p.status}</span></p>
                                         <p><strong>Date:</strong> ${p.date}</p>
                                         ${p.receipt_url ?
-                                            `<img src="${p.receipt_url}" class="w-40 mt-2 rounded-lg border shadow">`
+                                            `<img src="${p.receipt_url}"
+                                                  class="w-full mt-2 rounded-lg border shadow cursor-zoom-in"
+                                                  onclick="zoomReceipt(this.src)" alt="Receipt">`
                                             : ''}
                                     </div>
                                 `).join('')}
@@ -144,13 +152,18 @@
         });
     });
 
-    // CLOSE MODAL
+    // CLOSE RESERVATION MODAL
     closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
 
-    // Close when clicking outside the modal box
-    modal.addEventListener('click', (e) => {
-        if(e.target === modal) modal.classList.add('hidden');
-    });
+    // OPEN RECEIPT IMAGE MODAL
+    function zoomReceipt(src) {
+        receiptImage.src = src;
+        receiptModal.classList.remove('hidden');
+    }
+
+    // CLOSE RECEIPT IMAGE MODAL
+    receiptModal.addEventListener('click', () => receiptModal.classList.add('hidden'));
 </script>
 
 <style>
@@ -162,5 +175,4 @@
         to { opacity: 1; transform: scale(1); }
     }
 </style>
-
 @endpush

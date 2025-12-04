@@ -64,7 +64,7 @@
                             </ol>
                         </nav>
 
-                        <div class="mb-4 flex justify-end">
+                        <div class="mb-4 flex justify-end mt-5">
                             <a href="{{ route('member.reservations.history') }}"
                             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                                 My Reservation History
