@@ -19,8 +19,8 @@ return new class extends Migration
             // Updated status enum
             $table->enum('status', ['pending', 'forwarded_to_priest', 'approved', 'rejected'])->default('pending');
 
-            $table->unsignedBigInteger('forwarded_by')->nullable()->after('status');
-            $table->timestamp('forwarded_at')->nullable()->after('forwarded_by');
+            $table->unsignedBigInteger('forwarded_by')->nullable();
+            $table->timestamp('forwarded_at')->nullable();
             $table->foreign('forwarded_by')->references('id')->on('users')->nullOnDelete();
 
             $table->dateTime('reservation_date')->nullable();
