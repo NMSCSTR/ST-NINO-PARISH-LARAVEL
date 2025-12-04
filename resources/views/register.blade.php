@@ -83,6 +83,7 @@
                     <option value="admin">Admin</option>
                     <option value="staff">Staff</option>
                     <option value="member">Member</option>
+                    <option value="priest">Priest</option>
                 </select>
             </div>
 
