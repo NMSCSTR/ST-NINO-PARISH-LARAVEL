@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/member/pay-now/{payment}', [PaymentController::class, 'payNow'])->name('member.pay_now');
 
         Route::get('/payments', [PaymentController::class, 'showPaymentMember'])->name('member.payments');
+        Route::get('/payments/{id}', [ReservationController::class, 'fetchPayments']);
         Route::post('/payments/{payment}/pay-now', [PaymentController::class, 'payNow'])->name('member.payNow');
 
         Route::get('/profile', [MemberController::class, 'profile'])->name('profile');
