@@ -3,9 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Models\Payment;
-use App\Models\User;
 use App\Models\Reservation;
 use App\Models\ReservationDocument;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -13,7 +13,7 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = Reservation::with([
-            'member.user', 'sacrament', 'payments', 'approvedBy', 'forwardedByUser'
+            'member.user', 'sacrament', 'payments', 'approvedBy', 'forwardedByUser',
         ])->get();
 
         return view('admin.reservations', compact('reservations'));
@@ -93,23 +93,57 @@ class ReservationController extends Controller
             ->with('success', 'Reservation created successfully.');
     }
 
-    // NEW FORWARD METHOD
+    /**
+     * Forward reservation to priest
+     */
     public function forward($id)
     {
         $reservation = Reservation::findOrFail($id);
 
-        // Cannot forward if already approved or forwarded
-        if (in_array($reservation->status, ['approved', 'forwarded'])) {
+        // Cannot forward if already approved or rejected or already forwarded
+        if (in_array($reservation->status, ['approved', 'rejected', 'forwarded_to_priest'])) {
             return back()->with('error', 'This reservation cannot be forwarded.');
         }
 
         $reservation->update([
-            'status'       => 'forwarded',
+            'status'       => 'forwarded_to_priest',
             'forwarded_by' => auth()->user()->id,
             'forwarded_at' => now(),
         ]);
 
         return back()->with('success', 'Reservation forwarded to the priest.');
+    }
+
+    public function priestReject($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if ($reservation->status !== 'forwarded_to_priest') {
+            return back()->with('error', 'Only forwarded reservations can be rejected.');
+        }
+
+        $reservation->update([
+            'status'      => 'rejected',
+            'approved_by' => auth()->user()->id,
+        ]);
+
+        return back()->with('success', 'Reservation rejected successfully.');
+    }
+
+    public function priestApprove($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if ($reservation->status !== 'forwarded_to_priest') {
+            return back()->with('error', 'Only forwarded reservations can be approved.');
+        }
+
+        $reservation->update([
+            'status'      => 'approved',
+            'approved_by' => auth()->user()->id,
+        ]);
+
+        return back()->with('success', 'Reservation approved successfully.');
     }
 
     public function approve($id)

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Priest;
@@ -12,8 +11,11 @@ class PriestController extends Controller
      */
     public function index()
     {
-        $priest = Priest::all();
-        return view('priest.dashboard', compact('priest'));
+        $reservations = Reservation::with(['member.user', 'sacrament'])
+            ->where('status', 'forwarded_to_priest')
+            ->get();
+
+        return view('priest.dashboard', compact('reservations'));
     }
 
     public function priestList()

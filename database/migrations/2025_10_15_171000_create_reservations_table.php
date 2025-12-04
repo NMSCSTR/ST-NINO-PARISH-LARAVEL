@@ -15,16 +15,21 @@ return new class extends Migration
             $table->foreignId('member_id')->constrained()->onDelete('cascade');
             $table->foreignId('sacrament_id')->constrained()->onDelete('cascade');
             $table->decimal('fee', 8, 2)->nullable();
-            $table->string('status')->default('pending');
+
+            // Updated status enum
+            $table->enum('status', ['pending', 'forwarded_to_priest', 'approved', 'rejected'])->default('pending');
+
             $table->unsignedBigInteger('forwarded_by')->nullable()->after('status');
             $table->timestamp('forwarded_at')->nullable()->after('forwarded_by');
             $table->foreign('forwarded_by')->references('id')->on('users')->nullOnDelete();
+
             $table->dateTime('reservation_date')->nullable();
             $table->text('remarks')->nullable();
+
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
         });
-
     }
 
     /**

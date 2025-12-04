@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthUserController;
-use App\Http\Controllers\PriestController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PriestController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SacramentController;
@@ -63,7 +63,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/members', [MemberController::class, 'memberList'])->name('member.lists');
         Route::get('/members/{id}', [MemberController::class, 'showMore'])->name('admin.members.show');
 
-
         Route::get('/events', [EventController::class, 'index'])->name('events');
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
@@ -73,6 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/payments/{reservation}/pay-now', [PaymentController::class, 'adminPayNow'])
             ->name('admin.payNow');
         Route::get('/reservations/{id}/payments', [ReservationController::class, 'fetchPayments']);
+        Route::post('/reservations/{id}/forward', [ReservationController::class, 'forward'])->name('reservations.forward');
 
         Route::get('/priest', [PriestController::class, 'index'])->name('priest');
 
@@ -101,7 +101,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('makeReservation');
         Route::get('/reservations/history', [ReservationController::class, 'memberReservations'])->name('reservations.history');
 
-
         Route::get('/events', fn() => view('member.events'))->name('events.page');
         Route::get('/events/data', [EventController::class, 'fetchEventsData'])->name('events.data');
 
@@ -115,12 +114,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/member/profile/update', [MemberController::class, 'updateProfile'])->name('profile.update');
         Route::post('/member/profile/change-password', [MemberController::class, 'changePassword'])->name('profile.changePassword');
 
-
         Route::get('/reservations/{reservation}/documents', [ReservationController::class, 'getDocuments']);
 
     });
 
     Route::prefix('priest')->middleware('user_role:priest')->name('priest.')->group(function () {
         Route::get('/dashboard', [PriestController::class, 'index'])->name('dashboard');
+        
+        Route::post('/reservations/{id}/approve', [ReservationController::class, 'priestApprove'])->name('reservations.approve');
+        Route::post('/reservations/{id}/reject', [ReservationController::class, 'priestReject'])->name('reservations.reject');
     });
 });
