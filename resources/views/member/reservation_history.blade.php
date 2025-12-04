@@ -65,19 +65,19 @@
 <div id="detailsModal"
     class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
 
-    <div class="bg-white w-full max-w-3xl rounded-xl shadow-2xl relative animate-fadeIn scale-95 max-h-[90vh] flex flex-col">
+    <div class="bg-white w-full max-w-5xl rounded-xl shadow-2xl relative animate-fadeIn max-h-[90vh] flex flex-col">
 
         {{-- Close Button --}}
-        <button id="closeModal" class="absolute top-3 right-4 text-3xl hover:text-red-600 z-10">&times;</button>
+        <button id="closeModal" class="absolute top-4 right-4 text-3xl hover:text-red-600 z-10">&times;</button>
 
         {{-- Scrollable Content --}}
-        <div class="p-6 overflow-y-auto flex-1">
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center space-x-2">
+        <div class="p-6 overflow-y-auto flex-1 space-y-6">
+            <h2 class="text-2xl font-bold border-b pb-2 flex items-center space-x-2">
                 <span class="material-icons text-blue-600">event_note</span>
                 <span>Reservation Details</span>
             </h2>
 
-            <div id="modalContent" class="text-gray-800 space-y-4 text-lg">
+            <div id="modalContent" class="text-gray-800 text-lg">
                 <p class="text-center py-6 text-gray-500 text-xl">Loading details...</p>
             </div>
         </div>
@@ -111,35 +111,34 @@
                 .then(res => res.ok ? res.json() : Promise.reject("Failed"))
                 .then(data => {
                     let html = `
-                        <div class="space-y-3">
-                            <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">person</span> <strong>Member:</strong> ${data.member}</p>
-                            <p class="flex items-center space-x-2"><span class="material-icons text-green-600">church</span> <strong>Sacrament:</strong> ${data.sacrament}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">person</span> <strong>Member:</strong> ${data.member}</p>
+                                <p class="flex items-center space-x-2"><span class="material-icons text-green-600">church</span> <strong>Sacrament:</strong> ${data.sacrament}</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <h3 class="text-xl font-semibold flex items-center space-x-2">
+                                    <span class="material-icons text-yellow-600">payment</span>
+                                    <span>Payments</span>
+                                </h3>
+                                ${data.payments.length > 0 ? `<div class="space-y-4">` +
+                                    data.payments.map(p => `
+                                        <div class="p-4 border rounded-lg bg-gray-50 shadow-sm space-y-2">
+                                            <p class="flex items-center space-x-2"><span class="material-icons text-green-600">attach_money</span> <strong>Amount:</strong> ₱${p.amount}</p>
+                                            <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">credit_card</span> <strong>Method:</strong> ${p.method}</p>
+                                            <p class="flex items-center space-x-2"><span class="material-icons text-purple-600">info</span> <strong>Status:</strong> <span class="font-semibold">${p.status}</span></p>
+                                            <p class="flex items-center space-x-2"><span class="material-icons text-orange-600">calendar_today</span> <strong>Date:</strong> ${p.date}</p>
+                                            ${p.receipt_url ? `<p class="flex flex-col">
+                                                <span class="material-icons text-red-600 mb-1">receipt</span>
+                                                <img src="${p.receipt_url}" class="w-full rounded-lg border shadow cursor-zoom-in mt-1" onclick="zoomReceipt(this.src)" alt="Receipt">
+                                            </p>` : ''}
+                                        </div>
+                                    `).join('') +
+                                `</div>` : `<p class="text-gray-500 mt-2">No payments found.</p>`}
+                            </div>
                         </div>
-
-                        <h3 class="mt-6 text-xl font-semibold flex items-center space-x-2">
-                            <span class="material-icons text-yellow-600">payment</span>
-                            <span>Payments</span>
-                        </h3>
                     `;
-
-                    if (data.payments.length > 0) {
-                        html += `<div class="space-y-4 mt-4">` +
-                            data.payments.map(p => `
-                                <div class="p-4 border rounded-lg bg-gray-50 shadow-sm space-y-2">
-                                    <p class="flex items-center space-x-2"><span class="material-icons text-green-600">attach_money</span> <strong>Amount:</strong> ₱${p.amount}</p>
-                                    <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">credit_card</span> <strong>Method:</strong> ${p.method}</p>
-                                    <p class="flex items-center space-x-2"><span class="material-icons text-purple-600">info</span> <strong>Status:</strong> <span class="font-semibold">${p.status}</span></p>
-                                    <p class="flex items-center space-x-2"><span class="material-icons text-orange-600">calendar_today</span> <strong>Date:</strong> ${p.date}</p>
-                                    ${p.receipt_url ? `<p class="flex flex-col">
-                                        <span class="material-icons text-red-600 mb-1">receipt</span>
-                                        <img src="${p.receipt_url}" class="w-full rounded-lg border shadow cursor-zoom-in mt-1" onclick="zoomReceipt(this.src)" alt="Receipt">
-                                    </p>` : ''}
-                                </div>
-                            `).join('') +
-                        `</div>`;
-                    } else {
-                        html += `<p class="text-gray-500 mt-4 text-lg">No payments found.</p>`;
-                    }
 
                     modalContent.innerHTML = html;
 
