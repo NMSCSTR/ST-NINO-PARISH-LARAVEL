@@ -77,7 +77,7 @@
                         </div>
 
                         <!-- CONTACT NUMBER -->
-                        <div>
+                        <div class="md:col-span-2">
                             <label class="text-sm font-medium">Contact Number</label>
                             <input type="text" name="contact_number" value="{{ $member->contact_number }}"
                                    class="w-full border p-2 rounded-lg bg-gray-50">
@@ -95,3 +95,6 @@
     </div>
 </section>
 @endsection
+@push('scripts')
+@include('components.alerts')
+@endpush
