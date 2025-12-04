@@ -33,7 +33,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'firstname' => 'required|string|max:100',
             'lastname'  => 'required|string|max:100',
-            'email' => 'required|string|email|max:255|unique:users,email',
+            'email'     => 'required|string|email|max:255|unique:users,email',
             'password'  => 'required|string|min:8|confirmed',
             'role'      => 'required',
         ]);
@@ -47,31 +47,32 @@ class UserController extends Controller
         ]);
 
         return redirect()
-        ->route('login')
-        ->with('success', 'User added successfully!');
+            ->route('login')
+            ->with('success', 'User added successfully!');
     }
 
     public function addUser(Request $request)
     {
         $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname'  => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|min:6|confirmed',
-            'role'      => 'required|in:admin,staff,member',
+            'firstname'    => 'required|string|max:255',
+            'lastname'     => 'required|string|max:255',
+            'email'        => 'required|email|unique:users,email',
+            'phone_number' => 'required|string|max:20',
+            'password'     => 'required|min:6|confirmed',
+            'role'         => 'required|in:admin,staff,member,priest',
         ]);
 
         UserModel::create([
-            'firstname' => $request->firstname,
-            'lastname'  => $request->lastname,
-            'email'     => $request->email,
-            'password'  => bcrypt($request->password),
-            'role'      => $request->role,
+            'firstname'    => $request->firstname,
+            'lastname'     => $request->lastname,
+            'email'        => $request->email,
+            'phone_number' => $request->phone_number, // store phone number
+            'password'     => bcrypt($request->password),
+            'role'         => $request->role,
         ]);
 
         return redirect()->route('admin.users')->with('success', 'User added successfully!');
     }
-
 
     /**
      * Display the specified resource.
@@ -100,19 +101,18 @@ class UserController extends Controller
         $validated = $request->validate([
             'firstname' => 'required|string|max:255',
             'lastname'  => 'required|string|max:255',
-            'email'     => ['required','email', Rule::unique('users', 'email')->ignore($id),],
+            'email'     => ['required', 'email', Rule::unique('users', 'email')->ignore($id)],
             'role'      => 'required|in:admin,staff,member',
             'password'  => 'nullable|string|min:6',
         ]);
 
         $user->firstname = $validated['firstname'];
-        $user->lastname = $validated['lastname'];
-        $user->email = $validated['email'];
-        $user->role = $validated['role'];
+        $user->lastname  = $validated['lastname'];
+        $user->email     = $validated['email'];
+        $user->role      = $validated['role'];
 
-
-        if (!empty($validated['password'])) {
-                $user->password = Hash::make($validated['password']);
+        if (! empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
         }
 
         $user->save();

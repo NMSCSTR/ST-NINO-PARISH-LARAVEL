@@ -43,7 +43,7 @@
 
 
 <div class="bg-white rounded-xl shadow-lg px-6 py-4" data-aos="slide-right">
-    <a href="#" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
+    <a href="{{ route('member.profile') }}" class="flex items-center justify-between text-gray-600 hover:text-black my-4">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">face</span>
             Profile

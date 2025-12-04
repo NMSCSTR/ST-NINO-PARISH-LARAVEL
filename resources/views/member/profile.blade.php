@@ -1,87 +1,97 @@
 @extends('components.default')
 
-@section('title', 'Members Profile | Santo Niño Parish Church')
+@section('title', 'My Profile')
 
 @section('content')
+<section class="pt-24 px-6">
+    @include('components.member.topnav')
 
-<section>
-    <div class="min-h-screen pt-24">
-        {{-- @include('components.admin.bg') --}}
-        {{-- Include Top Navigation --}}
-        @include('components.member.topnav')
-        <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-4 gap-6">
+    <div class="flex flex-col lg:flex-row gap-6">
+        <div class="lg:w-2/12">
+            @include('components.member.sidebar')
+        </div>
 
-            {{-- Include Sidebar --}}
-            <div class="lg:w-2/12 w-full">
-                @include('components.member.sidebar')
-            </div>
+        <div class="lg:w-10/12">
+            <div class="bg-white shadow-xl rounded-xl p-6">
 
-            {{-- Main Content --}}
-            <div class="lg:w-10/12 w-full">
+                <h2 class="text-2xl font-bold mb-6">My Profile</h2>
 
-                <div class="bg-white rounded-xl shadow-2xl">
-                    <div class="px-6 py-6">
+                @if(session('success'))
+                    <div class="p-4 mb-4 text-green-800 bg-green-100 border border-green-300 rounded-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
+                <form action="{{ route('member.profile.update') }}" method="POST">
+                    @csrf
 
-                        <!-- Breadcrumb -->
-                        <nav class="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-                            aria-label="Breadcrumb">
-                            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                                <li class="inline-flex items-center">
-                                    <a href="#"
-                                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                                        <svg class="w-3 h-3 me-2.5" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                                        </svg>
-                                        Member
-                                    </a>
-                                </li>
-                                <li>
-                                    <div class="flex items-center">
-                                        <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4" />
-                                        </svg>
-                                        <a href="#"
-                                            class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Dashboard</a>
-                                    </div>
-                                </li>
-                                <li aria-current="page">
-                                    <div class="flex items-center">
-                                        <svg class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4" />
-                                        </svg>
-                                        <span
-                                            class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Make
-                                            Reservations</span>
-                                    </div>
-                                </li>
-                            </ol>
-                        </nav>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <!-- FIRST NAME -->
+                        <div>
+                            <label class="text-sm font-medium">First Name</label>
+                            <input type="text" name="firstname" value="{{ $user->firstname }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50" required>
+                        </div>
+
+                        <!-- LAST NAME -->
+                        <div>
+                            <label class="text-sm font-medium">Last Name</label>
+                            <input type="text" name="lastname" value="{{ $user->lastname }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50" required>
+                        </div>
+
+                        <!-- PHONE -->
+                        <div>
+                            <label class="text-sm font-medium">Phone Number</label>
+                            <input type="text" name="phone_number" value="{{ $user->phone_number }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50">
+                        </div>
+
+                        <!-- MIDDLE NAME -->
+                        <div>
+                            <label class="text-sm font-medium">Middle Name</label>
+                            <input type="text" name="middle_name" value="{{ $member->middle_name }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50">
+                        </div>
+
+                        <!-- BIRTHDATE -->
+                        <div>
+                            <label class="text-sm font-medium">Birth Date</label>
+                            <input type="date" name="birth_date" value="{{ $member->birth_date }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50">
+                        </div>
+
+                        <!-- PLACE OF BIRTH -->
+                        <div>
+                            <label class="text-sm font-medium">Place of Birth</label>
+                            <input type="text" name="place_of_birth" value="{{ $member->place_of_birth }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50">
+                        </div>
+
+                        <!-- ADDRESS -->
+                        <div class="md:col-span-2">
+                            <label class="text-sm font-medium">Address</label>
+                            <input type="text" name="address" value="{{ $member->address }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50">
+                        </div>
+
+                        <!-- CONTACT NUMBER -->
+                        <div>
+                            <label class="text-sm font-medium">Contact Number</label>
+                            <input type="text" name="contact_number" value="{{ $member->contact_number }}"
+                                   class="w-full border p-2 rounded-lg bg-gray-50">
+                        </div>
 
                     </div>
 
-                    <div class="relative overflow-x-auto sm:rounded-lg  px-6 py-6">
-                        <section class="bg-white dark:bg-gray-900">
-                            <div class="mx-auto">
-                                
-                            </div>
-                        </section>
+                    <button class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold">
+                        Save Changes
+                    </button>
 
-
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
 @endsection
-@push('scripts')
-@include('components.alerts')
-
-@endpush

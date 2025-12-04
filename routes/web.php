@@ -108,6 +108,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/payments', [PaymentController::class, 'showPaymentMember'])->name('member.payments');
         Route::post('/payments/{payment}/pay-now', [PaymentController::class, 'payNow'])->name('member.payNow');
 
+        Route::get('/profile', [MemberController::class, 'profile'])->name('profile');
+        Route::post('/member/profile/update', [MemberController::class, 'updateProfile'])->name('member.profile.update');
+
     });
 
     Route::prefix('priest')->middleware('user_role:priest')->name('priest.')->group(function () {

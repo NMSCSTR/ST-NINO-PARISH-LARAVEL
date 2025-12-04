@@ -127,11 +127,12 @@
                                                 id="menu-button-{{ $user->id }}" aria-expanded="true"
                                                 aria-haspopup="true">
                                                 <!-- Three dots icon -->
-<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-  <circle cx="5" cy="12" r="2"/>
-  <circle cx="12" cy="12" r="2"/>
-  <circle cx="19" cy="12" r="2"/>
-</svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"
+                                                    fill="currentColor" viewBox="0 0 24 24">
+                                                    <circle cx="5" cy="12" r="2" />
+                                                    <circle cx="12" cy="12" r="2" />
+                                                    <circle cx="19" cy="12" r="2" />
+                                                </svg>
 
                                             </button>
 
@@ -398,6 +399,13 @@
                         <label class="text-sm font-medium">Email</label>
                         <input type="email" name="email" required class="w-full p-2.5 border rounded-lg bg-gray-50" />
                     </div>
+
+                    <div>
+                        <label class="text-sm font-medium">Phone Number</label>
+                        <input type="text" name="phone_number" required
+                            class="w-full p-2.5 border rounded-lg bg-gray-50" placeholder="e.g., +63 912 345 6789" />
+                    </div>
+
 
                     <div>
                         <label class="text-sm font-medium">Password</label>

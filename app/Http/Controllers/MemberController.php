@@ -114,6 +114,42 @@ class MemberController extends Controller
         return view('admin.users', compact('member'));
     }
 
+    public function updateProfile(Request $request)
+    {
+$request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'phone_number' => 'nullable|string|max:20',
+
+            // Member table fields
+            'middle_name' => 'nullable|string|max:255',
+            'birth_date' => 'nullable|date',
+            'place_of_birth' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'contact_number' => 'nullable|string|max:255',
+        ]);
+
+        $user = auth()->user();
+
+        // Update user data
+        $user->update([
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'phone_number' => $request->phone_number,
+        ]);
+
+        // Update member data
+        $user->member->update([
+            'middle_name' => $request->middle_name,
+            'birth_date' => $request->birth_date,
+            'place_of_birth' => $request->place_of_birth,
+            'address' => $request->address,
+            'contact_number' => $request->contact_number,
+        ]);
+
+        return back()->with('success', 'Profile updated successfully!');
+    }
+
 
 
     /**
