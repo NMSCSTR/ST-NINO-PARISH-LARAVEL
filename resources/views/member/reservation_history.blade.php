@@ -150,7 +150,7 @@
                                 let docHtml = `
                                     <h3 class="mt-8 text-2xl font-bold flex items-center space-x-3">
                                         <span class="material-icons text-purple-600 text-2xl">description</span>
-                                        <span>Documents</span>
+                                        <span>Submitted Documents</span>
                                     </h3>
                                     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                         ${docData.documents.map(doc => `
