@@ -142,3 +142,25 @@ function closePaymentModal() {
     document.getElementById('paymentModal').classList.remove('flex');
 }
 </script>
+<script>
+/* FORWARD TO PRIEST CONFIRMATION */
+document.querySelectorAll('form[action*="forward"]').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent immediate form submission
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This reservation will be forwarded to the priest.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#aaa',
+            confirmButtonText: 'Yes, forward it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // Submit the form if confirmed
+            }
+        });
+    });
+});
+</script>
