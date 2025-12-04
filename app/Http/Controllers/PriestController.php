@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Priest;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 
 class PriestController extends Controller
