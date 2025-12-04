@@ -164,3 +164,23 @@ document.querySelectorAll('form[action*="forward"]').forEach(form => {
     });
 });
 </script>
+<script>
+    // Toggle dropdown
+    document.querySelectorAll('[id^="menu-button-"]').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = button.id.replace('menu-button-', '');
+            const dropdown = document.getElementById('dropdown-' + id);
+            dropdown.classList.toggle('hidden');
+        });
+    });
+
+    // Close dropdown if clicked outside
+    document.addEventListener('click', () => {
+        document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+            if (!dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
+</script>
