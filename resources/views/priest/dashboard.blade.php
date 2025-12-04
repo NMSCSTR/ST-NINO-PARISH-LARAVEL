@@ -86,36 +86,46 @@
                                                 </svg>
                                             </button>
 
-                                            <div class="origin-top-right absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
+                                            <div class="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
                                                 id="priest-dropdown-{{ $reservation->id }}">
-                                                <div class="py-1">
+                                                <div class="py-2 px-3">
 
-                                                    {{-- Approve --}}
+                                                    {{-- Approve with remarks --}}
                                                     <form
                                                         action="{{ route('priest.reservations.approve', $reservation->id) }}"
-                                                        method="POST"
-                                                        class="px-4 py-2 text-sm hover:bg-green-50 flex items-center gap-2 text-green-600">
+                                                        method="POST" class="mb-2">
                                                         @csrf
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        <button type="submit" class="w-full text-left">Approve</button>
+                                                        <textarea name="remarks" placeholder="Add remarks (optional)"
+                                                            rows="2"
+                                                            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm mb-2"></textarea>
+                                                        <button type="submit"
+                                                            class="w-full flex items-center justify-center gap-2 text-green-600 font-medium hover:bg-green-50 rounded px-2 py-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M5 13l4 4L19 7" />
+                                                            </svg>
+                                                            Approve
+                                                        </button>
                                                     </form>
 
-                                                    {{-- Reject --}}
+                                                    {{-- Reject with remarks --}}
                                                     <form
                                                         action="{{ route('priest.reservations.reject', $reservation->id) }}"
-                                                        method="POST"
-                                                        class="px-4 py-2 text-sm hover:bg-red-50 flex items-center gap-2 text-red-600">
+                                                        method="POST">
                                                         @csrf
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                        </svg>
-                                                        <button type="submit" class="w-full text-left">Reject</button>
+                                                        <textarea name="remarks" placeholder="Add remarks (optional)"
+                                                            rows="2"
+                                                            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-sm mb-2"></textarea>
+                                                        <button type="submit"
+                                                            class="w-full flex items-center justify-center gap-2 text-red-600 font-medium hover:bg-red-50 rounded px-2 py-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                            Reject
+                                                        </button>
                                                     </form>
 
                                                 </div>
@@ -124,21 +134,20 @@
 
                                         <script>
                                             const priestBtn{{ $reservation->id }} = document.getElementById('priest-menu-button-{{ $reservation->id }}');
-                                                    const priestDropdown{{ $reservation->id }} = document.getElementById('priest-dropdown-{{ $reservation->id }}');
+        const priestDropdown{{ $reservation->id }} = document.getElementById('priest-dropdown-{{ $reservation->id }}');
 
-                                                    priestBtn{{ $reservation->id }}.addEventListener('click', (e) => {
-                                                        e.stopPropagation();
-                                                        priestDropdown{{ $reservation->id }}.classList.toggle('hidden');
-                                                    });
+        priestBtn{{ $reservation->id }}.addEventListener('click', (e) => {
+            e.stopPropagation();
+            priestDropdown{{ $reservation->id }}.classList.toggle('hidden');
+        });
 
-                                                    document.addEventListener('click', () => {
-                                                        if (!priestDropdown{{ $reservation->id }}.classList.contains('hidden')) {
-                                                            priestDropdown{{ $reservation->id }}.classList.add('hidden');
-                                                        }
-                                                    });
+        document.addEventListener('click', () => {
+            priestDropdown{{ $reservation->id }}.classList.add('hidden');
+        });
                                         </script>
                                         @endif
                                     </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>

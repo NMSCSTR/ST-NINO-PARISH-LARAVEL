@@ -114,7 +114,7 @@ class ReservationController extends Controller
         return back()->with('success', 'Reservation forwarded to the priest.');
     }
 
-    public function priestReject($id)
+    public function priestReject(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
 
@@ -122,15 +122,20 @@ class ReservationController extends Controller
             return back()->with('error', 'Only forwarded reservations can be rejected.');
         }
 
+        $remarks = $request->remarks
+            ? $request->remarks . ' (by ' . auth()->user()->firstname . ' ' . auth()->user()->lastname . ')'
+            : null;
+
         $reservation->update([
             'status'      => 'rejected',
             'approved_by' => auth()->user()->id,
+            'remarks'     => $remarks,
         ]);
 
         return back()->with('success', 'Reservation rejected successfully.');
     }
 
-    public function priestApprove($id)
+    public function priestApprove(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
 
@@ -138,9 +143,14 @@ class ReservationController extends Controller
             return back()->with('error', 'Only forwarded reservations can be approved.');
         }
 
+        $remarks = $request->remarks
+            ? $request->remarks . ' (by ' . auth()->user()->firstname . ' ' . auth()->user()->lastname . ')'
+            : null;
+
         $reservation->update([
             'status'      => 'approved',
             'approved_by' => auth()->user()->id,
+            'remarks'     => $remarks,
         ]);
 
         return back()->with('success', 'Reservation approved successfully.');
