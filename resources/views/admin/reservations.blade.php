@@ -134,7 +134,7 @@
 
                                     <!-- Reservation Date -->
                                     <td class="px-6 py-4">
-                                        {{ $reservation->reservation_date->format('F j, Y g:i A') }}
+                                        {{ $reservation->reservation_date }}
                                     </td>
 
                                     <!-- Remarks -->
