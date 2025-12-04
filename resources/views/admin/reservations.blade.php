@@ -152,67 +152,88 @@
                                         {{ $reservation->remarks ?? 'No remarks yet' }}
                                     </td>
 
-                                 <!-- Actions Dropdown -->
-<td class="px-6 py-4 text-right">
-    <div class="relative inline-block text-left">
-        <button type="button"
-                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                id="menu-button-{{ $reservation->id }}"
-                aria-expanded="true"
-                aria-haspopup="true">
-            Actions
-            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-        </button>
+                                    <!-- Actions Dropdown -->
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="relative inline-block text-left">
+                                            <button type="button"
+                                                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                                id="menu-button-{{ $reservation->id }}" aria-expanded="true"
+                                                aria-haspopup="true">
+                                                Actions
+                                                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </button>
 
-        <!-- Dropdown menu -->
-        <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden"
-             id="dropdown-{{ $reservation->id }}">
-            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="menu-button-{{ $reservation->id }}">
+                                            <!-- Dropdown menu -->
+                                            <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
+                                                id="dropdown-{{ $reservation->id }}">
+                                                <div class="py-1" role="menu" aria-orientation="vertical"
+                                                    aria-labelledby="menu-button-{{ $reservation->id }}">
 
-                <!-- Forward (Staff/Admin only, if pending) -->
-                @if(in_array(auth()->user()->role, ['staff', 'admin']) && $reservation->status === 'pending')
-                <form action="{{ route('admin.reservations.forward', $reservation->id) }}" method="POST" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" onsubmit="return confirm('Are you sure you want to forward this reservation to the priest?');">
-                    @csrf
-                    <button type="submit" class="w-full text-left">Forward to Priest</button>
-                </form>
-                @endif
+                                                    <!-- Forward (Staff/Admin only, if pending) -->
+                                                    @if(in_array(auth()->user()->role, ['staff', 'admin']) &&
+                                                    $reservation->status === 'pending')
+                                                    <form
+                                                        action="{{ route('admin.reservations.forward', $reservation->id) }}"
+                                                        method="POST"
+                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        role="menuitem"
+                                                        onsubmit="return confirm('Are you sure you want to forward this reservation to the priest?');">
+                                                        @csrf
+                                                        <button type="submit" class="w-full text-left">Forward to
+                                                            Priest</button>
+                                                    </form>
+                                                    @endif
 
-                <!-- Approve (Priest only, if forwarded) -->
-                @if(auth()->user()->role === 'priest' && $reservation->status === 'forwarded_to_priest')
-                <form action="{{ route('admin.reservations.approve', $reservation->id) }}" method="POST" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                    @csrf
-                    <button type="submit" class="w-full text-left">Approve</button>
-                </form>
-                @endif
+                                                    <!-- Approve (Priest only, if forwarded) -->
+                                                    @if(auth()->user()->role === 'priest' && $reservation->status ===
+                                                    'forwarded_to_priest')
+                                                    <form
+                                                        action="{{ route('admin.reservations.approve', $reservation->id) }}"
+                                                        method="POST"
+                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        role="menuitem">
+                                                        @csrf
+                                                        <button type="submit" class="w-full text-left">Approve</button>
+                                                    </form>
+                                                    @endif
 
-                <!-- Pay Now -->
-                <button onclick="openPaymentModal({{ $reservation->id }})" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Pay Now</button>
+                                                    <!-- Pay Now -->
+                                                    <button onclick="openPaymentModal({{ $reservation->id }})"
+                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Pay
+                                                        Now</button>
 
-                <!-- Edit -->
-                <a href="{{ route('admin.reservations.edit', $reservation->id) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
+                                                    <!-- Edit -->
+                                                    <a href="{{ route('admin.reservations.edit', $reservation->id) }}"
+                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
 
-                <!-- Delete -->
-                <button data-id="{{ $reservation->id }}" class="delete-reservation-btn block px-4 py-2 text-sm text-red-600 hover:bg-red-100 w-full text-left">Delete</button>
+                                                    <!-- Delete -->
+                                                    <button data-id="{{ $reservation->id }}"
+                                                        class="delete-reservation-btn block px-4 py-2 text-sm text-red-600 hover:bg-red-100 w-full text-left">Delete</button>
 
-                <!-- Documents -->
-                <button onclick="openDocumentsModal({{ $reservation->id }})" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Documents</button>
+                                                    <!-- Documents -->
+                                                    <button onclick="openDocumentsModal({{ $reservation->id }})"
+                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Documents</button>
 
-                <!-- Payments -->
-                <button onclick="openPaymentListModal({{ $reservation->id }})" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Payments</button>
+                                                    <!-- Payments -->
+                                                    <button onclick="openPaymentListModal({{ $reservation->id }})"
+                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Payments</button>
 
-            </div>
-        </div>
-    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-    <!-- Hidden Delete Form -->
-    <form id="delete-reservation-form-{{ $reservation->id }}" method="POST" style="display:none;">
-        @csrf
-        @method('DELETE')
-    </form>
-</td>
+                                        <!-- Hidden Delete Form -->
+                                        <form id="delete-reservation-form-{{ $reservation->id }}" method="POST"
+                                            style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>
