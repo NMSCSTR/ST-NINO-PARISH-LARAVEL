@@ -63,18 +63,23 @@
 
 {{-- RESERVATION DETAILS MODAL --}}
 <div id="detailsModal"
-    class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50 overflow-y-auto">
+    class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
 
-    <div class="bg-white w-full max-w-3xl rounded-xl shadow-2xl p-6 relative animate-fadeIn scale-95">
-        <button id="closeModal" class="absolute top-3 right-4 text-3xl hover:text-red-600">&times;</button>
+    <div class="bg-white w-full max-w-3xl rounded-xl shadow-2xl relative animate-fadeIn scale-95 max-h-[90vh] flex flex-col">
 
-        <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center space-x-2">
-            <span class="material-icons text-blue-600">event_note</span>
-            <span>Reservation Details</span>
-        </h2>
+        {{-- Close Button --}}
+        <button id="closeModal" class="absolute top-3 right-4 text-3xl hover:text-red-600 z-10">&times;</button>
 
-        <div id="modalContent" class="text-gray-800 space-y-4 text-lg">
-            <p class="text-center py-6 text-gray-500 text-xl">Loading details...</p>
+        {{-- Scrollable Content --}}
+        <div class="p-6 overflow-y-auto flex-1">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center space-x-2">
+                <span class="material-icons text-blue-600">event_note</span>
+                <span>Reservation Details</span>
+            </h2>
+
+            <div id="modalContent" class="text-gray-800 space-y-4 text-lg">
+                <p class="text-center py-6 text-gray-500 text-xl">Loading details...</p>
+            </div>
         </div>
     </div>
 </div>
@@ -198,6 +203,16 @@
 
     table th, table td {
         transition: background 0.2s;
+    }
+
+    /* Scrollbar styling for modal */
+    #detailsModal .flex-1::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #detailsModal .flex-1::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0,0.2);
+        border-radius: 4px;
     }
 </style>
 @endpush
