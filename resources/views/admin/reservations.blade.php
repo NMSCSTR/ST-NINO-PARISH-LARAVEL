@@ -120,7 +120,12 @@
                                             {{ $reservation->forwardedByUser->lastname }}
                                         </div>
                                         <div class="text-xs text-gray-500">
-                                            {{ $reservation->forwarded_at->format('M d, Y g:i A') }}
+                                            @if($reservation->forwarded_at)
+                                            <div class="text-xs text-gray-500">
+                                                {{ \Carbon\Carbon::parse($reservation->forwarded_at)->format('M d, Y g:i
+                                                A') }}
+                                            </div>
+                                            @endif
                                         </div>
                                         @else
                                         <span class="text-gray-400">Not forwarded</span>

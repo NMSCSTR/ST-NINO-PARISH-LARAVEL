@@ -26,6 +26,11 @@ class Reservation extends Model
         'forwarded_at',
     ];
 
+    protected $casts = [
+    'reservation_date' => 'datetime',
+    'forwarded_at' => 'datetime',
+];
+
     public function member()
     {
         return $this->belongsTo(Member::class);
