@@ -179,10 +179,15 @@
                                                     <form
                                                         action="{{ route('admin.reservations.forward', $reservation->id) }}"
                                                         method="POST"
-                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        class="px-4 py-2 text-sm hover:bg-blue-50 flex items-center gap-2 text-blue-600"
                                                         role="menuitem"
                                                         onsubmit="return confirm('Are you sure you want to forward this reservation to the priest?');">
                                                         @csrf
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                                        </svg>
                                                         <button type="submit" class="w-full text-left">Forward to
                                                             Priest</button>
                                                     </form>
@@ -194,33 +199,76 @@
                                                     <form
                                                         action="{{ route('admin.reservations.approve', $reservation->id) }}"
                                                         method="POST"
-                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        class="px-4 py-2 text-sm hover:bg-green-50 flex items-center gap-2 text-green-600"
                                                         role="menuitem">
                                                         @csrf
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M5 13l4 4L19 7" />
+                                                        </svg>
                                                         <button type="submit" class="w-full text-left">Approve</button>
                                                     </form>
                                                     @endif
 
                                                     <!-- Pay Now -->
                                                     <button onclick="openPaymentModal({{ $reservation->id }})"
-                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Pay
-                                                        Now</button>
+                                                        class="px-4 py-2 text-sm hover:bg-blue-50 flex items-center gap-2 text-blue-600 w-full text-left">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M12 14v4m0 0l-2-2m2 2l2-2" />
+                                                        </svg>
+                                                        Pay Now
+                                                    </button>
 
                                                     <!-- Edit -->
                                                     <a href="{{ route('admin.reservations.edit', $reservation->id) }}"
-                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
+                                                        class="block px-4 py-2 text-sm hover:bg-green-50 flex items-center gap-2 text-green-600">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M11 17l-4 4m0 0l4-4m-4 4V13" />
+                                                        </svg>
+                                                        Edit
+                                                    </a>
 
                                                     <!-- Delete -->
                                                     <button data-id="{{ $reservation->id }}"
-                                                        class="delete-reservation-btn block px-4 py-2 text-sm text-red-600 hover:bg-red-100 w-full text-left">Delete</button>
+                                                        class="delete-reservation-btn block px-4 py-2 text-sm hover:bg-red-50 flex items-center gap-2 text-red-600 w-full text-left">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        Delete
+                                                    </button>
 
                                                     <!-- Documents -->
                                                     <button onclick="openDocumentsModal({{ $reservation->id }})"
-                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Documents</button>
+                                                        class="px-4 py-2 text-sm hover:bg-purple-50 flex items-center gap-2 text-purple-600 w-full text-left">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M9 12h6m2 0a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v4a2 2 0 002 2h10z" />
+                                                        </svg>
+                                                        Documents
+                                                    </button>
 
                                                     <!-- Payments -->
                                                     <button onclick="openPaymentListModal({{ $reservation->id }})"
-                                                        class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Payments</button>
+                                                        class="px-4 py-2 text-sm hover:bg-gray-100 flex items-center gap-2 text-gray-700 w-full text-left">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M9 14l2-2 4 4M7 10h10v10H7V10z" />
+                                                        </svg>
+                                                        Payments
+                                                    </button>
 
                                                 </div>
                                             </div>
@@ -233,7 +281,6 @@
                                             @method('DELETE')
                                         </form>
                                     </td>
-
                                 </tr>
                                 @endforeach
                             </tbody>
