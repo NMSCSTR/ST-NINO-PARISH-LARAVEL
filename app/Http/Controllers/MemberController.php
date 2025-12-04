@@ -76,14 +76,20 @@ class MemberController extends Controller
     {
         $user = auth()->user();
 
-        // If user has no member record, create one
-        if (!$user->member) {
-            $user->member()->create([]);
+        // Create member row if not exists
+        if (! $user->member) {
+            $user->member()->create([
+                'middle_name'    => null,
+                'birth_date'     => null,
+                'place_of_birth' => null,
+                'address'        => null,
+                'contact_number' => null,
+            ]);
         }
 
         return view('member.profile', [
-            'user' => $user,
-            'member' => $user->member
+            'user'   => $user,
+            'member' => $user->member,
         ]);
     }
 

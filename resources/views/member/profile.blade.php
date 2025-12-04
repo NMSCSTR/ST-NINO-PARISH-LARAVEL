@@ -24,56 +24,56 @@
                         <!-- FIRST NAME -->
                         <div>
                             <label class="text-sm font-medium">First Name</label>
-                            <input type="text" name="firstname" value="{{ $user->firstname }}"
+                            <input type="text" name="firstname" value="{{ $user->firstname ?? '' }}"
                                    class="w-full border p-2 rounded-lg bg-gray-50" required>
                         </div>
 
                         <!-- LAST NAME -->
                         <div>
                             <label class="text-sm font-medium">Last Name</label>
-                            <input type="text" name="lastname" value="{{ $user->lastname }}"
+                            <input type="text" name="lastname" value="{{ $user->lastname ?? '' }}"
                                    class="w-full border p-2 rounded-lg bg-gray-50" required>
                         </div>
 
                         <!-- PHONE -->
                         <div>
                             <label class="text-sm font-medium">Phone Number</label>
-                            <input type="text" name="phone_number" value="{{ $user->phone_number }}"
+                            <input type="text" name="phone_number" value="{{ $user->phone_number ?? '' }}"
                                    class="w-full border p-2 rounded-lg bg-gray-50">
                         </div>
 
                         <!-- MIDDLE NAME -->
                         <div>
                             <label class="text-sm font-medium">Middle Name</label>
-                            <input type="text" name="middle_name" value="{{ $member->middle_name }}"
+                            <input type="text" name="middle_name" value="{{ $member->middle_name ?? ''}}"
                                    class="w-full border p-2 rounded-lg bg-gray-50">
                         </div>
 
                         <!-- BIRTHDATE -->
                         <div>
                             <label class="text-sm font-medium">Birth Date</label>
-                            <input type="date" name="birth_date" value="{{ $member->birth_date }}"
+                            <input type="date" name="birth_date" value="{{ $member->birth_date ?? ''}}"
                                    class="w-full border p-2 rounded-lg bg-gray-50">
                         </div>
 
                         <!-- PLACE OF BIRTH -->
                         <div>
                             <label class="text-sm font-medium">Place of Birth</label>
-                            <input type="text" name="place_of_birth" value="{{ $member->place_of_birth }}"
+                            <input type="text" name="place_of_birth" value="{{ $member->place_of_birth ?? ''}}"
                                    class="w-full border p-2 rounded-lg bg-gray-50">
                         </div>
 
                         <!-- ADDRESS -->
                         <div class="md:col-span-2">
                             <label class="text-sm font-medium">Address</label>
-                            <input type="text" name="address" value="{{ $member->address }}"
+                            <input type="text" name="address" value="{{ $member->address ?? ''}}"
                                    class="w-full border p-2 rounded-lg bg-gray-50">
                         </div>
 
                         <!-- CONTACT NUMBER -->
                         <div class="md:col-span-2">
                             <label class="text-sm font-medium">Contact Number</label>
-                            <input type="text" name="contact_number" value="{{ $member->contact_number }}"
+                            <input type="text" name="contact_number" value="{{ $member->contact_number ?? ''}}"
                                    class="w-full border p-2 rounded-lg bg-gray-50">
                         </div>
 
