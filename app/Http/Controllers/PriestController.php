@@ -2,12 +2,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Priest;
-use App\Models\User;
 use App\Models\Reservation;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class PriestController extends Controller
 {
@@ -61,31 +59,28 @@ class PriestController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
+        $priest = auth()->user();
 
-        // Validate input
-        $validated = $request->validate([
-            'firstname'    => ['required', 'string', 'max:255'],
-            'lastname'     => ['required', 'string', 'max:255'],
-            'email'        => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'phone_number' => ['nullable', 'string', 'max:20'],
-            'password'     => ['nullable', 'string', 'min:6', 'confirmed'], // password_confirmation field required
+        $request->validate([
+            'firstname'    => 'required|string|max:255',
+            'lastname'     => 'required|string|max:255',
+            'email'        => 'required|email|unique:users,email,' . $priest->id,
+            'phone_number' => 'nullable|string|max:20',
+            'password'     => 'nullable|string|min:6|confirmed',
         ]);
 
-        // Update fields
-        $user->firstname    = $validated['firstname'];
-        $user->lastname     = $validated['lastname'];
-        $user->email        = $validated['email'];
-        $user->phone_number = $validated['phone_number'] ?? $user->phone_number;
+        $priest->firstname    = $request->firstname;
+        $priest->lastname     = $request->lastname;
+        $priest->email        = $request->email;
+        $priest->phone_number = $request->phone_number;
 
-        // Update password if provided
-        if (! empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
+        if ($request->filled('password')) {
+            $priest->password = bcrypt($request->password);
         }
 
-        $user->save();
+        $priest->save();
 
-        return redirect()->route('priest.profile.edit')->with('success', 'Profile updated successfully!');
+        return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
     /**
