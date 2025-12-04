@@ -115,6 +115,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/member/profile/update', [MemberController::class, 'updateProfile'])->name('profile.update');
         Route::post('/member/profile/change-password', [MemberController::class, 'changePassword'])->name('profile.changePassword');
 
+
+        Route::get('/reservations/{reservation}/documents', [ReservationController::class, 'getDocuments']);
+
     });
 
     Route::prefix('priest')->middleware('user_role:priest')->name('priest.')->group(function () {

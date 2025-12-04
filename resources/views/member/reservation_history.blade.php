@@ -65,7 +65,7 @@
 <div id="detailsModal"
     class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50 overflow-y-auto">
 
-    <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl p-6 relative animate-fadeIn scale-95">
+    <div class="bg-white w-full max-w-3xl rounded-xl shadow-2xl p-6 relative animate-fadeIn scale-95">
         <button id="closeModal" class="absolute top-3 right-4 text-3xl hover:text-red-600">&times;</button>
 
         <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center space-x-2">
@@ -100,6 +100,8 @@
             modal.classList.remove('hidden');
             modalContent.innerHTML = `<p class="text-center py-6 text-gray-500 text-xl">Loading...</p>`;
             let id = this.dataset.id;
+
+            // Fetch reservation details
             fetch(`/member/payments/${id}`)
                 .then(res => res.ok ? res.json() : Promise.reject("Failed"))
                 .then(data => {
@@ -108,11 +110,13 @@
                             <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">person</span> <strong>Member:</strong> ${data.member}</p>
                             <p class="flex items-center space-x-2"><span class="material-icons text-green-600">church</span> <strong>Sacrament:</strong> ${data.sacrament}</p>
                         </div>
+
                         <h3 class="mt-6 text-xl font-semibold flex items-center space-x-2">
                             <span class="material-icons text-yellow-600">payment</span>
                             <span>Payments</span>
                         </h3>
                     `;
+
                     if (data.payments.length > 0) {
                         html += `<div class="space-y-4 mt-4">` +
                             data.payments.map(p => `
@@ -131,7 +135,36 @@
                     } else {
                         html += `<p class="text-gray-500 mt-4 text-lg">No payments found.</p>`;
                     }
+
                     modalContent.innerHTML = html;
+
+                    // Fetch reservation documents
+                    fetch(`/member/reservations/${id}/documents`)
+                        .then(res => res.ok ? res.json() : Promise.reject("Failed to fetch documents"))
+                        .then(docData => {
+                            if (docData.documents.length > 0) {
+                                let docHtml = `
+                                    <h3 class="mt-6 text-xl font-semibold flex items-center space-x-2">
+                                        <span class="material-icons text-purple-600">description</span>
+                                        <span>Documents</span>
+                                    </h3>
+                                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        ${docData.documents.map(doc => `
+                                            <a href="${doc.url}" target="_blank" class="p-4 border rounded-lg shadow-sm hover:bg-gray-50 flex items-center space-x-2 transition">
+                                                <span class="material-icons text-blue-600">insert_drive_file</span>
+                                                <span class="truncate text-gray-700">Document #${doc.id}</span>
+                                            </a>
+                                        `).join('')}
+                                    </div>
+                                `;
+                                modalContent.innerHTML += docHtml;
+                            } else {
+                                modalContent.innerHTML += `<p class="text-gray-500 mt-4 text-lg">No documents uploaded.</p>`;
+                            }
+                        })
+                        .catch(err => {
+                            modalContent.innerHTML += `<p class="text-center text-red-600 py-4 text-lg">Failed to load documents.</p>`;
+                        });
                 })
                 .catch(() => {
                     modalContent.innerHTML = `<p class="text-center text-red-600 py-6 text-xl">Error loading details. Please try again.</p>`;
