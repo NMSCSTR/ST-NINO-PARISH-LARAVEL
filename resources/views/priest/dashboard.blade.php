@@ -74,79 +74,97 @@
                                     {{-- Actions --}}
                                     <td class="px-4 py-2 text-right">
                                         @if($reservation->status === 'forwarded_to_priest')
-                                        <div class="relative inline-block text-left">
-                                            <button type="button"
-                                                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-3 py-1.5 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100"
-                                                id="priest-menu-button-{{ $reservation->id }}">
-                                                Actions
-                                                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M19 9l-7 7-7-7" />
-                                                </svg>
-                                            </button>
+                                        <button
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                            onclick="openModal({{ $reservation->id }})">
+                                            Actions
+                                            <svg class="h-5 w-5 -mr-1 ml-2" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
 
-                                            <div class="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
-                                                id="priest-dropdown-{{ $reservation->id }}">
-                                                <div class="py-2 px-3">
+                                        {{-- Modal --}}
+                                        <div id="modal-{{ $reservation->id }}"
+                                            class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+                                            <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative">
+                                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Approve / Reject
+                                                    Reservation</h3>
 
-                                                    {{-- Approve with remarks --}}
-                                                    <form
-                                                        action="{{ route('priest.reservations.approve', $reservation->id) }}"
-                                                        method="POST" class="mb-2">
-                                                        @csrf
-                                                        <textarea name="remarks" placeholder="Add remarks (optional)"
-                                                            rows="2"
-                                                            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm mb-2"></textarea>
-                                                        <button type="submit"
-                                                            class="w-full flex items-center justify-center gap-2 text-green-600 font-medium hover:bg-green-50 rounded px-2 py-1">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2" d="M5 13l4 4L19 7" />
-                                                            </svg>
-                                                            Approve
-                                                        </button>
-                                                    </form>
+                                                {{-- Remarks Form --}}
+                                                <form
+                                                    action="{{ route('priest.reservations.approve', $reservation->id) }}"
+                                                    method="POST" class="mb-3">
+                                                    @csrf
+                                                    <textarea name="remarks" placeholder="Add remarks (optional)"
+                                                        class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-2"
+                                                        rows="3"></textarea>
+                                                    <button type="submit"
+                                                        class="w-full flex items-center justify-center gap-2 text-green-600 font-medium hover:bg-green-50 rounded px-3 py-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        Approve
+                                                    </button>
+                                                </form>
 
-                                                    {{-- Reject with remarks --}}
-                                                    <form
-                                                        action="{{ route('priest.reservations.reject', $reservation->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <textarea name="remarks" placeholder="Add remarks (optional)"
-                                                            rows="2"
-                                                            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-sm mb-2"></textarea>
-                                                        <button type="submit"
-                                                            class="w-full flex items-center justify-center gap-2 text-red-600 font-medium hover:bg-red-50 rounded px-2 py-1">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                            </svg>
-                                                            Reject
-                                                        </button>
-                                                    </form>
+                                                <form
+                                                    action="{{ route('priest.reservations.reject', $reservation->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <textarea name="remarks" placeholder="Add remarks (optional)"
+                                                        class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-2"
+                                                        rows="3"></textarea>
+                                                    <button type="submit"
+                                                        class="w-full flex items-center justify-center gap-2 text-red-600 font-medium hover:bg-red-50 rounded px-3 py-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        Reject
+                                                    </button>
+                                                </form>
 
-                                                </div>
+                                                {{-- Close Button --}}
+                                                <button type="button" onclick="closeModal({{ $reservation->id }})"
+                                                    class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
                                             </div>
                                         </div>
 
+                                        {{-- Modal Script --}}
                                         <script>
-                                            const priestBtn{{ $reservation->id }} = document.getElementById('priest-menu-button-{{ $reservation->id }}');
-        const priestDropdown{{ $reservation->id }} = document.getElementById('priest-dropdown-{{ $reservation->id }}');
+                                            function openModal(id) {
+                document.getElementById(`modal-${id}`).classList.remove('hidden');
+                document.getElementById(`modal-${id}`).classList.add('flex');
+            }
 
-        priestBtn{{ $reservation->id }}.addEventListener('click', (e) => {
-            e.stopPropagation();
-            priestDropdown{{ $reservation->id }}.classList.toggle('hidden');
-        });
+            function closeModal(id) {
+                document.getElementById(`modal-${id}`).classList.remove('flex');
+                document.getElementById(`modal-${id}`).classList.add('hidden');
+            }
 
-        document.addEventListener('click', () => {
-            priestDropdown{{ $reservation->id }}.classList.add('hidden');
-        });
+            // Close modal when clicking outside
+            document.addEventListener('click', function (event) {
+                const modal = document.getElementById(`modal-{{ $reservation->id }}`);
+                if (modal && !modal.firstElementChild.contains(event.target) && !event.target.closest('button')) {
+                    closeModal({{ $reservation->id }});
+                }
+            });
                                         </script>
                                         @endif
                                     </td>
+
 
                                 </tr>
                                 @endforeach
