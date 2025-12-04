@@ -2,8 +2,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Priest;
+use App\Models\User;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PriestController extends Controller
 {
