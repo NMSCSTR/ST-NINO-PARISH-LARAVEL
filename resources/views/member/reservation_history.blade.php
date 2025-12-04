@@ -10,10 +10,10 @@
 
     {{-- Header with Back Button --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 mt-10 bg-gray-50 p-4 rounded-lg shadow-sm">
-        <h2 class="text-3xl font-bold mb-3 md:mb-0 mt-2 text-gray-800">My Reservations</h2>
+        <h2 class="text-3xl font-extrabold mb-3 md:mb-0 mt-2 text-gray-800">My Reservations</h2>
 
         <a href="{{ route('member.reservation') }}"
-            class="px-5 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition duration-200 shadow">
+            class="px-5 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition duration-200 shadow font-semibold">
             ← Back to Reservation Form
         </a>
     </div>
@@ -23,23 +23,23 @@
         @if($reservations->isEmpty())
             <p class="text-gray-600 text-center py-6 text-lg">No reservations found.</p>
         @else
-        <table class="w-full text-sm text-gray-700 border-collapse">
+        <table class="w-full text-sm md:text-base text-gray-700 border-collapse">
             <thead>
                 <tr class="bg-gray-100 border-b">
-                    <th class="p-3 text-left rounded-tl-lg">Sacrament</th>
-                    <th class="p-3 text-left">Reservation Date</th>
-                    <th class="p-3 text-left">Status</th>
-                    <th class="p-3 text-center rounded-tr-lg">Actions</th>
+                    <th class="p-3 text-left rounded-tl-lg font-bold text-lg">Sacrament</th>
+                    <th class="p-3 text-left font-bold text-lg">Reservation Date</th>
+                    <th class="p-3 text-left font-bold text-lg">Status</th>
+                    <th class="p-3 text-center rounded-tr-lg font-bold text-lg">Actions</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($reservations as $res)
                 <tr class="border-b hover:bg-gray-50 transition duration-150">
-                    <td class="p-3 text-lg font-medium">{{ ucfirst($res->sacrament->sacrament_type) }}</td>
-                    <td class="p-3 text-lg">{{ $res->reservation_date?->format('M d, Y') }}</td>
+                    <td class="p-3 text-lg font-semibold">{{ ucfirst($res->sacrament->sacrament_type) }}</td>
+                    <td class="p-3 text-lg font-semibold">{{ $res->reservation_date?->format('M d, Y') }}</td>
                     <td class="p-3">
-                        <span class="px-3 py-1 rounded-full text-white text-sm font-semibold
+                        <span class="px-3 py-1 rounded-full text-white text-base font-bold
                             {{ $res->status == 'approved' ? 'bg-green-600' :
                                ($res->status == 'pending' ? 'bg-yellow-500' : 'bg-red-600') }}">
                             {{ ucfirst($res->status) }}
@@ -47,7 +47,7 @@
                     </td>
                     <td class="p-3 text-center">
                         <button
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition duration-150 detailBtn text-sm md:text-lg"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition duration-150 detailBtn text-base font-semibold"
                             data-id="{{ $res->id }}">
                             View Details
                         </button>
@@ -65,20 +65,20 @@
 <div id="detailsModal"
     class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
 
-    <div class="bg-white w-full max-w-5xl rounded-xl shadow-2xl relative animate-fadeIn max-h-[90vh] flex flex-col">
+    <div class="bg-white w-full max-w-6xl rounded-xl shadow-2xl relative animate-fadeIn max-h-[90vh] flex flex-col">
 
         {{-- Close Button --}}
         <button id="closeModal" class="absolute top-4 right-4 text-3xl hover:text-red-600 z-10">&times;</button>
 
         {{-- Scrollable Content --}}
-        <div class="p-6 overflow-y-auto flex-1 space-y-6">
-            <h2 class="text-2xl font-bold border-b pb-2 flex items-center space-x-2">
-                <span class="material-icons text-blue-600">event_note</span>
+        <div class="p-8 overflow-y-auto flex-1 space-y-8">
+            <h2 class="text-3xl font-extrabold border-b pb-3 flex items-center space-x-3">
+                <span class="material-icons text-blue-600 text-3xl">event_note</span>
                 <span>Reservation Details</span>
             </h2>
 
             <div id="modalContent" class="text-gray-800 text-lg">
-                <p class="text-center py-6 text-gray-500 text-xl">Loading details...</p>
+                <p class="text-center py-10 text-gray-500 text-xl">Loading details...</p>
             </div>
         </div>
     </div>
@@ -103,7 +103,7 @@
     document.querySelectorAll('.detailBtn').forEach(btn => {
         btn.addEventListener('click', function () {
             modal.classList.remove('hidden');
-            modalContent.innerHTML = `<p class="text-center py-6 text-gray-500 text-xl">Loading...</p>`;
+            modalContent.innerHTML = `<p class="text-center py-10 text-gray-500 text-xl">Loading...</p>`;
             let id = this.dataset.id;
 
             // Fetch reservation details
@@ -111,31 +111,31 @@
                 .then(res => res.ok ? res.json() : Promise.reject("Failed"))
                 .then(data => {
                     let html = `
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-3">
-                                <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">person</span> <strong>Member:</strong> ${data.member}</p>
-                                <p class="flex items-center space-x-2"><span class="material-icons text-green-600">church</span> <strong>Sacrament:</strong> ${data.sacrament}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg">
+                            <div class="space-y-4">
+                                <p class="font-bold text-xl flex items-center space-x-3"><span class="material-icons text-blue-600 text-2xl">person</span> <span>Member:</span> <span class="font-semibold text-xl">${data.member}</span></p>
+                                <p class="font-bold text-xl flex items-center space-x-3"><span class="material-icons text-green-600 text-2xl">church</span> <span>Sacrament:</span> <span class="font-semibold text-xl">${data.sacrament}</span></p>
                             </div>
 
-                            <div class="space-y-3">
-                                <h3 class="text-xl font-semibold flex items-center space-x-2">
-                                    <span class="material-icons text-yellow-600">payment</span>
+                            <div class="space-y-4">
+                                <h3 class="text-2xl font-bold flex items-center space-x-3">
+                                    <span class="material-icons text-yellow-600 text-2xl">payment</span>
                                     <span>Payments</span>
                                 </h3>
-                                ${data.payments.length > 0 ? `<div class="space-y-4">` +
+                                ${data.payments.length > 0 ? `<div class="space-y-5">` +
                                     data.payments.map(p => `
-                                        <div class="p-4 border rounded-lg bg-gray-50 shadow-sm space-y-2">
-                                            <p class="flex items-center space-x-2"><span class="material-icons text-green-600">attach_money</span> <strong>Amount:</strong> ₱${p.amount}</p>
-                                            <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">credit_card</span> <strong>Method:</strong> ${p.method}</p>
-                                            <p class="flex items-center space-x-2"><span class="material-icons text-purple-600">info</span> <strong>Status:</strong> <span class="font-semibold">${p.status}</span></p>
-                                            <p class="flex items-center space-x-2"><span class="material-icons text-orange-600">calendar_today</span> <strong>Date:</strong> ${p.date}</p>
+                                        <div class="p-5 border rounded-lg bg-gray-50 shadow-sm space-y-3">
+                                            <p class="font-bold text-lg flex items-center space-x-2"><span class="material-icons text-green-600">attach_money</span> <span>Amount:</span> <span class="font-semibold text-lg">₱${p.amount}</span></p>
+                                            <p class="font-bold text-lg flex items-center space-x-2"><span class="material-icons text-blue-600">credit_card</span> <span>Method:</span> <span class="font-semibold text-lg">${p.method}</span></p>
+                                            <p class="font-bold text-lg flex items-center space-x-2"><span class="material-icons text-purple-600">info</span> <span>Status:</span> <span class="font-semibold text-lg">${p.status}</span></p>
+                                            <p class="font-bold text-lg flex items-center space-x-2"><span class="material-icons text-orange-600">calendar_today</span> <span>Date:</span> <span class="font-semibold text-lg">${p.date}</span></p>
                                             ${p.receipt_url ? `<p class="flex flex-col">
                                                 <span class="material-icons text-red-600 mb-1">receipt</span>
-                                                <img src="${p.receipt_url}" class="w-full rounded-lg border shadow cursor-zoom-in mt-1" onclick="zoomReceipt(this.src)" alt="Receipt">
+                                                <img src="${p.receipt_url}" class="w-full rounded-lg border shadow cursor-zoom-in mt-2" onclick="zoomReceipt(this.src)" alt="Receipt">
                                             </p>` : ''}
                                         </div>
                                     `).join('') +
-                                `</div>` : `<p class="text-gray-500 mt-2">No payments found.</p>`}
+                                `</div>` : `<p class="text-gray-500 mt-2 font-semibold text-lg">No payments found.</p>`}
                             </div>
                         </div>
                     `;
@@ -148,30 +148,30 @@
                         .then(docData => {
                             if (docData.documents.length > 0) {
                                 let docHtml = `
-                                    <h3 class="mt-6 text-xl font-semibold flex items-center space-x-2">
-                                        <span class="material-icons text-purple-600">description</span>
+                                    <h3 class="mt-8 text-2xl font-bold flex items-center space-x-3">
+                                        <span class="material-icons text-purple-600 text-2xl">description</span>
                                         <span>Documents</span>
                                     </h3>
                                     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                         ${docData.documents.map(doc => `
-                                            <a href="${doc.url}" target="_blank" class="p-4 border rounded-lg shadow-sm hover:bg-gray-50 flex items-center space-x-2 transition">
-                                                <span class="material-icons text-blue-600">insert_drive_file</span>
-                                                <span class="truncate text-gray-700">Document #${doc.id}</span>
+                                            <a href="${doc.url}" target="_blank" class="p-5 border rounded-lg shadow-sm hover:bg-gray-50 flex items-center space-x-3 transition font-semibold text-lg">
+                                                <span class="material-icons text-blue-600 text-2xl">insert_drive_file</span>
+                                                <span class="truncate">Document #${doc.id}</span>
                                             </a>
                                         `).join('')}
                                     </div>
                                 `;
                                 modalContent.innerHTML += docHtml;
                             } else {
-                                modalContent.innerHTML += `<p class="text-gray-500 mt-4 text-lg">No documents uploaded.</p>`;
+                                modalContent.innerHTML += `<p class="text-gray-500 mt-4 font-semibold text-lg">No documents uploaded.</p>`;
                             }
                         })
                         .catch(err => {
-                            modalContent.innerHTML += `<p class="text-center text-red-600 py-4 text-lg">Failed to load documents.</p>`;
+                            modalContent.innerHTML += `<p class="text-center text-red-600 py-4 font-bold text-lg">Failed to load documents.</p>`;
                         });
                 })
                 .catch(() => {
-                    modalContent.innerHTML = `<p class="text-center text-red-600 py-6 text-xl">Error loading details. Please try again.</p>`;
+                    modalContent.innerHTML = `<p class="text-center text-red-600 py-10 font-bold text-xl">Error loading details. Please try again.</p>`;
                 });
         });
     });
@@ -197,7 +197,7 @@
     }
 
     .material-icons {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
     table th, table td {
@@ -206,12 +206,12 @@
 
     /* Scrollbar styling for modal */
     #detailsModal .flex-1::-webkit-scrollbar {
-        width: 8px;
+        width: 10px;
     }
 
     #detailsModal .flex-1::-webkit-scrollbar-thumb {
-        background-color: rgba(0,0,0,0.2);
-        border-radius: 4px;
+        background-color: rgba(0,0,0,0.3);
+        border-radius: 5px;
     }
 </style>
 @endpush
