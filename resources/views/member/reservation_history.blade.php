@@ -10,10 +10,10 @@
 
     {{-- Header with Back Button --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-10">
-        <h2 class="text-2xl font-bold mb-3 md:mb-0">My Reservations</h2>
+        <h2 class="text-3xl font-bold mb-3 md:mb-0 mt-2">My Reservations</h2>
 
         <a href="{{ route('member.reservation') }}"
-            class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 mt-5">
+            class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 mt-8">
             ← Back to Reservation Form
         </a>
     </div>
@@ -22,7 +22,7 @@
     <div class="bg-white shadow-lg rounded-lg p-4 overflow-x-auto">
 
         @if($reservations->isEmpty())
-            <p class="text-gray-600 text-center py-4">No reservations found.</p>
+            <p class="text-gray-600 text-center py-4 text-lg">No reservations found.</p>
         @else
         <table class="w-full text-sm text-gray-700">
             <thead>
@@ -37,10 +37,10 @@
             <tbody>
                 @foreach ($reservations as $res)
                 <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="p-3">{{ ucfirst($res->sacrament->sacrament_type) }}</td>
-                    <td class="p-3">{{ $res->reservation_date?->format('M d, Y') }}</td>
+                    <td class="p-3 text-lg">{{ ucfirst($res->sacrament->sacrament_type) }}</td>
+                    <td class="p-3 text-lg">{{ $res->reservation_date?->format('M d, Y') }}</td>
                     <td class="p-3">
-                        <span class="px-2 py-1 rounded text-white
+                        <span class="px-3 py-1 rounded text-white text-lg
                             {{ $res->status == 'approved' ? 'bg-green-600' :
                                ($res->status == 'pending' ? 'bg-yellow-500' : 'bg-red-600') }}">
                             {{ ucfirst($res->status) }}
@@ -48,7 +48,7 @@
                     </td>
                     <td class="p-3 text-center">
                         <button
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-lg detailBtn shadow"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg detailBtn shadow text-lg"
                             data-id="{{ $res->id }}">
                             View Details
                         </button>
@@ -67,14 +67,17 @@
 <div id="detailsModal"
     class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50 overflow-y-auto">
 
-    <div class="bg-white w-full max-w-xl rounded-lg shadow-2xl p-6 relative animate-fadeIn">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl p-6 relative animate-fadeIn">
 
-        <button id="closeModal" class="absolute top-2 right-3 text-2xl hover:text-red-600">&times;</button>
+        <button id="closeModal" class="absolute top-3 right-4 text-3xl hover:text-red-600">&times;</button>
 
-        <h2 class="text-xl font-bold mb-4 border-b pb-2">Reservation Details</h2>
+        <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center space-x-2">
+            <span class="material-icons text-blue-600">event_note</span>
+            <span>Reservation Details</span>
+        </h2>
 
-        <div id="modalContent" class="text-gray-800">
-            <p class="text-center py-4 text-gray-500">Loading details...</p>
+        <div id="modalContent" class="text-gray-800 space-y-4 text-lg">
+            <p class="text-center py-6 text-gray-500 text-xl">Loading details...</p>
         </div>
 
     </div>
@@ -102,7 +105,7 @@
         btn.addEventListener('click', function () {
 
             modal.classList.remove('hidden');
-            modalContent.innerHTML = `<p class="text-center py-4 text-gray-500">Loading...</p>`;
+            modalContent.innerHTML = `<p class="text-center py-6 text-gray-500 text-xl">Loading...</p>`;
 
             let id = this.dataset.id;
 
@@ -113,39 +116,46 @@
                 })
                 .then(data => {
                     let html = `
-                        <p><strong>Member:</strong> ${data.member}</p>
-                        <p><strong>Sacrament:</strong> ${data.sacrament}</p>
+                        <div class="space-y-3">
+                            <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">person</span> <strong>Member:</strong> ${data.member}</p>
+                            <p class="flex items-center space-x-2"><span class="material-icons text-green-600">church</span> <strong>Sacrament:</strong> ${data.sacrament}</p>
+                        </div>
 
-                        <h3 class="mt-4 font-bold">Payments</h3>
+                        <h3 class="mt-6 text-xl font-semibold flex items-center space-x-2">
+                            <span class="material-icons text-yellow-600">payment</span>
+                            <span>Payments</span>
+                        </h3>
                     `;
 
                     if (data.payments.length > 0) {
                         html += `
-                            <div class="space-y-3 mt-3">
+                            <div class="space-y-4 mt-4">
                                 ${data.payments.map(p => `
-                                    <div class="p-3 border rounded-lg bg-gray-50">
-                                        <p><strong>Amount:</strong> ₱${p.amount}</p>
-                                        <p><strong>Method:</strong> ${p.method}</p>
-                                        <p><strong>Status:</strong> <span class="font-semibold">${p.status}</span></p>
-                                        <p><strong>Date:</strong> ${p.date}</p>
+                                    <div class="p-4 border rounded-lg bg-gray-50 shadow-sm space-y-2">
+                                        <p class="flex items-center space-x-2"><span class="material-icons text-green-600">attach_money</span> <strong>Amount:</strong> ₱${p.amount}</p>
+                                        <p class="flex items-center space-x-2"><span class="material-icons text-blue-600">credit_card</span> <strong>Method:</strong> ${p.method}</p>
+                                        <p class="flex items-center space-x-2"><span class="material-icons text-purple-600">info</span> <strong>Status:</strong> <span class="font-semibold">${p.status}</span></p>
+                                        <p class="flex items-center space-x-2"><span class="material-icons text-orange-600">calendar_today</span> <strong>Date:</strong> ${p.date}</p>
                                         ${p.receipt_url ?
-                                            `<img src="${p.receipt_url}"
-                                                  class="w-full mt-2 rounded-lg border shadow cursor-zoom-in"
-                                                  onclick="zoomReceipt(this.src)" alt="Receipt">`
-                                            : ''}
+                                            `<p class="flex flex-col">
+                                                <span class="material-icons text-red-600 mb-1">receipt</span>
+                                                <img src="${p.receipt_url}"
+                                                    class="w-full rounded-lg border shadow cursor-zoom-in mt-1"
+                                                    onclick="zoomReceipt(this.src)" alt="Receipt">
+                                            </p>` : ''}
                                     </div>
                                 `).join('')}
                             </div>
                         `;
                     } else {
-                        html += `<p class="text-gray-500 mt-2">No payments found.</p>`;
+                        html += `<p class="text-gray-500 mt-4 text-lg">No payments found.</p>`;
                     }
 
                     modalContent.innerHTML = html;
                 })
                 .catch(err => {
                     modalContent.innerHTML = `
-                        <p class="text-center text-red-600 py-4">
+                        <p class="text-center text-red-600 py-6 text-xl">
                             Error loading details. Please try again.
                         </p>`;
                 });
@@ -173,6 +183,11 @@
     @keyframes fadeIn {
         from { opacity: 0; transform: scale(0.95); }
         to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Optional: increase icon size */
+    .material-icons {
+        font-size: 1.5rem;
     }
 </style>
 @endpush
