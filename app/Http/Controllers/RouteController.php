@@ -69,8 +69,8 @@ class RouteController extends Controller
 
     public function documents()
     {
-        $documents = Documents::all();
-        return view('admin.documents', compact('documents'));
+        // $documents = Documents::all();
+        // return view('admin.documents', compact('documents'));
     }
     /**
      * Show the form for creating a new resource.
