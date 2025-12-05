@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/payments/{reservation}/pay-now', [PaymentController::class, 'adminPayNow'])
             ->name('admin.payNow');
         Route::get('/reservations/{id}/payments', [ReservationController::class, 'fetchPayments']);
+        Route::put('/payments/{id}/mark-paid', [ReservationController::class, 'markPaymentAsPaid']);
         Route::post('/reservations/{id}/forward', [ReservationController::class, 'forward'])->name('reservations.forward');
 
         Route::get('/priest', [PriestController::class, 'index'])->name('priest');

@@ -176,6 +176,7 @@ class ReservationController extends Controller
             'sacrament' => $reservation->sacrament->sacrament_type ?? 'N/A',
             'payments'  => $reservation->payments->map(function ($p) {
                 return [
+                    'id'           => $p->id,
                     'amount'       => $p->amount,
                     'method'       => $p->method,
                     'status'       => $p->status,
@@ -186,6 +187,21 @@ class ReservationController extends Controller
             }),
         ]);
     }
+
+    public function markPaymentAsPaid($id)
+    {
+        $payment = Payment::findOrFail($id);
+
+        if ($payment->status === 'paid') {
+            return response()->json(['message' => 'This payment is already marked as PAID.'], 400);
+        }
+
+        $payment->status = 'paid';
+        $payment->save();
+
+        return response()->json(['message' => 'Payment status updated to PAID successfully.']);
+    }
+
 
     public function getDocuments($id)
     {

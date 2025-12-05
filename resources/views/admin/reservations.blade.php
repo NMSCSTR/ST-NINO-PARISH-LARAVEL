@@ -317,7 +317,7 @@
                     <tr>
                         <th class="px-3 py-2 text-left">Amount</th>
                         <th class="px-3 py-2 text-left">Method</th>
-                        <th class="px-3 py-2 text-left">Status</th>
+                        <th class="px-3 py-2 text-left">Payment Status</th>
                         <th class="px-3 py-2 text-left">Receipt</th>
                         <th class="px-3 py-2 text-left">Date</th>
                     </tr>

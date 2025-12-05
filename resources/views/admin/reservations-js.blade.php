@@ -80,6 +80,25 @@ function closeReceiptModal() {
 
 <!-- PAYMENT LIST MODAL -->
 <script>
+    function setPaymentToPaid(paymentId) {
+    if (!confirm("Mark this payment as PAID?")) return;
+
+    fetch(`/admin/payments/${paymentId}/mark-paid`, {
+        method: "PUT",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            "Content-Type": "application/json",
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        document.getElementById("paymentListModal").classList.add("hidden");
+        location.reload();
+    })
+    .catch(err => console.error(err));
+}
+
 function openPaymentListModal(reservationId) {
     fetch(`/admin/reservations/${reservationId}/payments`)
         .then(response => response.json())
@@ -98,10 +117,15 @@ function openPaymentListModal(reservationId) {
                             <td class="px-3 py-2">₱${parseFloat(payment.amount).toFixed(2)}</td>
                             <td class="px-3 py-2">${payment.method ?? '-'}</td>
                             <td class="px-3 py-2">
-                                <span class="${payment.status === 'paid' ? 'text-green-600' : 'text-yellow-600'}">
-                                    ${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
-                                </span>
+                                ${payment.status === 'pending'
+                                    ? `<button onclick="setPaymentToPaid(${payment.id})"
+                                            class="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700">
+                                            Set to Paid
+                                    </button>`
+                                    : `<span class="text-green-600">Paid</span>`
+                                }
                             </td>
+
                             <td class="px-3 py-2">
                                 ${payment.receipt_path ?
                                     `<button onclick="showReceipt('${payment.receipt_url}')"
