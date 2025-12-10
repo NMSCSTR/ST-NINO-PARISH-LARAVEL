@@ -135,6 +135,9 @@ class ReservationController extends Controller
         return back()->with('success', 'Reservation rejected successfully.');
     }
 
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Http;
+
     public function priestApprove(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
@@ -152,6 +155,19 @@ class ReservationController extends Controller
             'approved_by' => auth()->user()->id,
             'remarks'     => $remarks,
         ]);
+
+        // Send SMS via Semaphore
+        $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+            'apikey'     => env(''),
+            'number'     => $reservation->contact_number,
+            'message'    => 'Your reservation was approved by Priest: ' . auth()->user()->firstname . ' ' . auth()->user()->lastname,
+            'sendername' => 'SEMAPHORE',
+        ]);
+
+
+        if ($response->failed()) {
+            return back()->with('warning', 'Reservation approved, but SMS failed to send.');
+        }
 
         return back()->with('success', 'Reservation approved successfully.');
     }
@@ -201,7 +217,6 @@ class ReservationController extends Controller
 
         return response()->json(['message' => 'Payment status updated to PAID successfully.']);
     }
-
 
     public function getDocuments($id)
     {

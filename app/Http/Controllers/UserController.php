@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User as UserModel;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -89,8 +90,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = UserModel::findOrFail($id);
-        return view('admin.update.update_user', compact('user'));
+        $member = member::findOrFail($id);
+        return view('admin.update.update_user', compact('member'));
     }
 
     /**

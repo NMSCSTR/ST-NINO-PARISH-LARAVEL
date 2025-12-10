@@ -20,7 +20,7 @@ class Member extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function Baptism()
+    public function baptism()
     {
         return $this->hasMany(Baptism::class);
     }
