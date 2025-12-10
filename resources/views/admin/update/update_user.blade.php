@@ -22,7 +22,7 @@
                     <div class="px-6 py-6">
 
                         <div>
-                            <form action="{{ route('admin.users.update', ['id' => $member->id]) }}" method="POST">
+                            <form action="{{ route('admin.users.update', ['id' => $user->id]) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
@@ -31,7 +31,7 @@
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First
                                             Name</label>
                                         <input type="text" name="firstname" id="firstname"
-                                            value="{{ old('firstname', $member->firstname) }}" placeholder="First Name"
+                                            value="{{ old('firstname', $user->firstname) }}" placeholder="First Name"
                                             required
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                                     </div>
@@ -40,7 +40,7 @@
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last
                                             Name</label>
                                         <input type="text" name="lastname" id="lastname"
-                                            value="{{ old('lastname', $member->lastname) }}" placeholder="Last Name"
+                                            value="{{ old('lastname', $user->lastname) }}" placeholder="Last Name"
                                             required
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                                     </div>
@@ -48,7 +48,7 @@
                                         <label for="email"
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                                         <input type="email" name="email" id="email"
-                                            value="{{ old('email', $member->email) }}" placeholder="Email" required
+                                            value="{{ old('email', $user->email) }}" placeholder="Email" required
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                                     </div>
                                     <div class="sm:col-span-2">
@@ -56,11 +56,11 @@
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
                                         <select name="role" id="role" required
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                            <option value="admin" {{ old('role', $member->role) === 'admin' ? 'selected' :
+                                            <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' :
                                                 '' }}>Admin</option>
-                                            <option value="staff" {{ old('role', $member->role) === 'staff' ? 'selected' :
+                                            <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' :
                                                 '' }}>Staff</option>
-                                            <option value="member" {{ old('role', $member->role) === 'member' ? 'selected'
+                                            <option value="member" {{ old('role', $user->role) === 'member' ? 'selected'
                                                 : '' }}>Member</option>
                                         </select>
                                     </div>

@@ -90,8 +90,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $member = member::with('user')->findOrFail($id);
-        return view('admin.update.update_user', compact('member'));
+        $user = UserModel::findOrFail($id);
+        return view('admin.update.update_user', compact('user'));
     }
 
     /**
