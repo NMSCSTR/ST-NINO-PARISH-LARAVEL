@@ -121,7 +121,7 @@ class UserController extends Controller
 
         $user->save();
 
-        // If the user is a member, update the associated Member profile
+        
         if ($user->role === 'member') {
             $memberValidated = $request->validate([
                 'middle_name'    => 'nullable|string|max:255',
