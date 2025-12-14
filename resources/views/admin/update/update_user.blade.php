@@ -68,6 +68,19 @@
                                            focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition" />
                             </div>
 
+                        </div>
+
+                            {{-- Phone Number --}}
+                            <div class="sm:col-span-2">
+                                <label for="email" class="block mb-1 text-sm font-medium text-gray-700">
+                                    Phone Number
+                                </label>
+                                <input type="text" name="phone_number" id="phone_number"
+                                    value="{{ old('phone_number', $user->phone_number) }}" required
+                                    class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
+                                           focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition" />
+                            </div>
+
                             {{-- Role --}}
                             <div class="sm:col-span-2">
                                 <label for="role" class="block mb-1 text-sm font-medium text-gray-700">
