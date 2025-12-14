@@ -133,6 +133,16 @@ class ReservationController extends Controller
             'approved_by' => auth()->user()->id,
             'remarks'     => $remarks,
         ]);
+        $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+            'apikey'     => config('services.semaphore.key'),
+            'number' => optional($reservation->member->user)->phone_number,
+            'message'    => 'Your reservation was rejected by Priest: ' . auth()->user()->firstname . ' ' . auth()->user()->lastname,
+            'sendername' => 'SalnPlatfrm',
+        ]);
+
+        if ($response->failed()) {
+            return back()->with('warning', 'Reservation rejected, but SMS failed to send.');
+        }
 
         return back()->with('success', 'Reservation rejected successfully.');
     }
@@ -159,7 +169,7 @@ class ReservationController extends Controller
 
         $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
             'apikey'     => config('services.semaphore.key'),
-            'number'     => $reservation->contact_number,
+            'number' => optional($reservation->member->user)->phone_number,
             'message'    => 'Your reservation was approved by Priest: ' . auth()->user()->firstname . ' ' . auth()->user()->lastname,
             'sendername' => 'SalnPlatfrm',
         ]);

@@ -11,9 +11,10 @@ class Member extends Model
         'birth_date',
         'address',
         'place_of_birth',
-        'contact_number',
+        'contact_number', // do not use this
         'email',
     ];
+    
 
     public function user()
     {
