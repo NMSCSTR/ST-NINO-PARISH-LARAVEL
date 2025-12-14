@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = UserModel::with('member')->get;
+        $users = UserModel::with('member')->get();
         return view('admin.users', compact('users'));
     }
 
