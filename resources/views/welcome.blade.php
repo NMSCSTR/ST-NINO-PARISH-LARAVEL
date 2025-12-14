@@ -104,10 +104,10 @@
             </div>
 
             <div class="mt-8 text-center">
-                <button id="closeModal"
+                {{-- <button id="closeModal"
                     class="inline-block px-6 py-2.5 bg-gradient-to-r from-[#d4af37] to-[#8b5e3c] text-white font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
                     Close
-                </button>
+                </button> --}}
             </div>
         </div>
     </div>

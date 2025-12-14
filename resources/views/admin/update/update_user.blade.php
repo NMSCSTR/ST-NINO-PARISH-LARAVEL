@@ -90,7 +90,7 @@
                                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
                                         </div>
 
-                                        <div class="sm:col-span-1">
+                                        <div class="sm:col-span-2">
                                             <label for="birth_date"
                                                 class="block mb-2 text-sm font-medium text-gray-900">Birth Date</label>
                                             <input type="date" name="birth_date" id="birth_date"
@@ -98,7 +98,7 @@
                                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
                                         </div>
 
-                                        <div class="sm:col-span-1">
+                                        <div class="sm:col-span-2">
                                             <label for="place_of_birth"
                                                 class="block mb-2 text-sm font-medium text-gray-900">Place of
                                                 Birth</label>
