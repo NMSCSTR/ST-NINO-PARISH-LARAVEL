@@ -88,6 +88,12 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
+                                        <button
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-blue-300 text-sm font-medium text-blue-700 hover:bg-blue-50 mr-2"
+                                            onclick="openDetailsModal({{ $reservation->id }})">
+                                            View Details
+                                        </button>
+
 
                                         {{-- Modal --}}
                                         <div id="modal-{{ $reservation->id }}"
@@ -178,11 +184,99 @@
             </div>
         </div>
     </div>
+
+    <div id="details-modal-{{ $reservation->id }}"
+    class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 relative">
+
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+            Reservation Details
+        </h3>
+
+        <div class="space-y-3 text-sm text-gray-700">
+            <div>
+                <strong>Member Name:</strong>
+                {{ $reservation->member->user->firstname }}
+                {{ $reservation->member->user->lastname }}
+            </div>
+
+            <div>
+                <strong>Phone Number:</strong>
+                {{ $reservation->member->user->phone_number }}
+            </div>
+
+            <div>
+                <strong>Email:</strong>
+                {{ $reservation->member->user->email }}
+            </div>
+
+            <div>
+                <strong>Sacrament:</strong>
+                {{ $reservation->sacrament->sacrament_type ?? 'N/A' }}
+            </div>
+
+            <div>
+                <strong>Reservation Date:</strong>
+                {{ $reservation->reservation_date?->format('M d, Y') ?? 'N/A' }}
+            </div>
+
+            <div>
+                <strong>Fee:</strong>
+                ₱{{ number_format($reservation->fee, 2) }}
+            </div>
+
+            <div>
+                <strong>Status:</strong>
+                {{ ucfirst(str_replace('_', ' ', $reservation->status)) }}
+            </div>
+
+            @if($reservation->remarks)
+            <div>
+                <strong>Remarks:</strong>
+                <p class="text-gray-600">{{ $reservation->remarks }}</p>
+            </div>
+            @endif
+
+            @if($reservation->forwarded_by)
+            <div>
+                <strong>Forwarded By:</strong>
+                {{ $reservation->forwardedByUser->firstname }}
+                {{ $reservation->forwardedByUser->lastname }}
+                <div class="text-xs text-gray-500">
+                    {{ $reservation->forwarded_at->format('M d, Y g:i A') }}
+                </div>
+            </div>
+            @endif
+        </div>
+
+        {{-- Close Button --}}
+        <button type="button"
+            onclick="closeDetailsModal({{ $reservation->id }})"
+            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+            ✕
+        </button>
+    </div>
+</div>
+
 </section>
 
 @endsection
 
 @push('scripts')
 @include('components.alerts')
+<script>
+    function openDetailsModal(id) {
+        const modal = document.getElementById(`details-modal-${id}`);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeDetailsModal(id) {
+        const modal = document.getElementById(`details-modal-${id}`);
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
+</script>
+
 
 @endpush
