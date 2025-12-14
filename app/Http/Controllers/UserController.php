@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\User as UserModel;
 use App\Models\Member;
+use App\Models\User as UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -103,24 +103,25 @@ class UserController extends Controller
 
         // Base validation for all users
         $validated = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname'  => 'required|string|max:255',
-            'email'     => ['required', 'email', Rule::unique('users', 'email')->ignore($id)],
-            'role'      => 'required|in:admin,staff,member,priest',
-            'password'  => 'nullable|string|min:6',
+            'firstname'    => 'required|string|max:255',
+            'lastname'     => 'required|string|max:255',
+            'email'        => ['required', 'email', Rule::unique('users', 'email')->ignore($id)],
+            'role'         => 'required|in:admin,staff,member,priest',
+            'password'     => 'nullable|string|min:6',
+            'phone_number' => 'required|string|max:20',
         ]);
 
-        $user->firstname = $validated['firstname'];
-        $user->lastname  = $validated['lastname'];
-        $user->email     = $validated['email'];
-        $user->role      = $validated['role'];
+        $user->firstname    = $validated['firstname'];
+        $user->lastname     = $validated['lastname'];
+        $user->email        = $validated['email'];
+        $user->role         = $validated['role'];
+        $user->phone_number = $validated['phone_number'];
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 
         $user->save();
-
 
         if ($user->role === 'member') {
             $memberValidated = $request->validate([
@@ -128,11 +129,10 @@ class UserController extends Controller
                 'birth_date'     => 'nullable|date',
                 'place_of_birth' => 'nullable|string|max:255',
                 'address'        => 'nullable|string|max:255',
-                'contact_number' => 'nullable|string|max:20',
             ]);
 
             // Create member record if it doesn't exist
-            if (!$user->member) {
+            if (! $user->member) {
                 $user->member()->create($memberValidated);
             } else {
                 $user->member->update($memberValidated);
@@ -143,7 +143,6 @@ class UserController extends Controller
             ->route('admin.users', ['id' => $id])
             ->with('success', 'User updated successfully.');
     }
-
 
     /**
      * Remove the specified resource from storage.
