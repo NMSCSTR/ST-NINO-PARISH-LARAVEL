@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use App\Models\ReservationDocument;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ReservationController extends Controller
 {
