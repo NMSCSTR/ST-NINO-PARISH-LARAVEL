@@ -27,6 +27,15 @@ Route::post('/register', [UserController::class, 'store'])->name('user.store');
 Route::post('/login', [AuthUserController::class, 'auth'])->name('user.login');
 Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
 
+Route::get('/env-check', function () {
+    return [
+        'env'    => env('SEMAPHORE_API_KEY'),
+        'config' => config('services.semaphore.key'),
+        'envName'=> app()->environment(),
+    ];
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes
