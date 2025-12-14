@@ -38,6 +38,8 @@
                                                 'approved' ? 'selected' : '' }}>Approved</option>
                                             <option value="cancel" {{ old('status', $reservations->status) === 'cancel'
                                                 ? 'selected' : '' }}>Cancel</option>
+                                            <option value="forwarded_to_priest" {{ old('status', $reservations->status) === 'forwarded_to_priest'
+                                                ? 'selected' : '' }}>Forward to priest</option>
                                         </select>
 
                                     </div>

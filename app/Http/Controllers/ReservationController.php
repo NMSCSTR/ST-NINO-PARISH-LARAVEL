@@ -265,7 +265,7 @@ class ReservationController extends Controller
         $reservation->reservation_date = $request->reservation_date;
         $reservation->remarks          = $request->remarks;
 
-        if (in_array($request->status, ['pending', 'cancel'])) {
+        if (in_array($request->status, ['pending', 'cancel','forwarded_to_priest'])) {
             $reservation->approved_by = null;
         }
 
