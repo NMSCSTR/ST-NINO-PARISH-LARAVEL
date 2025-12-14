@@ -27,8 +27,8 @@
                                 <li class="inline-flex items-center">
                                     <a href="#"
                                         class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
-                                        <svg class="w-3 h-3 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                            viewBox="0 0 20 20">
+                                        <svg class="w-3 h-3 me-2.5" xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor" viewBox="0 0 20 20">
                                             <path
                                                 d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                                         </svg>
@@ -39,8 +39,7 @@
                                 <li class="text-gray-400">/</li>
 
                                 <li>
-                                    <a href="#"
-                                        class="text-sm font-medium text-gray-700 hover:text-blue-600">
+                                    <a href="#" class="text-sm font-medium text-gray-700 hover:text-blue-600">
                                         Dashboard
                                     </a>
                                 </li>
@@ -57,8 +56,7 @@
 
                         {{-- Action Button --}}
                         <div class="mt-6 flex justify-end">
-                            <a href="{{ route('member.reservations.history') }}"
-                                class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white
+                            <a href="{{ route('member.reservations.history') }}" class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white
                                        hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30 transition">
                                 My Reservation History
                             </a>
@@ -78,14 +76,13 @@
                                     <label class="block mb-2 text-sm font-medium text-gray-700">
                                         Select Sacrament Type
                                     </label>
-                                    <select id="sacrament_id" name="sacrament_id" required
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
+                                    <select id="sacrament_id" name="sacrament_id" required class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
                                                focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition">
                                         <option value="">-- Choose sacrament type --</option>
                                         @foreach ($sacraments as $sacrament)
-                                            <option value="{{ $sacrament->id }}">
-                                                {{ ucfirst($sacrament->sacrament_type) }}
-                                            </option>
+                                        <option value="{{ $sacrament->id }}">
+                                            {{ ucfirst($sacrament->sacrament_type) }}
+                                        </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -105,8 +102,7 @@
                                     <label class="block mb-2 text-sm font-medium text-gray-700">
                                         Reservation Date
                                     </label>
-                                    <input type="date" name="reservation_date"
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
+                                    <input type="date" name="reservation_date" class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
                                                focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition">
                                 </div>
 
@@ -115,8 +111,7 @@
                                     <label class="block mb-2 text-sm font-medium text-gray-700">
                                         Remarks
                                     </label>
-                                    <textarea name="remarks" rows="5"
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
+                                    <textarea name="remarks" rows="5" class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
                                                focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition"
                                         placeholder="Optional notes or instructions"></textarea>
                                 </div>
@@ -168,8 +163,7 @@
 
                             {{-- Submit --}}
                             <div class="mt-8 flex justify-end border-t pt-6">
-                                <button type="submit"
-                                    class="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white
+                                <button type="submit" class="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white
                                            hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30 transition">
                                     Submit Reservation
                                 </button>
