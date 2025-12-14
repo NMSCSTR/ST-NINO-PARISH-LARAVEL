@@ -145,6 +145,17 @@
         </div>
     </div>
 </section>
+<style>
+    .form-label {
+    @apply block mb-2 text-sm font-medium text-gray-700;
+}
+
+.form-input {
+    @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm
+           focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition;
+}
+
+</style>
 @endsection
 
 @push('scripts')
