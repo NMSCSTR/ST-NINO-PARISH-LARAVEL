@@ -24,6 +24,7 @@
                                     <th class="px-4 py-2">Member</th>
                                     <th class="px-4 py-2">Sacrament</th>
                                     <th class="px-4 py-2">Fee</th>
+                                    <th class="px-4 py-2">Phone Number</th>
                                     <th class="px-4 py-2">Status</th>
                                     <th class="px-4 py-2">Forwarded Info</th>
                                     <th class="px-4 py-2 text-right">Actions</th>
@@ -43,6 +44,9 @@
 
                                     {{-- Fee --}}
                                     <td class="px-4 py-2">₱{{ number_format($reservation->fee, 2) }}</td>
+
+                                    {{-- Phone Number --}}
+                                    <td class="px-4 py-2">{{ $reservation->member->user->lastname }}</td>
 
                                     {{-- Status --}}
                                     <td class="px-4 py-2">
@@ -145,27 +149,25 @@
                                         {{-- Modal Script --}}
                                         <script>
                                             function openModal(id) {
-                document.getElementById(`modal-${id}`).classList.remove('hidden');
-                document.getElementById(`modal-${id}`).classList.add('flex');
-            }
+                                                document.getElementById(`modal-${id}`).classList.remove('hidden');
+                                                document.getElementById(`modal-${id}`).classList.add('flex');
+                                            }
 
-            function closeModal(id) {
-                document.getElementById(`modal-${id}`).classList.remove('flex');
-                document.getElementById(`modal-${id}`).classList.add('hidden');
-            }
+                                            function closeModal(id) {
+                                                document.getElementById(`modal-${id}`).classList.remove('flex');
+                                                document.getElementById(`modal-${id}`).classList.add('hidden');
+                                            }
 
-            // Close modal when clicking outside
-            document.addEventListener('click', function (event) {
-                const modal = document.getElementById(`modal-{{ $reservation->id }}`);
-                if (modal && !modal.firstElementChild.contains(event.target) && !event.target.closest('button')) {
-                    closeModal({{ $reservation->id }});
-                }
-            });
+                                            // Close modal when clicking outside
+                                            document.addEventListener('click', function (event) {
+                                                const modal = document.getElementById(`modal-{{ $reservation->id }}`);
+                                                if (modal && !modal.firstElementChild.contains(event.target) && !event.target.closest('button')) {
+                                                    closeModal({{ $reservation->id }});
+                                                }
+                                            });
                                         </script>
                                         @endif
                                     </td>
-
-
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -182,4 +184,5 @@
 
 @push('scripts')
 @include('components.alerts')
+
 @endpush
