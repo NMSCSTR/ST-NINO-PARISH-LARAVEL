@@ -117,7 +117,7 @@
                                     </td>
 
                                     <td class="px-6 py-4">
-                                        {{ $user->member->phone_number ?? 'N/A' }}
+                                        {{ $user->member->contact_number ?? 'N/A' }}
                                     </td>
                                     <td class="px-6 py-4 text-right">
                                         <div class="relative inline-block text-left">

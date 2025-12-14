@@ -80,43 +80,50 @@
 
                                     {{-- Member-specific fields --}}
                                     @if($user->role === 'member')
-{{-- Member-specific fields --}}
-<div id="member-fields" class="{{ $user->role === 'member' ? '' : 'hidden' }}">
-    <div class="sm:col-span-2">
-        <label for="middle_name" class="block mb-2 text-sm font-medium text-gray-900">Middle Name</label>
-        <input type="text" name="middle_name" id="middle_name"
-               value="{{ old('middle_name', optional($user->member)->middle_name) }}"
-               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
-    </div>
+                                    {{-- Member-specific fields --}}
+                                    <div id="member-fields" class="{{ $user->role === 'member' ? '' : 'hidden' }}">
+                                        <div class="sm:col-span-2">
+                                            <label for="middle_name"
+                                                class="block mb-2 text-sm font-medium text-gray-900">Middle Name</label>
+                                            <input type="text" name="middle_name" id="middle_name"
+                                                value="{{ old('middle_name', optional($user->member)->middle_name) }}"
+                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+                                        </div>
 
-    <div class="sm:col-span-1">
-        <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900">Birth Date</label>
-        <input type="date" name="birth_date" id="birth_date"
-               value="{{ old('birth_date', optional($user->member)->birth_date) }}"
-               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
-    </div>
+                                        <div class="sm:col-span-1">
+                                            <label for="birth_date"
+                                                class="block mb-2 text-sm font-medium text-gray-900">Birth Date</label>
+                                            <input type="date" name="birth_date" id="birth_date"
+                                                value="{{ old('birth_date', optional($user->member)->birth_date) }}"
+                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+                                        </div>
 
-    <div class="sm:col-span-1">
-        <label for="place_of_birth" class="block mb-2 text-sm font-medium text-gray-900">Place of Birth</label>
-        <input type="text" name="place_of_birth" id="place_of_birth"
-               value="{{ old('place_of_birth', optional($user->member)->place_of_birth) }}"
-               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
-    </div>
+                                        <div class="sm:col-span-1">
+                                            <label for="place_of_birth"
+                                                class="block mb-2 text-sm font-medium text-gray-900">Place of
+                                                Birth</label>
+                                            <input type="text" name="place_of_birth" id="place_of_birth"
+                                                value="{{ old('place_of_birth', optional($user->member)->place_of_birth) }}"
+                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+                                        </div>
 
-    <div class="sm:col-span-2">
-        <label for="address" class="block mb-2 text-sm font-medium text-gray-900">Address</label>
-        <input type="text" name="address" id="address"
-               value="{{ old('address', optional($user->member)->address) }}"
-               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
-    </div>
+                                        <div class="sm:col-span-2">
+                                            <label for="address"
+                                                class="block mb-2 text-sm font-medium text-gray-900">Address</label>
+                                            <input type="text" name="address" id="address"
+                                                value="{{ old('address', optional($user->member)->address) }}"
+                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+                                        </div>
 
-    <div class="sm:col-span-2">
-        <label for="contact_number" class="block mb-2 text-sm font-medium text-gray-900">Contact Number</label>
-        <input type="text" name="contact_number" id="contact_number"
-               value="{{ old('contact_number', optional($user->member)->contact_number) }}"
-               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
-    </div>
-</div>
+                                        <div class="sm:col-span-2">
+                                            <label for="contact_number"
+                                                class="block mb-2 text-sm font-medium text-gray-900">Contact
+                                                Number</label>
+                                            <input type="text" name="contact_number" id="contact_number"
+                                                value="{{ old('contact_number', optional($user->member)->contact_number) }}"
+                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+                                        </div>
+                                    </div>
 
                                     @endif
 
@@ -154,4 +161,3 @@
     });
 </script>
 @endpush
-
