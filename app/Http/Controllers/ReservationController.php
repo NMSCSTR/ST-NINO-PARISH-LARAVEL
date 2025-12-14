@@ -135,8 +135,6 @@ class ReservationController extends Controller
         return back()->with('success', 'Reservation rejected successfully.');
     }
 
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Http;
 
     public function priestApprove(Request $request, $id)
     {
