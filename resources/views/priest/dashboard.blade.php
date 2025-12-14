@@ -46,7 +46,7 @@
                                     <td class="px-4 py-2">₱{{ number_format($reservation->fee, 2) }}</td>
 
                                     {{-- Phone Number --}}
-                                    <td class="px-4 py-2">{{ $reservation->member->user->lastname }}</td>
+                                    <td class="px-4 py-2">{{ $reservation->member->user->phone_number }}</td>
 
                                     {{-- Status --}}
                                     <td class="px-4 py-2">
