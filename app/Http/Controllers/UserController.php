@@ -99,13 +99,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = UserModel::findOrfail($id);
+        $user = UserModel::findOrFail($id);
 
+        // Base validation for all users
         $validated = $request->validate([
             'firstname' => 'required|string|max:255',
             'lastname'  => 'required|string|max:255',
             'email'     => ['required', 'email', Rule::unique('users', 'email')->ignore($id)],
-            'role'      => 'required|in:admin,staff,member',
+            'role'      => 'required|in:admin,staff,member,priest',
             'password'  => 'nullable|string|min:6',
         ]);
 
@@ -114,16 +115,35 @@ class UserController extends Controller
         $user->email     = $validated['email'];
         $user->role      = $validated['role'];
 
-        if (! empty($validated['password'])) {
+        if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 
         $user->save();
 
+        // If the user is a member, update the associated Member profile
+        if ($user->role === 'member') {
+            $memberValidated = $request->validate([
+                'middle_name'    => 'nullable|string|max:255',
+                'birth_date'     => 'nullable|date',
+                'place_of_birth' => 'nullable|string|max:255',
+                'address'        => 'nullable|string|max:255',
+                'contact_number' => 'nullable|string|max:20',
+            ]);
+
+            // Create member record if it doesn't exist
+            if (!$user->member) {
+                $user->member()->create($memberValidated);
+            } else {
+                $user->member->update($memberValidated);
+            }
+        }
+
         return redirect()
             ->route('admin.users', ['id' => $id])
             ->with('success', 'User updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

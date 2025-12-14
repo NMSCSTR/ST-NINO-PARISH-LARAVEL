@@ -25,37 +25,41 @@
                             <form action="{{ route('admin.users.update', ['id' => $user->id]) }}" method="POST">
                                 @csrf
                                 @method('PUT')
+
                                 <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+                                    {{-- First Name --}}
                                     <div class="sm:col-span-1">
                                         <label for="firstname"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First
-                                            Name</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900">First Name</label>
                                         <input type="text" name="firstname" id="firstname"
-                                            value="{{ old('firstname', $user->firstname) }}" placeholder="First Name"
-                                            required
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                                            value="{{ old('firstname', $user->firstname) }}" required
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
                                     </div>
+
+                                    {{-- Last Name --}}
                                     <div class="sm:col-span-1">
-                                        <label for="lastname"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last
+                                        <label for="lastname" class="block mb-2 text-sm font-medium text-gray-900">Last
                                             Name</label>
                                         <input type="text" name="lastname" id="lastname"
-                                            value="{{ old('lastname', $user->lastname) }}" placeholder="Last Name"
-                                            required
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                                            value="{{ old('lastname', $user->lastname) }}" required
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
                                     </div>
+
+                                    {{-- Email --}}
                                     <div class="sm:col-span-2">
                                         <label for="email"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900">Email</label>
                                         <input type="email" name="email" id="email"
-                                            value="{{ old('email', $user->email) }}" placeholder="Email" required
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                                            value="{{ old('email', $user->email) }}" required
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
                                     </div>
+
+                                    {{-- Role --}}
                                     <div class="sm:col-span-2">
                                         <label for="role"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900">Role</label>
                                         <select name="role" id="role" required
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full">
                                             <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' :
                                                 '' }}>Admin</option>
                                             <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' :
@@ -64,35 +68,68 @@
                                                 : '' }}>Member</option>
                                         </select>
                                     </div>
+
+                                    {{-- Password --}}
                                     <div class="sm:col-span-2">
                                         <label for="password"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password
-                                            (leave blank to keep current)</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900">Password (leave blank
+                                            to keep current)</label>
                                         <input type="password" name="password" id="password" placeholder="New Password"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
                                     </div>
+
+                                    {{-- Member-specific fields --}}
+                                    @if($user->role === 'member')
+{{-- Member-specific fields --}}
+<div id="member-fields" class="{{ $user->role === 'member' ? '' : 'hidden' }}">
+    <div class="sm:col-span-2">
+        <label for="middle_name" class="block mb-2 text-sm font-medium text-gray-900">Middle Name</label>
+        <input type="text" name="middle_name" id="middle_name"
+               value="{{ old('middle_name', optional($user->member)->middle_name) }}"
+               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+    </div>
+
+    <div class="sm:col-span-1">
+        <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900">Birth Date</label>
+        <input type="date" name="birth_date" id="birth_date"
+               value="{{ old('birth_date', optional($user->member)->birth_date) }}"
+               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+    </div>
+
+    <div class="sm:col-span-1">
+        <label for="place_of_birth" class="block mb-2 text-sm font-medium text-gray-900">Place of Birth</label>
+        <input type="text" name="place_of_birth" id="place_of_birth"
+               value="{{ old('place_of_birth', optional($user->member)->place_of_birth) }}"
+               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+    </div>
+
+    <div class="sm:col-span-2">
+        <label for="address" class="block mb-2 text-sm font-medium text-gray-900">Address</label>
+        <input type="text" name="address" id="address"
+               value="{{ old('address', optional($user->member)->address) }}"
+               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+    </div>
+
+    <div class="sm:col-span-2">
+        <label for="contact_number" class="block mb-2 text-sm font-medium text-gray-900">Contact Number</label>
+        <input type="text" name="contact_number" id="contact_number"
+               value="{{ old('contact_number', optional($user->member)->contact_number) }}"
+               class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-full" />
+    </div>
+</div>
+
+                                    @endif
+
                                 </div>
 
                                 <div class="flex items-center space-x-4">
                                     <a href="{{ route('admin.users') }}"
-                                        class="flex items-center text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 me-2" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                                        </svg>
-                                        Back
-                                    </a>
-                                    <button type="submit"
-                                        class="flex items-center text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 me-2" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M11 17h2M12 12v5m9-9l-4-4a2.828 2.828 0 00-4 0L4 14v4h4l7-7z" />
-                                        </svg>
-                                        Update User
-                                    </button>
+                                        class="px-5 py-2.5 bg-gray-200 rounded-lg">Back</a>
+                                    <button type="submit" class="px-5 py-2.5 bg-blue-700 text-white rounded-lg">Update
+                                        User</button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
 
@@ -102,3 +139,19 @@
 </section>
 
 @endsection
+@push('scripts')
+@include('components.alerts')
+<script>
+    const roleSelect = document.getElementById('role');
+    const memberFields = document.getElementById('member-fields');
+
+    roleSelect.addEventListener('change', function() {
+        if (this.value === 'member') {
+            memberFields.classList.remove('hidden');
+        } else {
+            memberFields.classList.add('hidden');
+        }
+    });
+</script>
+@endpush
+

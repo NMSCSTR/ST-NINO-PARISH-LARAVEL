@@ -12,7 +12,7 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        dd(config('services.semaphore.key'));
+        // dd(config('services.semaphore.key'));
 
         $reservations = Reservation::with([
             'member.user', 'sacrament', 'payments', 'approvedBy', 'forwardedByUser',
@@ -156,7 +156,7 @@ class ReservationController extends Controller
             'remarks'     => $remarks,
         ]);
 
-        
+
         $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
             'apikey'     => config('services.semaphore.key'),
             'number'     => $reservation->contact_number,
