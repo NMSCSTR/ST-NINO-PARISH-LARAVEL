@@ -12,6 +12,8 @@ class ReservationController extends Controller
 {
     public function index()
     {
+        dd(config('services.semaphore.key'));
+
         $reservations = Reservation::with([
             'member.user', 'sacrament', 'payments', 'approvedBy', 'forwardedByUser',
         ])->get();
