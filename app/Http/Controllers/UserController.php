@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = UserModel::all();
+        $users = UserModel::with('member')->get;
         return view('admin.users', compact('users'));
     }
 
@@ -121,7 +121,7 @@ class UserController extends Controller
 
         $user->save();
 
-        
+
         if ($user->role === 'member') {
             $memberValidated = $request->validate([
                 'middle_name'    => 'nullable|string|max:255',
