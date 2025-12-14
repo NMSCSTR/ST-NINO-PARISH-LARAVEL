@@ -156,10 +156,10 @@ class ReservationController extends Controller
 
         // Send SMS via Semaphore
         $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
-            'apikey'     => env(''),
+            'apikey'     => config('services.semaphore.key'),
             'number'     => $reservation->contact_number,
             'message'    => 'Your reservation was approved by Priest: ' . auth()->user()->firstname . ' ' . auth()->user()->lastname,
-            'sendername' => 'SEMAPHORE',
+            'sendername' => 'SalnPlatfrm',
         ]);
 
 
