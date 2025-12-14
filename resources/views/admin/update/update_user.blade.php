@@ -17,7 +17,7 @@
 
             {{-- Main Content --}}
             <div class="lg:w-10/12 w-full">
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 max-w-5xl mx-auto">
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 w-full mx-auto">
 
                     {{-- Header --}}
                     <div class="mb-8">
