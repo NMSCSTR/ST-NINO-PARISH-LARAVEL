@@ -156,7 +156,7 @@ class ReservationController extends Controller
             'remarks'     => $remarks,
         ]);
 
-        // Send SMS via Semaphore
+        
         $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
             'apikey'     => config('services.semaphore.key'),
             'number'     => $reservation->contact_number,

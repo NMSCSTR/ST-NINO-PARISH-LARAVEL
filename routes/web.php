@@ -10,6 +10,8 @@ use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SacramentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,26 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+        Route::get('/test-sms', function () {
+            $reservation = (object) [
+                'contact_number' => '09093182861'
+            ];
+
+            $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                'apikey'     => config('services.semaphore.key'),
+                'number'     => $reservation->contact_number,
+                'message'    => 'Test message from ' . auth()->check() ? auth()->user()->firstname . ' ' . auth()->user()->lastname : 'System',
+                'sendername' => 'SalnPlatfrm',
+            ]);
+
+            if ($response->failed()) {
+                return 'SMS failed to send: ' . $response->body();
+            }
+
+            return 'SMS sent successfully! Response: ' . $response->body();
+        });
 
         // Reservations
         Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations');
