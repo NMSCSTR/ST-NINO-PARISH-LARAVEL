@@ -1,97 +1,91 @@
 @extends('components.default')
 
-@section('title', 'Edit Users | Santo Niño Parish Church')
+@section('title', 'Edit User | Santo Niño Parish Church')
 
 @section('content')
-<section class="min-h-screen pt-24 bg-gray-50">
+<section class="min-h-screen pt-24">
     @include('components.admin.bg')
     @include('components.admin.topnav')
 
-    <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-10 gap-6">
+    <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-8 gap-6">
 
         {{-- Sidebar --}}
-        <div class="w-full lg:w-2/12">
+        <div class="lg:w-2/12 w-full">
             @include('components.admin.sidebar')
         </div>
 
         {{-- Main Content --}}
-        <div class="w-full lg:w-10/12">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="lg:w-10/12 w-full">
 
-                {{-- Card Header --}}
-                <div class="px-6 py-4 border-b">
-                    <h2 class="text-lg font-semibold text-gray-800">
-                        Edit User Information
-                    </h2>
-                    <p class="text-sm text-gray-500">
-                        Update user details and permissions
-                    </p>
-                </div>
+            {{-- Page Header --}}
+            <div class="mb-6">
+                <h1 class="text-2xl font-semibold text-gray-800">Edit User</h1>
+                <p class="text-sm text-gray-500">
+                    Update account information and role details
+                </p>
+            </div>
 
-                {{-- Card Body --}}
-                <div class="p-6">
+            {{-- Card --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="px-8 py-8">
+
                     <form action="{{ route('admin.users.update', ['id' => $user->id]) }}" method="POST">
                         @csrf
                         @method('PUT')
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        {{-- Basic Info --}}
+                        <div class="grid gap-6 sm:grid-cols-2 mb-8">
 
-                            {{-- First Name --}}
                             <div>
-                                <label for="firstname" class="form-label">First Name</label>
-                                <input type="text" name="firstname" id="firstname"
-                                    value="{{ old('firstname', $user->firstname) }}" required class="form-input">
+                                <label class="form-label">First Name</label>
+                                <input type="text" name="firstname"
+                                    value="{{ old('firstname', $user->firstname) }}"
+                                    class="form-input" required>
                             </div>
 
-                            {{-- Last Name --}}
                             <div>
-                                <label for="lastname" class="form-label">Last Name</label>
-                                <input type="text" name="lastname" id="lastname"
-                                    value="{{ old('lastname', $user->lastname) }}" required class="form-input">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" name="lastname"
+                                    value="{{ old('lastname', $user->lastname) }}"
+                                    class="form-input" required>
                             </div>
 
-                            {{-- Email --}}
                             <div class="sm:col-span-2">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
-                                    required class="form-input">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email"
+                                    value="{{ old('email', $user->email) }}"
+                                    class="form-input" required>
                             </div>
 
-                            {{-- Role --}}
                             <div class="sm:col-span-2">
-                                <label for="role" class="form-label">User Role</label>
-                                <select name="role" id="role" required class="form-input">
-                                    <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>
-                                        Admin
-                                    </option>
-                                    <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' : '' }}>
-                                        Staff
-                                    </option>
-                                    <option value="member" {{ old('role', $user->role) === 'member' ? 'selected' : ''
-                                        }}>
-                                        Member
-                                    </option>
+                                <label class="form-label">Role</label>
+                                <select name="role" id="role" class="form-input" required>
+                                    <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' : '' }}>Staff</option>
+                                    <option value="member" {{ old('role', $user->role) === 'member' ? 'selected' : '' }}>Member</option>
                                 </select>
                             </div>
 
-                            {{-- Password --}}
                             <div class="sm:col-span-2">
-                                <label for="password" class="form-label">
-                                    Password <span class="text-gray-400">(leave blank to keep current)</span>
+                                <label class="form-label">
+                                    Password
+                                    <span class="text-xs text-gray-400">(leave blank to keep current)</span>
                                 </label>
-                                <input type="password" name="password" id="password" placeholder="Enter new password"
+                                <input type="password" name="password"
+                                    placeholder="New password"
                                     class="form-input">
                             </div>
                         </div>
 
-                        {{-- Member Fields --}}
-                        <div id="member-fields" class="mt-8 space-y-5 {{ $user->role === 'member' ? '' : 'hidden' }}">
+                        {{-- Member Information --}}
+                        <div id="member-fields"
+                            class="{{ $user->role === 'member' ? '' : 'hidden' }} bg-gray-50 border border-gray-200 rounded-xl p-6 mb-8">
 
-                            <h3 class="text-sm font-semibold text-gray-700 border-b pb-2">
+                            <h3 class="text-lg font-medium text-gray-800 mb-4">
                                 Member Information
                             </h3>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="grid gap-6 sm:grid-cols-2">
 
                                 <div>
                                     <label class="form-label">Middle Name</label>
@@ -121,27 +115,31 @@
                                         class="form-input">
                                 </div>
 
-                                <div>
+                                <div class="sm:col-span-2">
                                     <label class="form-label">Contact Number</label>
                                     <input type="text" name="contact_number"
                                         value="{{ old('contact_number', optional($user->member)->contact_number) }}"
                                         class="form-input">
                                 </div>
+
                             </div>
                         </div>
 
                         {{-- Actions --}}
-                        <div class="flex justify-end gap-3 mt-8">
+                        <div class="flex justify-between items-center">
                             <a href="{{ route('admin.users') }}"
-                                class="px-5 py-2.5 rounded-lg border text-gray-700 hover:bg-gray-100 transition">
-                                Cancel
+                                class="px-6 py-2.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                                ← Back
                             </a>
+
                             <button type="submit"
-                                class="px-6 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
-                                Update User
+                                class="px-6 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition shadow">
+                                Save Changes
                             </button>
                         </div>
+
                     </form>
+
                 </div>
             </div>
         </div>
@@ -151,7 +149,6 @@
 
 @push('scripts')
 @include('components.alerts')
-
 <script>
     const roleSelect = document.getElementById('role');
     const memberFields = document.getElementById('member-fields');
