@@ -37,6 +37,12 @@ Route::get('/env-check', function () {
     ];
 });
 
+Route::get('/phpmyadmin',function(){
+    return redirect('/phpmyadmin/index.php');
+});
+
+
+
 
 /*
 |--------------------------------------------------------------------------
