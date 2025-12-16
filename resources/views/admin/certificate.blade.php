@@ -52,10 +52,32 @@
 
             <br><br>
 
-            Approved by the authority of the parish on this day,
+            Approved by:
             <strong>
-                {{ \Carbon\Carbon::parse($reservation->updated_at)->format('F d, Y') }}
-            </strong>.
+                @if ($reservation->approved_by)
+                    {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}
+                @else
+                    <span class="text-gray-400">Not yet approved</span>
+                @endif
+            </strong>
+
+            <br><br>
+
+            Printed/Viewed by:
+            <strong>
+                {{ auth()->user()->firstname }} {{ auth()->user()->lastname }}
+            </strong>
+
+            <br><br>
+
+            Date Approved:
+            <strong>
+                @if ($reservation->approved_by)
+                    {{ \Carbon\Carbon::parse($reservation->updated_at)->format('F d, Y') }}
+                @else
+                    <span class="text-gray-400">Not yet approved</span>
+                @endif
+            </strong>
         </div>
 
         <!-- SIGNATURE SECTION -->
@@ -162,6 +184,10 @@
         margin: 0 60px;
         position: relative;
         z-index: 1;
+    }
+
+    .text-gray-400 {
+        color: #9ca3af;
     }
 
     /* FOOTER */
