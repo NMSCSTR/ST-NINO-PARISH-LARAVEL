@@ -154,61 +154,53 @@ class ReservationController extends Controller
     // }
 
     public function forward($id)
-    {
-        $reservation = Reservation::findOrFail($id);
+{
+    $reservation = Reservation::findOrFail($id);
 
-        // Cannot forward if already approved, rejected, or forwarded
-        if (in_array($reservation->status, ['approved', 'rejected', 'forwarded_to_priest'])) {
-            return back()->with('error', 'This reservation cannot be forwarded.');
-        }
+    // Cannot forward if already approved, rejected, or forwarded
+    if (in_array($reservation->status, ['approved', 'rejected', 'forwarded_to_priest'])) {
+        return back()->with('error', 'This reservation cannot be forwarded.');
+    }
 
-        // Check if priest is assigned
-        if (! $reservation->priest_id) {
-            return back()->with('error', 'No priest assigned for this reservation.');
-        }
+    // Update reservation status
+    $reservation->update([
+        'status'       => 'forwarded_to_priest',
+        'forwarded_by' => auth()->user()->id,
+        'forwarded_at' => now(),
+    ]);
 
-        $priest = User::find($reservation->priest_id);
+    // Get all priests with phone numbers
+    $priests = User::where('role', 'priest')
+                   ->whereNotNull('phone_number')
+                   ->get();
 
-        if (! $priest || ! $priest->phone_number) {
-            return back()->with('error', 'Assigned priest does not have a phone number.');
-        }
+    if ($priests->isEmpty()) {
+        return back()->with('warning', 'Reservation forwarded, but no priests with phone numbers found.');
+    }
 
-        // Update reservation status
-        $reservation->update([
-            'status'       => 'forwarded_to_priest',
-            'forwarded_by' => auth()->user()->id,
-            'forwarded_at' => now(),
-        ]);
+    // Prepare reservation details for SMS
+    $memberName = $reservation->member ? $reservation->member->firstname . ' ' . $reservation->member->lastname : 'N/A';
+    $reservationDate = $reservation->date ?? 'N/A';
+    $reservationTime = $reservation->time ?? 'N/A';
 
-        // Prepare SMS message with reservation details
-        $memberName      = $reservation->member ? $reservation->member->firstname . ' ' . $reservation->member->lastname : 'N/A';
-        $reservationDate = $reservation->date ?? 'N/A';
-        $reservationTime = $reservation->time ?? 'N/A';
+    $message = "A new reservation has been forwarded for approval.\n"
+             . "Member: {$memberName}\n"
+             . "Date: {$reservationDate}\n"
+             . "Time: {$reservationTime}\n"
+             . "Please log in to the system to review.";
 
-        $message = "Good day Father {$priest->firstname}, a new reservation has been forwarded to you for approval.\n"
-            . "Member: {$memberName}\n"
-            . "Date: {$reservationDate}\n"
-            . "Time: {$reservationTime}\n"
-            . "Please log in to the system to review.";
-
-        // Send SMS
-        $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+    // Send SMS to all priests
+    foreach ($priests as $priest) {
+        Http::asForm()->post('https://semaphore.co/api/v4/messages', [
             'apikey'     => config('services.semaphore.key'),
             'number'     => $priest->phone_number,
             'message'    => $message,
             'sendername' => 'SalnPlatfrm',
         ]);
-
-        if ($response->failed()) {
-            return back()->with(
-                'warning',
-                'Reservation forwarded, but SMS notification to priest failed.'
-            );
-        }
-
-        return back()->with('success', 'Reservation forwarded and priest notified via SMS.');
     }
 
+    return back()->with('success', 'Reservation forwarded and priests notified via SMS.');
+}
     public function priestReject(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
