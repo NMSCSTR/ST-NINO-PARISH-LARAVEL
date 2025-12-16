@@ -12,15 +12,21 @@
 
     <div class="certificate bg-white">
 
-        <!-- LOGO & CHURCH HEADER -->
+        <!-- WATERMARK -->
+        <div class="watermark">
+            <img src="{{ asset('images/stparish.jpg') }}" alt="Watermark Logo">
+        </div>
+
+        <!-- LOGO (TOP CENTER) -->
         <div class="logo-container">
             <img src="{{ asset('images/stparish.jpg') }}" alt="Santo Niño Parish Logo" class="logo">
+        </div>
 
-            <div class="church-header">
-                <div class="church-name">SANTO NIÑO PARISH CHURCH</div>
-                <div class="church-location">STA. MARIA, TANGUB CITY</div>
-                <div class="church-diocese">ARCHDIOCESE OF OZAMIS</div>
-            </div>
+        <!-- CHURCH HEADER -->
+        <div class="church-header">
+            <div class="church-name">SANTO NIÑO PARISH CHURCH</div>
+            <div class="church-location">Sta. Maria, Tangub City</div>
+            <div class="church-diocese">Archdiocese of Ozamis</div>
         </div>
 
         <!-- CERTIFICATE TITLE -->
@@ -28,46 +34,40 @@
             Certificate of Approval
         </div>
 
-        <!-- CERTIFICATE CONTENT -->
+        <!-- CONTENT -->
         <div class="content">
-            This certifies that the reservation of
+            This is to formally certify that the reservation of
             <strong>
                 {{ $reservation->member->user->firstname }}
                 {{ $reservation->member->user->lastname }}
             </strong>
-            for the sacrament of
-            <strong>{{ $reservation->sacrament->sacrament_type }}</strong>
+            for the Sacrament of
+            <strong>{{ $reservation->sacrament->sacrament_type }}</strong>,
             scheduled on
             <strong>
                 {{ \Carbon\Carbon::parse($reservation->reservation_date)->format('F d, Y') }}
-            </strong>
-            has been officially approved by the Santo Niño Parish Church.
+            </strong>,
+            has been duly examined and officially approved in accordance with
+            the canonical and pastoral regulations of the Santo Niño Parish Church.
 
             <br><br>
 
-            Approved by:
-            <strong>
-                {{ $reservation->approvedBy->firstname }}
-                {{ $reservation->approvedBy->lastname }}
-            </strong>
-            <br>
-
-            Date Approved:
+            Approved by the authority of the parish on this day,
             <strong>
                 {{ \Carbon\Carbon::parse($reservation->updated_at)->format('F d, Y') }}
-            </strong>
+            </strong>.
         </div>
 
-        <!-- FOOTER SIGNATURES -->
+        <!-- SIGNATURE SECTION -->
         <div class="footer">
             <div class="signature-block">
                 ___________________________<br>
-                Parish Office
+                <span class="signature-title">Parish Secretary</span>
             </div>
 
             <div class="signature-block">
                 ___________________________<br>
-                Parish Priest
+                <span class="signature-title">Parish Priest</span>
             </div>
         </div>
     </div>
@@ -80,70 +80,108 @@
         font-family: "Times New Roman", serif;
     }
 
+    /* CERTIFICATE BORDER */
     .certificate {
-        border: 5px double #000;
-        padding: 50px 40px;
-        text-align: center;
+        position: relative;
+        border: 6px double #000;
+        padding: 60px 50px;
+        background: #fff;
+        overflow: hidden;
     }
 
+    /* WATERMARK */
+    .watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.05;
+        z-index: 0;
+    }
+
+    .watermark img {
+        width: 400px;
+    }
+
+    /* LOGO */
     .logo-container {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
     }
 
     .logo {
-        width: 120px;
+        width: 110px;
         height: auto;
-        margin-bottom: 10px;
     }
 
+    /* CHURCH HEADER */
     .church-header {
         text-align: center;
-        margin-top: 10px;
-        line-height: 1.2;
+        line-height: 1.3;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
     }
 
     .church-name {
         font-size: 22px;
         font-weight: bold;
-        letter-spacing: 1px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
     }
 
     .church-location {
         font-size: 16px;
         font-style: italic;
+        margin-top: 2px;
     }
 
     .church-diocese {
         font-size: 14px;
-        font-weight: normal;
+        margin-top: 2px;
     }
 
+    /* TITLE */
     .title {
         text-align: center;
-        font-size: 28px;
+        font-size: 30px;
         font-weight: bold;
-        margin: 40px 0 30px 0;
         text-decoration: underline;
+        margin-bottom: 35px;
+        position: relative;
+        z-index: 1;
     }
 
+    /* CONTENT */
     .content {
         font-size: 18px;
-        line-height: 1.8;
+        line-height: 1.9;
         text-align: justify;
-        margin: 0 50px;
+        margin: 0 60px;
+        position: relative;
+        z-index: 1;
     }
 
+    /* FOOTER */
     .footer {
-        margin-top: 80px;
+        margin-top: 90px;
         display: flex;
         justify-content: space-between;
-        padding: 0 60px;
+        padding: 0 70px;
+        position: relative;
+        z-index: 1;
     }
 
     .signature-block {
         text-align: center;
         font-size: 16px;
+    }
+
+    .signature-title {
+        font-style: italic;
+        font-size: 14px;
     }
 
     @media print {
