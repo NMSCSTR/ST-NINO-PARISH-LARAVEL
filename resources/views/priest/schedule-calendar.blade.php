@@ -4,6 +4,8 @@
 
 @section('content')
 <section>
+    @include('components.admin.bg')
+    @include('components.priest.topnav')
     <div class="min-h-screen pt-24 px-4 lg:px-10">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">YOUR APPROVED SCHEDULE THIS MONTH</h2>
 
