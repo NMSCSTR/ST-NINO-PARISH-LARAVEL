@@ -15,6 +15,13 @@
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Reservations Forwarded to You</h2>
 
                     <div class="overflow-x-auto">
+                        <div class="flex justify-end mb-4">
+                            <a href="{{ route('priest.schedule.calendar') }}"
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            📅 View My Approved Schedule
+                            </a>
+                        </div>
+
                         <table class="w-full text-sm text-gray-800">
                             <thead class="bg-gray-50 border-b border-gray-200 text-gray-700 text-xs uppercase">
                                 <tr>

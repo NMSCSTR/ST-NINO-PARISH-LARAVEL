@@ -22,6 +22,25 @@ class PriestController extends Controller
         return view('priest.dashboard', compact('reservations'));
     }
 
+    public function scheduleCalendar()
+    {
+        $user = auth()->user();
+        $startOfMonth = \Carbon\Carbon::now()->startOfMonth();
+        $endOfMonth = \Carbon\Carbon::now()->endOfMonth();
+
+        $reservations = \App\Models\Reservation::with(['member.user', 'sacrament', 'documents', 'payments'])
+            ->where('approved_by', $user->id)
+            ->where('status', 'approved')
+            ->whereBetween('reservation_date', [$startOfMonth, $endOfMonth])
+            ->orderBy('reservation_date')
+            ->get()
+            ->groupBy(function($res) {
+                return $res->reservation_date->format('Y-m-d');
+            });
+
+        return view('priest.schedule-calendar', compact('reservations', 'startOfMonth'));
+    }
+
     public function schedule()
     {
         $user = Auth::user();
