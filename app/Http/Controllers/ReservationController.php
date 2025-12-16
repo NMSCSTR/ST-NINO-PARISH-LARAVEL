@@ -191,10 +191,13 @@ class ReservationController extends Controller
             ? $reservation->reservation_date->format('H:i')
             : 'N/A';
 
+        $sacramentName = $reservation->sacrament ? $reservation->sacrament->name : 'N/A';
+
+
         $message = "A new reservation has been forwarded for approval.\n"
             . "Member: {$memberName}\n"
             . "Date: {$reservationDate}\n"
-            . "Time: {$reservationTime}\n"
+            . "Sacrament: {$sacramentName}\n"
             . "Please log in to the system to review.";
 
         // Send SMS to all priests

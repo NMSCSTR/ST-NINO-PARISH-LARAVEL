@@ -180,8 +180,7 @@
                                                         action="{{ route('admin.reservations.forward', $reservation->id) }}"
                                                         method="POST"
                                                         class="px-4 py-2 text-sm hover:bg-blue-50 flex items-center gap-2 text-blue-600"
-                                                        role="menuitem"
-                                                        onsubmit="return confirm('Are you sure you want to forward this reservation to the priest?');">
+                                                        role="menuitem">
                                                         @csrf
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
