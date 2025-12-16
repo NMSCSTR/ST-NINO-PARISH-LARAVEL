@@ -44,13 +44,13 @@ class ReservationController extends Controller
             'receipt'           => 'nullable|image|max:2048',
             'submission_method' => 'required|in:online,walkin',
             'documents.*'       => 'nullable|image|max:2048',
-            'fee'               => 'required|numeric', // ensure numeric
+            'fee'               => 'required|numeric',
         ]);
 
         $reservation = Reservation::create([
             'member_id'        => auth()->user()->member->id,
             'sacrament_id'     => $request->sacrament_id,
-            'fee'              => $request->fee, // numeric from hidden input
+            'fee'              => $request->fee,
             'reservation_date' => $request->reservation_date,
             'remarks'          => $request->remarks,
             'status'           => 'pending',
@@ -81,7 +81,7 @@ class ReservationController extends Controller
             ]);
         }
 
-        // Document upload
+
         if ($request->submission_method === 'online' && $request->hasFile('documents')) {
             foreach ($request->file('documents') as $file) {
                 $path = $file->store('documents', 'public');
@@ -155,21 +155,19 @@ class ReservationController extends Controller
 
     public function forward($id)
     {
-        $reservation = Reservation::with('member.user')->findOrFail($id);
+        $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
 
-        // Cannot forward if already approved, rejected, or forwarded
+
         if (in_array($reservation->status, ['approved', 'rejected', 'forwarded_to_priest'])) {
             return back()->with('error', 'This reservation cannot be forwarded.');
         }
 
-        // Update reservation status
         $reservation->update([
             'status'       => 'forwarded_to_priest',
             'forwarded_by' => auth()->user()->id,
             'forwarded_at' => now(),
         ]);
 
-        // Get all priests with phone numbers
         $priests = User::where('role', 'priest')
             ->whereNotNull('phone_number')
             ->get();
@@ -178,12 +176,10 @@ class ReservationController extends Controller
             return back()->with('warning', 'Reservation forwarded, but no priests with phone numbers found.');
         }
 
-        // Get member name from related user
         $memberName = $reservation->member && $reservation->member->user
             ? $reservation->member->user->firstname . ' ' . $reservation->member->user->lastname
             : 'N/A';
 
-        // Get reservation date & time
         $reservationDate = $reservation->reservation_date
             ? $reservation->reservation_date->format('Y-m-d')
             : 'N/A';
@@ -200,7 +196,7 @@ class ReservationController extends Controller
             . "Sacrament: {$sacramentName}\n"
             . "Please log in to the system to review.";
 
-        // Send SMS to all priests
+        
         foreach ($priests as $priest) {
             Http::asForm()->post('https://semaphore.co/api/v4/messages', [
                 'apikey'     => config('services.semaphore.key'),
