@@ -17,7 +17,6 @@
             {{-- Main Content --}}
             <div class="lg:w-10/12 w-full">
                 <div class="bg-white rounded-2xl border border-gray-200 shadow-sm">
-
                     <div class="px-6 py-6">
 
                         {{-- Breadcrumb --}}
@@ -76,7 +75,8 @@
                                     <label class="block mb-2 text-sm font-medium text-gray-700">
                                         Select Sacrament Type
                                     </label>
-                                    <select id="sacrament_id" name="sacrament_id" required class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
+                                    <select id="sacrament_id" name="sacrament_id" required
+                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
                                                focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition">
                                         <option value="">-- Choose sacrament type --</option>
                                         @foreach ($sacraments as $sacrament)
@@ -87,14 +87,16 @@
                                     </select>
                                 </div>
 
-                                {{-- Fee --}}
+                                {{-- Fee Display --}}
                                 <div class="sm:col-span-2">
                                     <label class="block mb-2 text-sm font-medium text-gray-700">
                                         Fee
                                     </label>
-                                    <input type="text" id="fee" readonly
+                                    <input type="text" id="fee_display" readonly
                                         class="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-2.5 text-sm"
                                         placeholder="Select a sacrament first">
+                                    {{-- Hidden numeric input to submit --}}
+                                    <input type="hidden" name="fee" id="fee_input">
                                 </div>
 
                                 {{-- Date --}}
@@ -184,21 +186,28 @@
 <script>
     const sacraments = @json($sacraments);
 
+    const feeDisplay = document.getElementById('fee_display');
+    const feeInput = document.getElementById('fee_input');
+
     document.getElementById('sacrament_id').addEventListener('change', function () {
         const found = sacraments.find(item => item.id == this.value);
-        document.getElementById('fee').value = found ? `₱ ${parseFloat(found.fee).toFixed(2)}` : '';
+        if (found) {
+            feeDisplay.value = `₱ ${parseFloat(found.fee).toFixed(2)}`;
+            feeInput.value = parseFloat(found.fee).toFixed(2); // numeric
+        } else {
+            feeDisplay.value = '';
+            feeInput.value = '';
+        }
     });
 
     const paymentSelect = document.getElementById('payment_option');
     const receiptDiv = document.getElementById('receipt_upload_div');
-
     paymentSelect.addEventListener('change', () => {
         receiptDiv.classList.toggle('hidden', paymentSelect.value !== 'pay_now');
     });
 
     const submissionSelect = document.getElementById('submission_method');
     const documentDiv = document.getElementById('document_upload_div');
-
     submissionSelect.addEventListener('change', () => {
         documentDiv.classList.toggle('hidden', submissionSelect.value !== 'online');
     });

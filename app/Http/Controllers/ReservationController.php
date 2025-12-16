@@ -44,18 +44,19 @@ class ReservationController extends Controller
             'receipt'           => 'nullable|image|max:2048',
             'submission_method' => 'required|in:online,walkin',
             'documents.*'       => 'nullable|image|max:2048',
+            'fee'               => 'required|numeric', // ensure numeric
         ]);
 
         $reservation = Reservation::create([
             'member_id'        => auth()->user()->member->id,
             'sacrament_id'     => $request->sacrament_id,
-            'fee'              => preg_replace('/[^\d.]/', '', $request->fee),
+            'fee'              => $request->fee, // numeric from hidden input
             'reservation_date' => $request->reservation_date,
             'remarks'          => $request->remarks,
             'status'           => 'pending',
         ]);
 
-        // Payment handling (unchanged)
+        // Payment handling
         if ($request->payment_option === 'pay_now' && $request->hasFile('receipt')) {
             $path = $request->file('receipt')->store('receipts', 'public');
 
@@ -136,7 +137,7 @@ class ReservationController extends Controller
         ]);
         $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
             'apikey'     => config('services.semaphore.key'),
-            'number' => optional($reservation->member->user)->phone_number,
+            'number'     => optional($reservation->member->user)->phone_number,
             'message'    => 'Your reservation was rejected by Priest: ' . auth()->user()->firstname . ' ' . auth()->user()->lastname,
             'sendername' => 'SalnPlatfrm',
         ]);
@@ -148,20 +149,18 @@ class ReservationController extends Controller
         return back()->with('success', 'Reservation rejected successfully.');
     }
 
+    public function certificate(Reservation $reservation)
+    {
+        abort_if($reservation->status !== 'approved', 403);
 
-        public function certificate(Reservation $reservation)
-        {
-            abort_if($reservation->status !== 'approved', 403);
+        $reservation->load([
+            'member.user',
+            'sacrament',
+            'approvedBy',
+        ]);
 
-            $reservation->load([
-                'member.user',
-                'sacrament',
-                'approvedBy'
-            ]);
-
-            return view('admin.certificate', compact('reservation'));
-        }
-
+        return view('admin.certificate', compact('reservation'));
+    }
 
     public function priestApprove(Request $request, $id)
     {
@@ -181,14 +180,12 @@ class ReservationController extends Controller
             'remarks'     => $remarks,
         ]);
 
-
         $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
             'apikey'     => config('services.semaphore.key'),
-            'number' => optional($reservation->member->user)->phone_number,
+            'number'     => optional($reservation->member->user)->phone_number,
             'message'    => 'Your reservation was approved by Priest: ' . auth()->user()->firstname . ' ' . auth()->user()->lastname,
             'sendername' => 'SalnPlatfrm',
         ]);
-
 
         if ($response->failed()) {
             return back()->with('warning', 'Reservation approved, but SMS failed to send.');
@@ -279,7 +276,7 @@ class ReservationController extends Controller
         $reservation->reservation_date = $request->reservation_date;
         $reservation->remarks          = $request->remarks;
 
-        if (in_array($request->status, ['pending', 'cancel','forwarded_to_priest'])) {
+        if (in_array($request->status, ['pending', 'cancel', 'forwarded_to_priest'])) {
             $reservation->approved_by = null;
         }
 
