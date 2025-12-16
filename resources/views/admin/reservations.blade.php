@@ -18,7 +18,7 @@
 
             <!-- Main Content -->
             <div class="lg:w-10/12 w-full">
-                <div class="bg-white rounded-2xl shadow-xl">
+                <div class="bg-white rounded-2xl shadow-xl h-[300px]">
 
                     <div class="px-6 py-6">
                         <!-- Breadcrumb -->

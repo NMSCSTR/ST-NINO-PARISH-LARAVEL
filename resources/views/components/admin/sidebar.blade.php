@@ -30,14 +30,14 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
-    <a href="{{ route('admin.member.lists') }}"
+    {{-- <a href="{{ route('admin.member.lists') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.members') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">group</span>
             Members
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
-    </a>
+    </a> --}}
 
     <a href="{{ route('admin.events') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.events') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
