@@ -93,6 +93,24 @@ class ReservationController extends Controller
             }
         }
 
+        $message = "🔔 NEW RESERVATION
+                    Sacrament: {$reservation->sacrament->name}
+                    Status: Pending
+                    Date Submitted: " . now()->format('M d, Y h:i A');
+
+        $users = User::whereIn('role', ['staff', 'admin'])
+            ->whereNotNull('phone_number')
+            ->get();
+
+        foreach ($users as $user) {
+            Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                'apikey'     => config('services.semaphore.key'),
+                'number'     => $user->phone_number,
+                'message'    => $message,
+                'sendername' => 'SalnPlatfrm',
+            ]);
+        }
+
         return redirect()->route('member.reservation')
             ->with('success', 'Reservation created successfully.');
     }
