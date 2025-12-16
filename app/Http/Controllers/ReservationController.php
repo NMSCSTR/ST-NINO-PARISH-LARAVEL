@@ -41,20 +41,26 @@ class ReservationController extends Controller
             'message' => 'required|string',
         ]);
 
-        $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
-            'apikey'     => config('services.semaphore.key'),
-            'number'     => $request->phone_number,
-            'message'    => $request->message,
-            'sendername' => 'SalnPlatfrm',
-        ]);
+        try {
+            $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                'apikey'     => config('services.semaphore.key'),
+                'number'     => $request->phone_number,
+                'message'    => $request->message,
+                'sendername' => 'SalnPlatfrm',
+            ]);
 
-        if ($response->failed()) {
-            return response()->json(['success' => false]);
+            if ($response->failed()) {
+                \Log::error('Semaphore API failed: ' . $response->body());
+                return response()->json(['success' => false, 'error' => 'SMS API failed']);
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            \Log::error('SMS sending error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'error' => 'Exception occurred']);
         }
-
-        return redirect()->route('member.reservation')
-            ->with('success', 'Message send successfully.');
     }
+
 
 
     public function makeReservation(Request $request)
