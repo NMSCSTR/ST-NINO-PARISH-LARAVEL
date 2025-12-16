@@ -88,7 +88,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/reservations/{id}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
         Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
         Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');
-        Route::post('/reservations/send-sms', [ReservationController::class, 'sendSMS'])->name('admin.reservations.sendSMS');
+        Route::post('/reservations/send-sms', [ReservationController::class, 'sendSMS'])->name('reservations.sendSMS');
 
 
         // Members, Events, Payments, Documents
