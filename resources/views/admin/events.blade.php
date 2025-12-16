@@ -159,44 +159,69 @@
 
                     <!-- Add Event Modal -->
                     <div id="addEventModal"
-                        class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-                        <div class="bg-white rounded-lg w-full max-w-lg p-6 relative">
-                            <h3 class="text-lg font-semibold mb-4">Add New Event</h3>
-                            <form action="{{ route('admin.events.store') }}" method="POST">
+                        class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6 relative">
+
+                            <!-- Modal Header -->
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-semibold text-gray-800">Add New Event</h3>
+                                <button id="closeAddEventModal" class="text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Modal Body -->
+                            <form action="{{ route('admin.events.store') }}" method="POST" class="space-y-4">
                                 @csrf
-                                <div class="mb-4">
-                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                                <div>
+                                    <label for="title" class="block text-sm font-medium text-gray-700">Title <span
+                                            class="text-red-500">*</span></label>
                                     <input type="text" name="title" id="title" required
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
                                 </div>
-                                <div class="mb-4">
+
+                                <div>
                                     <label for="description"
                                         class="block text-sm font-medium text-gray-700">Description</label>
                                     <textarea name="description" id="description" rows="3"
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"></textarea>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="start_date" class="block text-sm font-medium text-gray-700">Start
-                                        Date</label>
-                                    <input type="datetime-local" name="start_date" id="start_date" required
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="start_date" class="block text-sm font-medium text-gray-700">Start
+                                            Date <span class="text-red-500">*</span></label>
+                                        <input type="datetime-local" name="start_date" id="start_date" required
+                                            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="end_date" class="block text-sm font-medium text-gray-700">End
+                                            Date</label>
+                                        <input type="datetime-local" name="end_date" id="end_date"
+                                            class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                    </div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="end_date" class="block text-sm font-medium text-gray-700">End
-                                        Date</label>
-                                    <input type="datetime-local" name="end_date" id="end_date"
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                </div>
-                                <div class="mb-4">
+
+                                <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Event Type</label>
                                     <input type="text" name="type" id="type"
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="general">
+                                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                        value="general">
                                 </div>
-                                <div class="flex justify-end gap-2">
+
+                                <!-- Modal Footer -->
+                                <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
                                     <button type="button" id="closeAddEventModal"
-                                        class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                                        Cancel
+                                    </button>
                                     <button type="submit"
-                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Save</button>
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                                        Save Event
+                                    </button>
                                 </div>
                             </form>
                         </div>
