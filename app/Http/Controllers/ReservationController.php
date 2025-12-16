@@ -34,6 +34,28 @@ class ReservationController extends Controller
         return view('member.reservation_history', compact('reservations'));
     }
 
+    public function sendSMS(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required',
+            'message' => 'required|string',
+        ]);
+
+        $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+            'apikey'     => config('services.semaphore.key'),
+            'number'     => $request->phone_number,
+            'message'    => $request->message,
+            'sendername' => 'SalnPlatfrm',
+        ]);
+
+        if ($response->failed()) {
+            return response()->json(['success' => false]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+
     public function makeReservation(Request $request)
     {
         $request->validate([
@@ -185,10 +207,10 @@ class ReservationController extends Controller
 
         // Get reservation date & time
         $reservationDate = $reservation->reservation_date
-            ? $reservation->reservation_date->format('M d, Y') // e.g., Dec 16, 2025
+            ? $reservation->reservation_date->format('M d, Y')
             : 'N/A';
         $reservationTime = $reservation->reservation_date
-            ? $reservation->reservation_date->format('h:i A') // e.g., 03:30 PM
+            ? $reservation->reservation_date->format('h:i A')
             : 'N/A';
 
         // Get sacrament type

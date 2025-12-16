@@ -269,6 +269,16 @@
                                                         Payments
                                                     </button>
 
+                                                    <!-- Send SMS -->
+                                                    <button onclick="openSendSMSModal({{ $reservation->id }}, '{{ $reservation->member->user->firstname }} {{ $reservation->member->user->lastname }}', '{{ optional($reservation->member->user)->phone_number }}')"
+                                                        class="px-4 py-2 text-sm hover:bg-yellow-50 flex items-center gap-2 text-yellow-600 w-full text-left">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z" />
+                                                        </svg>
+                                                        Send SMS
+                                                    </button>
+
+
                                                     @if($reservation->status === 'approved')
                                                         <a href="{{ route('admin.reservations.certificate', $reservation->id) }}"
                                                         target="_blank"
@@ -320,6 +330,35 @@
             </button>
         </div>
     </div>
+
+    <!-- SEND SMS MODAL -->
+    <div id="sendSMSModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Send SMS to Member</h2>
+            <p id="sendSMSMemberInfo" class="text-sm text-gray-600 mb-3"></p>
+            <form id="sendSMSForm">
+                @csrf
+                <input type="hidden" name="reservation_id" id="sendSMSReservationId">
+                <div class="mb-4">
+                    <label for="sendSMSNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <input type="text" id="sendSMSNumber" name="phone_number" class="w-full border p-2 rounded" readonly>
+                </div>
+                <div class="mb-4">
+                    <label for="sendSMSMessage" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                    <textarea id="sendSMSMessage" name="message" class="w-full border p-2 rounded h-28" required></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeSendSMSModal()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                        Send SMS
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- PAYMENTS LIST MODAL -->
     <div id="paymentListModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
@@ -382,4 +421,50 @@
 @push('scripts')
 @include('components.alerts')
 @include('admin.reservations-js')
+<script>
+    function openSendSMSModal(reservationId, memberName, phoneNumber) {
+    document.getElementById('sendSMSReservationId').value = reservationId;
+    document.getElementById('sendSMSMemberInfo').innerText = `To: ${memberName}`;
+    document.getElementById('sendSMSNumber').value = phoneNumber || '';
+    document.getElementById('sendSMSMessage').value = '';
+    document.getElementById('sendSMSModal').classList.remove('hidden');
+}
+
+function closeSendSMSModal() {
+    document.getElementById('sendSMSModal').classList.add('hidden');
+}
+
+// AJAX form submit
+document.getElementById('sendSMSForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    let reservationId = document.getElementById('sendSMSReservationId').value;
+    let phoneNumber = document.getElementById('sendSMSNumber').value;
+    let message = document.getElementById('sendSMSMessage').value;
+
+    fetch("{{ route('admin.reservations.sendSMS') }}", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            reservation_id: reservationId,
+            phone_number: phoneNumber,
+            message: message
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            alert('SMS sent successfully!');
+            closeSendSMSModal();
+        } else {
+            alert('Failed to send SMS.');
+        }
+    })
+    .catch(() => alert('Error sending SMS.'));
+});
+
+</script>
 @endpush
