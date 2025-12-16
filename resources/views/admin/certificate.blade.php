@@ -5,7 +5,8 @@
 @section('content')
 <div class="max-w-5xl mx-auto mt-10">
 
-    <button onclick="window.print()" class="mb-6 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black print:hidden">
+    <button onclick="window.print()"
+        class="mb-6 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black print:hidden">
         Print Certificate
     </button>
 
@@ -61,15 +62,15 @@
             Date Approved:
             <strong>
                 @if ($reservation->approved_by)
-                {{ \Carbon\Carbon::parse($reservation->updated_at)->format('F d, Y') }}
+                    {{ \Carbon\Carbon::parse($reservation->updated_at)->format('F d, Y') }}
                 @else
-                <span class="text-gray-400">Not yet approved</span>
+                    <span class="text-gray-400">Not yet approved</span>
                 @endif
             </strong>
         </div>
     </div>
 
-</div>
+    </div>
 </div>
 @endsection
 
