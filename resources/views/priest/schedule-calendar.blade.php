@@ -9,8 +9,8 @@
 
         {{-- Back Button --}}
         <div class="mb-4">
-            <a href="{{ route('priest.schedule') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-100">
-                ← Back to Schedule
+            <a href="{{ route('priest.dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-100">
+                ← Back to Dashboard
             </a>
         </div>
 
