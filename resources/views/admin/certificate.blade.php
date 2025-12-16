@@ -5,11 +5,18 @@
 @section('content')
 <div class="max-w-5xl mx-auto mt-10">
 
-    <button onclick="window.print()" class="mb-6 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black print:hidden">
+    <button onclick="window.print()"
+        class="mb-6 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black print:hidden">
         Print Certificate
     </button>
 
     <div class="certificate bg-white">
+
+        <!-- LOGO -->
+        <div class="logo-container">
+            <img src="{{ asset('images/stparish.jpg') }}" alt="Santo Niño Parish Logo" class="logo">
+        </div>
+
         <div class="title">
             Certificate of Approval
         </div>
@@ -67,6 +74,16 @@
     .certificate {
         border: 5px double #000;
         padding: 40px;
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        width: 120px;
+        height: auto;
     }
 
     .title {
