@@ -9,9 +9,8 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SacramentController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,18 +30,15 @@ Route::post('/logout', [AuthUserController::class, 'destroy'])->name('logout');
 
 Route::get('/env-check', function () {
     return [
-        'env'    => env('SEMAPHORE_API_KEY'),
-        'config' => config('services.semaphore.key'),
-        'envName'=> app()->environment(),
+        'env'     => env('SEMAPHORE_API_KEY'),
+        'config'  => config('services.semaphore.key'),
+        'envName' => app()->environment(),
     ];
 });
 
-Route::get('/phpmyadmin',function(){
+Route::get('/phpmyadmin', function () {
     return redirect('/phpmyadmin/index.php');
 });
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -67,10 +63,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-
         Route::get('/test-sms', function () {
             $reservation = (object) [
-                'contact_number' => '09093182861'
+                'contact_number' => '09093182861',
             ];
 
             $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
@@ -124,6 +119,9 @@ Route::middleware('auth')->group(function () {
             Route::put('/{sacrament}', [SacramentController::class, 'update'])->name('update');
             Route::delete('/{sacrament}', [SacramentController::class, 'destroy'])->name('destroy');
         });
+
+        // Certificate of Approval (Preview & Print)
+        Route::get('/reservations/{reservation}/certificate', [ReservationController::class, 'certificate'])->name('reservations.certificate');
 
     });
 

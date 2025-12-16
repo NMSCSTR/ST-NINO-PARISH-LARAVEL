@@ -149,6 +149,20 @@ class ReservationController extends Controller
     }
 
 
+        public function certificate(Reservation $reservation)
+        {
+            abort_if($reservation->status !== 'approved', 403);
+
+            $reservation->load([
+                'member.user',
+                'sacrament',
+                'approvedBy'
+            ]);
+
+            return view('admin.certificate', compact('reservation'));
+        }
+
+
     public function priestApprove(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
