@@ -52,7 +52,8 @@ class ReservationController extends Controller
             return response()->json(['success' => false]);
         }
 
-        return response()->json(['success' => true]);
+        return redirect()->route('member.reservation')
+            ->with('success', 'Message send successfully.');
     }
 
 

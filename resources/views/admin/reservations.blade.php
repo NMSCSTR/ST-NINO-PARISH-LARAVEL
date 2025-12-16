@@ -332,28 +332,19 @@
     </div>
 
     <!-- SEND SMS MODAL -->
-    <div id="sendSMSModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 p-4">
+    <div id="sendSMSModal" class="fixed inset-0 bg-black bg-opacity-60 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Send SMS to Member</h2>
-            <p id="sendSMSMemberInfo" class="text-sm text-gray-600 mb-3"></p>
             <form id="sendSMSForm">
                 @csrf
-                <input type="hidden" name="reservation_id" id="sendSMSReservationId">
-                <div class="mb-4">
-                    <label for="sendSMSNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                    <input type="text" id="sendSMSNumber" name="phone_number" class="w-full border p-2 rounded" readonly>
-                </div>
-                <div class="mb-4">
-                    <label for="sendSMSMessage" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                    <textarea id="sendSMSMessage" name="message" class="w-full border p-2 rounded h-28" required></textarea>
-                </div>
+                <input type="hidden" name="reservation_id" id="smsReservationId">
+                <textarea name="message" id="smsMessage" rows="4" placeholder="Type your message here"
+                    class="w-full border p-2 rounded mb-4 resize-none"></textarea>
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeSendSMSModal()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
-                        Send SMS
-                    </button>
+                    <button type="button" onclick="closeSendSMSModal()"
+                        class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Send</button>
                 </div>
             </form>
         </div>
@@ -422,13 +413,13 @@
 @include('components.alerts')
 @include('admin.reservations-js')
 <script>
-    function openSendSMSModal(reservationId, memberName, phoneNumber) {
-    document.getElementById('sendSMSReservationId').value = reservationId;
-    document.getElementById('sendSMSMemberInfo').innerText = `To: ${memberName}`;
-    document.getElementById('sendSMSNumber').value = phoneNumber || '';
-    document.getElementById('sendSMSMessage').value = '';
-    document.getElementById('sendSMSModal').classList.remove('hidden');
-}
+//     function openSendSMSModal(reservationId, memberName, phoneNumber) {
+//     document.getElementById('sendSMSReservationId').value = reservationId;
+//     document.getElementById('sendSMSMemberInfo').innerText = `To: ${memberName}`;
+//     document.getElementById('sendSMSNumber').value = phoneNumber || '';
+//     document.getElementById('sendSMSMessage').value = '';
+//     document.getElementById('sendSMSModal').classList.remove('hidden');
+// }
 
 function closeSendSMSModal() {
     document.getElementById('sendSMSModal').classList.add('hidden');
@@ -465,6 +456,17 @@ document.getElementById('sendSMSForm').addEventListener('submit', function(e){
     })
     .catch(() => alert('Error sending SMS.'));
 });
+
+function openSendSMSModal(reservationId, memberName) {
+    document.getElementById('sendSMSModal').classList.remove('hidden');
+    document.getElementById('smsReservationId').value = reservationId;
+    document.getElementById('smsMessage').value = `Good day ${memberName}, your reservation status update: `;
+}
+
+function closeSendSMSModal() {
+    document.getElementById('sendSMSModal').classList.add('hidden');
+}
+
 
 </script>
 @endpush
