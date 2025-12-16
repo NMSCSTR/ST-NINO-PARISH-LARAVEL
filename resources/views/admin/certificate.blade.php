@@ -52,17 +52,6 @@
 
             <br><br>
 
-            Approved by:
-            <strong>
-                @if ($reservation->approved_by)
-                    {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}
-                @else
-                    <span class="text-gray-400">Not yet approved</span>
-                @endif
-            </strong>
-
-            <br><br>
-
             Printed/Viewed by:
             <strong>
                 {{ auth()->user()->firstname }} {{ auth()->user()->lastname }}
@@ -82,12 +71,19 @@
 
         <!-- SIGNATURE SECTION -->
         <div class="footer">
+            <!-- Parish Secretary -->
             <div class="signature-block">
                 ___________________________<br>
                 <span class="signature-title">Parish Secretary</span>
             </div>
 
+            <!-- Parish Priest with Approved By -->
             <div class="signature-block">
+                @if ($reservation->approved_by)
+                    <strong>{{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}</strong><br>
+                @else
+                    <span class="text-gray-400">Not yet approved</span><br>
+                @endif
                 ___________________________<br>
                 <span class="signature-title">Parish Priest</span>
             </div>
