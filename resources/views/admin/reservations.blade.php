@@ -334,11 +334,14 @@
     <!-- SEND SMS MODAL -->
     <div id="sendSMSModal" class="fixed inset-0 bg-black bg-opacity-60 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Send SMS to Member</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">Send SMS to Member</h2>
+            <p id="sendSMSMemberInfo" class="text-sm text-gray-600 mb-3"></p>
             <form id="sendSMSForm">
                 @csrf
-                <input type="hidden" name="reservation_id" id="smsReservationId">
-                <textarea name="message" id="smsMessage" rows="4" placeholder="Type your message here"
+                <input type="hidden" id="sendSMSReservationId" name="reservation_id">
+                <input type="hidden" id="sendSMSNumber" name="phone_number">
+                <textarea id="sendSMSMessage" name="message" rows="4"
+                    placeholder="Type your message here"
                     class="w-full border p-2 rounded mb-4 resize-none"></textarea>
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeSendSMSModal()"
@@ -349,6 +352,7 @@
             </form>
         </div>
     </div>
+
 
 
     <!-- PAYMENTS LIST MODAL -->
@@ -413,13 +417,13 @@
 @include('components.alerts')
 @include('admin.reservations-js')
 <script>
-//     function openSendSMSModal(reservationId, memberName, phoneNumber) {
-//     document.getElementById('sendSMSReservationId').value = reservationId;
-//     document.getElementById('sendSMSMemberInfo').innerText = `To: ${memberName}`;
-//     document.getElementById('sendSMSNumber').value = phoneNumber || '';
-//     document.getElementById('sendSMSMessage').value = '';
-//     document.getElementById('sendSMSModal').classList.remove('hidden');
-// }
+function openSendSMSModal(reservationId, memberName, phoneNumber = '') {
+    document.getElementById('sendSMSReservationId').value = reservationId;
+    document.getElementById('sendSMSMemberInfo').innerText = `To: ${memberName}`;
+    document.getElementById('sendSMSNumber').value = phoneNumber;
+    document.getElementById('sendSMSMessage').value = `Good day ${memberName}, your reservation status update: `;
+    document.getElementById('sendSMSModal').classList.remove('hidden');
+}
 
 function closeSendSMSModal() {
     document.getElementById('sendSMSModal').classList.add('hidden');
@@ -456,17 +460,6 @@ document.getElementById('sendSMSForm').addEventListener('submit', function(e){
     })
     .catch(() => alert('Error sending SMS.'));
 });
-
-function openSendSMSModal(reservationId, memberName) {
-    document.getElementById('sendSMSModal').classList.remove('hidden');
-    document.getElementById('smsReservationId').value = reservationId;
-    document.getElementById('smsMessage').value = `Good day ${memberName}, your reservation status update: `;
-}
-
-function closeSendSMSModal() {
-    document.getElementById('sendSMSModal').classList.add('hidden');
-}
-
-
 </script>
+
 @endpush
