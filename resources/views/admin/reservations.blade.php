@@ -461,5 +461,27 @@ document.getElementById('sendSMSForm').addEventListener('submit', function(e){
     .catch(() => alert('Error sending SMS.'));
 });
 </script>
+<script>
+    document.querySelectorAll('[id^="menu-button-"]').forEach(button => {
+    button.addEventListener('click', () => {
+        const dropdown = document.getElementById('dropdown-' + button.id.split('-')[2]);
+        dropdown.classList.toggle('hidden');
+
+        const rect = button.getBoundingClientRect();
+        const dropdownHeight = dropdown.scrollHeight;
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+
+        if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
+            dropdown.style.top = 'auto';
+            dropdown.style.bottom = '100%';
+        } else {
+            dropdown.style.top = '100%';
+            dropdown.style.bottom = 'auto';
+        }
+    });
+});
+
+</script>
 
 @endpush
