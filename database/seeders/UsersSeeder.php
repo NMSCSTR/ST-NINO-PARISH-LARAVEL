@@ -14,7 +14,7 @@ class UsersSeeder extends Seeder
         User::create([
             'firstname'    => 'Admin',
             'lastname'     => 'User',
-            'email'        => ' ',
+            'email'        => 'admin@nmsc.com',
             'password'     => Hash::make('password'),
             'phone_number' => '09123456789',
             'role'         => 'admin',
