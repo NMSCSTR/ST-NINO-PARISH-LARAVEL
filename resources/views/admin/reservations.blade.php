@@ -64,7 +64,7 @@
                     </div>
 
                     <!-- Table -->
-                    <div class="relative overflow-x-auto sm:rounded-lg px-6 pb-6">
+                    <div class="relative sm:rounded-lg px-6 pb-6">
                         <table id="datatable" class="w-full text-sm text-gray-800">
 
                             <thead class="bg-white border-b border-gray-200 text-gray-700 text-xs uppercase">
@@ -168,7 +168,7 @@
                                             </button>
 
                                             <!-- Dropdown menu -->
-                                            <div class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 max-h-96 overflow-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
+                                            <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
                                                 id="dropdown-{{ $reservation->id }}">
                                                 <div class="py-1" role="menu" aria-orientation="vertical"
                                                     aria-labelledby="menu-button-{{ $reservation->id }}">
@@ -460,28 +460,6 @@ document.getElementById('sendSMSForm').addEventListener('submit', function(e){
     })
     .catch(() => alert('Error sending SMS.'));
 });
-</script>
-<script>
-    document.querySelectorAll('[id^="menu-button-"]').forEach(button => {
-    button.addEventListener('click', () => {
-        const dropdown = document.getElementById('dropdown-' + button.id.split('-')[2]);
-        dropdown.classList.toggle('hidden');
-
-        const rect = button.getBoundingClientRect();
-        const dropdownHeight = dropdown.scrollHeight;
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const spaceAbove = rect.top;
-
-        if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
-            dropdown.style.top = 'auto';
-            dropdown.style.bottom = '100%';
-        } else {
-            dropdown.style.top = '100%';
-            dropdown.style.bottom = 'auto';
-        }
-    });
-});
-
 </script>
 
 @endpush
