@@ -6,6 +6,7 @@ use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class PriestController extends Controller
 {
@@ -19,6 +20,24 @@ class PriestController extends Controller
             ->get();
 
         return view('priest.dashboard', compact('reservations'));
+    }
+
+    public function schedule()
+    {
+        $user = Auth::user();
+
+        // Current month start and end
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        $reservations = Reservation::with(['member.user', 'sacrament'])
+            ->where('approved_by', $user->id)
+            ->where('status', 'approved')
+            ->whereBetween('reservation_date', [$startOfMonth, $endOfMonth])
+            ->orderBy('reservation_date', 'asc')
+            ->get();
+
+        return view('priest.schedule', compact('reservations'));
     }
 
     public function priestList()

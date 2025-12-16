@@ -159,8 +159,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/reservations/{reservation}/documents', [ReservationController::class, 'getDocuments']);
 
     });
+
+
     Route::prefix('priest')->middleware('user_role:priest')->name('priest.')->group(function () {
         Route::get('/dashboard', [PriestController::class, 'index'])->name('dashboard');
+        Route::get('/schedule', [PriestController::class, 'schedule'])->name('schedule');
 
         Route::post('/reservations/{id}/approve', [ReservationController::class, 'priestApprove'])->name('reservations.approve');
         Route::post('/reservations/{id}/reject', [ReservationController::class, 'priestReject'])->name('reservations.reject');
