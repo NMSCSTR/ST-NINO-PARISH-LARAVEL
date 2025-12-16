@@ -127,7 +127,17 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date'  => 'required|date',
+            'end_date'    => 'nullable|date|after_or_equal:start_date',
+            'type'        => 'nullable|string|max:50',
+        ]);
+
+        $event->update($request->only('title', 'description', 'start_date', 'end_date', 'type'));
+
+        return redirect()->back()->with('success', 'Event updated successfully!');
     }
 
     /**
@@ -135,6 +145,7 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+        $event->delete();
+        return redirect()->back()->with('success', 'Event deleted successfully!');
     }
 }

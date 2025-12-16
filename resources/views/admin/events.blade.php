@@ -157,15 +157,15 @@
                     </div>
 
 
-                    <!-- Add Event Modal -->
-                    <div id="addEventModal"
+                    <!-- Event Modal (Add / Update) -->
+                    <div id="eventModal"
                         class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-50">
                         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6 relative">
 
                             <!-- Modal Header -->
                             <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-xl font-semibold text-gray-800">Add New Event</h3>
-                                <button id="closeAddEventModal" class="text-gray-400 hover:text-gray-600">
+                                <h3 id="modalTitle" class="text-xl font-semibold text-gray-800">Add Event</h3>
+                                <button id="closeEventModal" class="text-gray-400 hover:text-gray-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -174,8 +174,9 @@
                             </div>
 
                             <!-- Modal Body -->
-                            <form action="{{ route('admin.events.store') }}" method="POST" class="space-y-4">
+                            <form id="eventForm" method="POST" class="space-y-4">
                                 @csrf
+                                <input type="hidden" name="_method" id="formMethod" value="POST">
                                 <div>
                                     <label for="title" class="block text-sm font-medium text-gray-700">Title <span
                                             class="text-red-500">*</span></label>
@@ -214,11 +215,11 @@
 
                                 <!-- Modal Footer -->
                                 <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
-                                    <button type="button" id="closeAddEventModal"
+                                    <button type="button" id="closeEventModal"
                                         class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
                                         Cancel
                                     </button>
-                                    <button type="submit"
+                                    <button type="submit" id="saveEventBtn"
                                         class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
                                         Save Event
                                     </button>
@@ -226,6 +227,7 @@
                             </form>
                         </div>
                     </div>
+
 
                 </div>
 
@@ -236,6 +238,71 @@
 @endsection
 @push('scripts')
 @include('components.alerts')
+<script>
+    const eventModal = document.getElementById('eventModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const eventForm = document.getElementById('eventForm');
+    const formMethod = document.getElementById('formMethod');
+    const saveEventBtn = document.getElementById('saveEventBtn');
+    const closeEventModal = document.querySelectorAll('#closeEventModal');
+
+    const openAddModal = () => {
+        modalTitle.textContent = 'Add Event';
+        eventForm.action = "{{ route('admin.events.store') }}";
+        formMethod.value = 'POST';
+        eventForm.reset();
+        eventModal.classList.remove('hidden');
+    };
+
+    const openEditModal = (event) => {
+        modalTitle.textContent = 'Edit Event';
+        eventForm.action = `/admin/events/${event.id}`;
+        formMethod.value = 'PUT';
+        document.getElementById('title').value = event.title;
+        document.getElementById('description').value = event.description;
+        document.getElementById('start_date').value = event.start;
+        document.getElementById('end_date').value = event.end || '';
+        document.getElementById('type').value = event.type;
+        eventModal.classList.remove('hidden');
+    };
+
+    closeEventModal.forEach(btn => {
+        btn.addEventListener('click', () => {
+            eventModal.classList.add('hidden');
+        });
+    });
+
+    // Delete event with SweetAlert
+    document.querySelectorAll('.delete-event-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const eventId = this.dataset.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This event will be deleted permanently!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/events/${eventId}`;
+                    form.innerHTML = `
+                        @csrf
+                        <input type="hidden" name="_method" value="DELETE">
+                    `;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+
 <script>
     const addEventBtn = document.getElementById('addEventBtn');
     const addEventModal = document.getElementById('addEventModal');
