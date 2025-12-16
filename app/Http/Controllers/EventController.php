@@ -26,7 +26,7 @@ class EventController extends Controller
     public function fetchEventsData(Request $request)
     {
         $start = $request->query('start');
-        $end = $request->query('end');
+        $end   = $request->query('end');
 
         $query = Event::query();
 
@@ -36,22 +36,22 @@ class EventController extends Controller
 
         $events = $query->get()->map(function ($event) {
             return [
-                'id' => $event->id,
-                'title' => $event->title,
-                'start' => $event->start_date->toIso8601String(),
-                'end' => $event->end_date ? $event->end_date->toIso8601String() : null,
+                'id'          => $event->id,
+                'title'       => $event->title,
+                'start'       => $event->start_date->toIso8601String(),
+                'end'         => $event->end_date ? $event->end_date->toIso8601String() : null,
                 'description' => $event->description,
-                'type' => $event->type,
+                'type'        => $event->type,
             ];
         });
 
         return response()->json($events);
     }
 
-        public function fetchEvents(Request $request)
+    public function fetchEvents(Request $request)
     {
         $start = $request->query('start');
-        $end = $request->query('end');
+        $end   = $request->query('end');
 
         $query = Event::query();
 
@@ -61,18 +61,17 @@ class EventController extends Controller
 
         $events = $query->get()->map(function ($event) {
             return [
-                'id' => $event->id,
-                'title' => $event->title,
-                'start' => $event->start_date->toIso8601String(),
-                'end' => $event->end_date ? $event->end_date->toIso8601String() : null,
+                'id'          => $event->id,
+                'title'       => $event->title,
+                'start'       => $event->start_date->toIso8601String(),
+                'end'         => $event->end_date ? $event->end_date->toIso8601String() : null,
                 'description' => $event->description,
-                'type' => $event->type,
+                'type'        => $event->type,
             ];
         });
 
         return response()->json($events);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -87,7 +86,24 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date'  => 'required|date',
+            'end_date'    => 'nullable|date|after_or_equal:start_date',
+            'type'        => 'nullable|string|max:50',
+        ]);
+
+        Event::create([
+            'user_id'     => auth()->id(), // logged-in admin
+            'title'       => $request->title,
+            'description' => $request->description,
+            'start_date'  => $request->start_date,
+            'end_date'    => $request->end_date,
+            'type'        => $request->type ?? 'general',
+        ]);
+
+        return redirect()->back()->with('success', 'Event created successfully!');
     }
 
     /**

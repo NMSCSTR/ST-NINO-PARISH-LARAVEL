@@ -96,6 +96,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/members/{id}', [MemberController::class, 'showMore'])->name('admin.members.show');
 
         Route::get('/events', [EventController::class, 'index'])->name('events');
+        Route::post('/events', [EventController::class, 'store'])->name('events.store');
+
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
         Route::get('/documents', [RouteController::class, 'documents'])->name('documents');
         Route::get('/reservations/{reservation}/documents',

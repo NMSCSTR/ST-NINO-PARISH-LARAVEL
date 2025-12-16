@@ -66,6 +66,20 @@
                             </ol>
                         </nav>
 
+
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Events</h2>
+                            <button id="addEventBtn"
+                                class="inline-flex items-center px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700">
+                                <svg class="w-4 h-4 me-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Add Event
+                            </button>
+                        </div>
+
+
                     </div>
 
                     <div class="relative overflow-x-auto sm:rounded-lg px-6 py-6">
@@ -141,6 +155,53 @@
 
                         </table>
                     </div>
+
+
+                    <!-- Add Event Modal -->
+                    <div id="addEventModal"
+                        class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-lg w-full max-w-lg p-6 relative">
+                            <h3 class="text-lg font-semibold mb-4">Add New Event</h3>
+                            <form action="{{ route('admin.events.store') }}" method="POST">
+                                @csrf
+                                <div class="mb-4">
+                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                                    <input type="text" name="title" id="title" required
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="description"
+                                        class="block text-sm font-medium text-gray-700">Description</label>
+                                    <textarea name="description" id="description" rows="3"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="start_date" class="block text-sm font-medium text-gray-700">Start
+                                        Date</label>
+                                    <input type="datetime-local" name="start_date" id="start_date" required
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="end_date" class="block text-sm font-medium text-gray-700">End
+                                        Date</label>
+                                    <input type="datetime-local" name="end_date" id="end_date"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Event Type</label>
+                                    <input type="text" name="type" id="type"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="general">
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                    <button type="button" id="closeAddEventModal"
+                                        class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -150,6 +211,27 @@
 @endsection
 @push('scripts')
 @include('components.alerts')
+<script>
+    const addEventBtn = document.getElementById('addEventBtn');
+    const addEventModal = document.getElementById('addEventModal');
+    const closeAddEventModal = document.getElementById('closeAddEventModal');
+
+    addEventBtn.addEventListener('click', () => {
+        addEventModal.classList.remove('hidden');
+    });
+
+    closeAddEventModal.addEventListener('click', () => {
+        addEventModal.classList.add('hidden');
+    });
+
+    // Optional: click outside modal to close
+    window.addEventListener('click', (e) => {
+        if (e.target === addEventModal) {
+            addEventModal.classList.add('hidden');
+        }
+    });
+</script>
+
 <script>
     document.querySelectorAll('.delete-user-btn').forEach(button => {
         button.addEventListener('click', function (e) {
