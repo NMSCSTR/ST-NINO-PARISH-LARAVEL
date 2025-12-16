@@ -168,7 +168,7 @@
                                             </button>
 
                                             <!-- Dropdown menu -->
-                                            <div class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
+                                            <div class="origin-bottom-right absolute right-0 bottom-full mb-2 w-56 max-h-96 overflow-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50"
                                                 id="dropdown-{{ $reservation->id }}">
                                                 <div class="py-1" role="menu" aria-orientation="vertical"
                                                     aria-labelledby="menu-button-{{ $reservation->id }}">
