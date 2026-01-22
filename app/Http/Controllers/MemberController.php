@@ -42,6 +42,11 @@ class MemberController extends Controller
         ));
     }
 
+    public function gskindex()
+    {
+        return view('member.gskcert');
+    }
+
     public function adminMemberView()
     {
         $members = Member::with('user')->get();
@@ -142,7 +147,7 @@ class MemberController extends Controller
             'lastname'       => 'required|string|max:255',
             'phone_number'   => 'nullable|string|max:20',
 
-            
+
             'middle_name'    => 'nullable|string|max:255',
             'birth_date'     => 'nullable|date',
             'place_of_birth' => 'nullable|string|max:255',

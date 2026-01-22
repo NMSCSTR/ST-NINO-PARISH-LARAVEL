@@ -139,6 +139,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('member')->middleware('user_role:member')->name('member.')->group(function () {
 
         Route::get('/dashboard', [MemberController::class, 'index'])->name('dashboard');
+        Route::get('/gskcert', [MemberController::class, 'gskindex'])->name('gskcert');
         Route::get('/reservation', [MemberController::class, 'reservation'])->name('reservation');
         Route::post('/reservation', [ReservationController::class, 'makeReservation'])->name('makeReservation');
         Route::get('/reservations/history', [ReservationController::class, 'memberReservations'])->name('reservations.history');
