@@ -75,14 +75,14 @@
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a> --}}
-    <a href="{{ route('admin.documents') }}"
+    {{-- <a href="{{ route('admin.documents') }}"
         class="flex items-center justify-between my-4 {{ request()->routeIs('admin.documents') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">description</span>
             Documents
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
-    </a>
+    </a> --}}
 </div>
 
 
