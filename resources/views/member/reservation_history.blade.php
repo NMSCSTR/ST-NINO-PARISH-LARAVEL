@@ -6,7 +6,7 @@
 
 @include('components.member.topnav')
 
-<div class="max-w-12xl mx-auto p-4 md:p-8 pt-20 md:pt-28">
+<div class="max-w-12xl mx-auto p-10 md:p-8 pt-20 md:pt-28">
 
     {{-- Header Section --}}
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4" data-aos="fade-down">
