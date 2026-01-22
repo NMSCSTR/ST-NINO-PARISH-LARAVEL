@@ -4,91 +4,104 @@
 
 @section('content')
 
-<section>
-    <div class="min-h-screen pt-24 bg-gray-50">
-        @include('components.admin.bg')
-        @include('components.admin.topnav')
+<section class="bg-gray-50 min-h-screen">
+    @include('components.admin.bg')
+    @include('components.admin.topnav')
 
-        <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-10 gap-6">
+    <div class="pt-24 px-4 lg:px-10 pb-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
             {{-- Sidebar --}}
             <div class="lg:w-2/12 w-full">
                 @include('components.admin.sidebar')
             </div>
 
-            {{-- Main Content --}}
+            {{-- Main Dashboard --}}
             <div class="lg:w-10/12 w-full">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
 
-                    {{-- Header Section --}}
-                    <div class="px-8 py-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div>
-                            <h2 class="text-2xl font-black text-gray-900 uppercase tracking-tighter">System Users</h2>
-                            <p class="text-sm text-gray-500">Manage church accounts and access levels.</p>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            {{-- Archive Trigger --}}
-                            <button data-modal-target="archiveModal" data-modal-toggle="archiveModal"
-                                class="inline-flex items-center gap-2 rounded-xl bg-amber-50 px-5 py-2.5 text-sm font-bold text-amber-700 hover:bg-amber-100 transition border border-amber-200">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-                                Archives ({{ $archivedUsers->count() }})
-                            </button>
-                            {{-- Add User Trigger --}}
-                            <button data-modal-target="createUserModal" data-modal-toggle="createUserModal"
-                                class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-100">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                                Add User
-                            </button>
-                        </div>
+                {{-- Action Header --}}
+                <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-3xl font-black text-gray-900 tracking-tighter uppercase">User Control</h1>
+                        <p class="text-gray-500 font-medium text-sm mt-1">Manage system security and church personnel access.</p>
                     </div>
 
-                    {{-- Main Users Table --}}
-                    <div class="p-6 overflow-x-auto">
-                        <table id="datatable" class="w-full text-sm text-left">
-                            <thead class="text-[10px] text-gray-400 uppercase font-black tracking-widest bg-gray-50/50">
+                    <div class="flex items-center gap-3">
+                        <button data-modal-target="archiveModal" data-modal-toggle="archiveModal"
+                                class="group flex items-center gap-2 bg-white border border-amber-200 px-5 py-2.5 rounded-2xl text-amber-700 font-bold text-sm shadow-sm hover:bg-amber-50 transition-all">
+                            <span class="flex h-2 w-2 rounded-full bg-amber-500 group-hover:animate-ping"></span>
+                            Archives ({{ $archivedUsers->count() }})
+                        </button>
+
+                        <button data-modal-target="createUserModal" data-modal-toggle="createUserModal"
+                                class="flex items-center gap-2 bg-blue-600 px-6 py-2.5 rounded-2xl text-white font-bold text-sm shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all active:scale-95">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="3" stroke-linecap="round"/></svg>
+                            Add New User
+                        </button>
+                    </div>
+                </div>
+
+                {{-- User Table Card --}}
+                <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50/50 border-b border-gray-100">
                                 <tr>
-                                    <th class="px-6 py-4 text-center">Name</th>
-                                    <th class="px-6 py-4 text-center">Contact Info</th>
-                                    <th class="px-6 py-4 text-center">Role</th>
-                                    <th class="px-6 py-4 text-right">Actions</th>
+                                    <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Personnel</th>
+                                    <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center">Contact Access</th>
+                                    <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center">Status/Role</th>
+                                    <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-gray-50">
                                 @foreach($users as $user)
-                                <tr class="hover:bg-blue-50/30 transition">
-                                    <td class="px-6 py-4 text-center font-bold text-gray-900">{{ $user->firstname }} {{ $user->lastname }}</td>
-                                    <td class="px-6 py-4 text-center">
-                                        <div class="text-gray-700 font-medium">{{ $user->email }}</div>
-                                        <div class="text-[10px] text-gray-400">{{ $user->phone_number ?? 'No Phone' }}</div>
+                                <tr class="hover:bg-blue-50/40 transition-colors group">
+                                    <td class="px-8 py-5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-sm">
+                                                {{ substr($user->firstname, 0, 1) }}{{ substr($user->lastname, 0, 1) }}
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-gray-900 leading-none">{{ $user->firstname }} {{ $user->lastname }}</p>
+                                                <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-tighter">Registered: {{ $user->created_at->format('M Y') }}</p>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td class="px-6 py-4 text-center">
+                                    <td class="px-8 py-5 text-center">
+                                        <p class="text-sm font-medium text-gray-700">{{ $user->email }}</p>
+                                        <p class="text-xs text-gray-400">{{ $user->phone_number ?? '---' }}</p>
+                                    </td>
+                                    <td class="px-8 py-5 text-center">
                                         @php
-                                            $roleColors = [
+                                            $roleStyle = match($user->role) {
                                                 'admin' => 'bg-purple-100 text-purple-700 border-purple-200',
-                                                'staff' => 'bg-blue-100 text-blue-700 border-blue-200',
                                                 'priest' => 'bg-amber-100 text-amber-700 border-amber-200',
-                                                'member' => 'bg-gray-100 text-gray-700 border-gray-200',
-                                            ];
+                                                'staff' => 'bg-blue-100 text-blue-700 border-blue-200',
+                                                default => 'bg-gray-100 text-gray-600 border-gray-200'
+                                            };
                                         @endphp
-                                        <span class="{{ $roleColors[$user->role] ?? 'bg-gray-50' }} px-3 py-1 rounded-lg text-[10px] font-black uppercase border">
+                                        <span class="{{ $roleStyle }} px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border">
                                             {{ $user->role }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <div class="flex justify-end items-center gap-2">
+                                    <td class="px-8 py-5">
+                                        <div class="flex justify-end items-center gap-1">
                                             @if($user->role === 'member')
-                                            <button data-modal-target="memberModal{{ $user->id }}" data-modal-toggle="memberModal{{ $user->id }}" class="p-2 text-gray-400 hover:text-blue-600 transition">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            <button data-modal-target="memberModal{{ $user->id }}" data-modal-toggle="memberModal{{ $user->id }}"
+                                                    class="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
                                             </button>
                                             @endif
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="p-2 text-gray-400 hover:text-blue-600 transition">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+
+                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg>
                                             </a>
-                                            <button onclick="confirmArchive({{ $user->id }})" class="p-2 text-gray-400 hover:text-amber-600 transition">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+
+                                            <button onclick="confirmArchive({{ $user->id }})" class="p-2.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" stroke-width="2"/></svg>
                                             </button>
-                                            <form id="archive-form-{{ $user->id }}" action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="hidden">
-                                                @csrf @method('DELETE')
-                                            </form>
+
+                                            <form id="archive-form-{{ $user->id }}" action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="hidden">@csrf @method('DELETE')</form>
                                         </div>
                                     </td>
                                 </tr>
@@ -100,163 +113,123 @@
             </div>
         </div>
     </div>
+</section>
 
-    {{-- 1. ADD USER MODAL --}}
-    <div id="createUserModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
-        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
-            <div class="bg-blue-600 px-8 py-5 flex justify-between items-center text-white">
-                <h3 class="text-lg font-bold uppercase tracking-widest">New System User</h3>
-                <button data-modal-toggle="createUserModal" class="hover:text-blue-100">✕</button>
+{{-- MODALS --}}
+
+{{-- Archive Modal --}}
+<div id="archiveModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/70 backdrop-blur-md p-4">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl overflow-hidden animate-in zoom-in duration-200">
+        <div class="bg-amber-500 px-10 py-6 flex justify-between items-center text-white">
+            <h3 class="text-xl font-black uppercase tracking-tighter italic">Inactive Records</h3>
+            <button data-modal-toggle="archiveModal" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-white/10 transition">✕</button>
+        </div>
+        <div class="p-10 max-h-[70vh] overflow-y-auto">
+            <table class="w-full">
+                <tbody class="divide-y divide-gray-100">
+                    @forelse($archivedUsers as $arch)
+                    <tr class="group">
+                        <td class="py-4">
+                            <p class="font-bold text-gray-800">{{ $arch->firstname }} {{ $arch->lastname }}</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase">Archived on: {{ $arch->deleted_at->format('M d, Y') }}</p>
+                        </td>
+                        <td class="py-4 text-right">
+                            <div class="flex justify-end gap-3">
+                                <form action="{{ route('admin.users.restore', $arch->id) }}" method="POST">
+                                    @csrf
+                                    <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-black uppercase hover:bg-blue-600 hover:text-white transition-all">Restore</button>
+                                </form>
+                                <button onclick="confirmWipe({{ $arch->id }})" class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-xs font-black uppercase hover:bg-red-600 hover:text-white transition-all">Wipe</button>
+                                <form id="wipe-form-{{ $arch->id }}" action="{{ route('admin.users.force_delete', $arch->id) }}" method="POST" class="hidden">@csrf @method('DELETE')</form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="py-10 text-center text-gray-400 italic font-medium">No users currently archived.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{-- Add User Modal --}}
+<div id="createUserModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/70 backdrop-blur-md p-4">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden animate-in slide-in-from-bottom-8 duration-300">
+        <div class="bg-gray-900 px-10 py-6 flex justify-between items-center text-white">
+            <h3 class="text-xl font-black uppercase tracking-tighter">System Enrollment</h3>
+            <button data-modal-toggle="createUserModal" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-white/10 transition">✕</button>
+        </div>
+        <form action="{{ route('admin.users.add') }}" method="POST" class="p-10 space-y-6">
+            @csrf
+            <div class="grid grid-cols-2 gap-6">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Firstname</label>
+                    <input type="text" name="firstname" required class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Lastname</label>
+                    <input type="text" name="lastname" required class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500">
+                </div>
             </div>
-            <form action="{{ route('admin.users.add') }}" method="POST" class="p-8 space-y-4">
-                @csrf
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Firstname</label>
-                        <input type="text" name="firstname" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Lastname</label>
-                        <input type="text" name="lastname" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
-                    </div>
-                </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Email Access</label>
+                <input type="email" name="email" required class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="grid grid-cols-2 gap-6">
                 <div class="space-y-1">
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Email</label>
-                    <input type="email" name="email" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Phone</label>
-                    <input type="text" name="phone_number" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Role</label>
-                    <select name="role" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Role</label>
+                    <select name="role" required class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500">
                         <option value="staff">Staff</option>
                         <option value="priest">Priest</option>
                         <option value="admin">Admin</option>
                         <option value="member">Member</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-2 gap-4 pb-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Password</label>
-                        <input type="password" name="password" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Confirm</label>
-                        <input type="password" name="password_confirmation" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
-                    </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Contact</label>
+                    <input type="text" name="phone_number" class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500">
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg">Create Account</button>
-            </form>
-        </div>
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Security Key</label>
+                    <input type="password" name="password" required class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Verify</label>
+                    <input type="password" name="password_confirmation" required class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 py-4 rounded-2xl text-white font-black uppercase tracking-widest shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all">Establish Account</button>
+        </form>
     </div>
+</div>
 
-    {{-- 2. ARCHIVE LIST MODAL --}}
-    <div id="archiveModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
-        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden animate-in zoom-in duration-200">
-            <div class="bg-amber-600 px-8 py-5 flex justify-between items-center text-white">
-                <h3 class="text-lg font-bold uppercase tracking-widest">Archived Users</h3>
-                <button data-modal-toggle="archiveModal" class="hover:text-amber-100 transition">✕</button>
-            </div>
-            <div class="p-6 overflow-y-auto max-h-[70vh]">
-                <table class="w-full text-sm text-left">
-                    <thead class="text-[10px] text-gray-400 uppercase font-black tracking-widest bg-gray-50/50">
-                        <tr>
-                            <th class="px-6 py-4">Name</th>
-                            <th class="px-6 py-4">Archived At</th>
-                            <th class="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @forelse($archivedUsers as $archived)
-                        <tr class="hover:bg-amber-50/30 transition">
-                            <td class="px-6 py-4">
-                                <div class="font-bold text-gray-700">{{ $archived->firstname }} {{ $archived->lastname }}</div>
-                                <div class="text-[10px] text-gray-400 italic">ID #{{ $archived->id }}</div>
-                            </td>
-                            <td class="px-6 py-4 text-xs text-gray-500">{{ $archived->deleted_at->format('M d, Y h:i A') }}</td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex justify-end gap-3 items-center">
-                                    <form action="{{ route('admin.users.restore', $archived->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="text-blue-600 font-black text-[10px] uppercase hover:underline">Restore</button>
-                                    </form>
-                                    <button onclick="forceDelete({{ $archived->id }})" class="text-red-600 font-black text-[10px] uppercase hover:underline">Delete Forever</button>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr><td colspan="3" class="px-6 py-10 text-center text-gray-400 italic">No archived users found.</td></tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    {{-- 3. MEMBER MODALS --}}
-    @foreach($users as $user)
-        @if($user->role === 'member')
-        <div id="memberModal{{ $user->id }}" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden border border-gray-200">
-                <div class="flex items-center justify-between px-6 py-4 bg-blue-50 border-b">
-                    <h3 class="text-lg font-bold text-gray-800">Member Profile</h3>
-                    <button data-modal-toggle="memberModal{{ $user->id }}" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
-                </div>
-                <div class="p-8 space-y-6">
-                    <div class="bg-gray-50 p-6 rounded-2xl">
-                        <h4 class="text-xs font-black text-blue-600 uppercase mb-4">Personal Details</h4>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <p><strong>Firstname:</strong> {{ $user->firstname }}</p>
-                            <p><strong>Lastname:</strong> {{ $user->lastname }}</p>
-                            <p><strong>Birth Date:</strong> {{ $user->member->birth_date ?? 'N/A' }}</p>
-                            <p><strong>Phone:</strong> {{ $user->phone_number ?? 'N/A' }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="px-6 py-4 border-t bg-gray-50 flex justify-end">
-                    <button data-modal-toggle="memberModal{{ $user->id }}" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold">Close</button>
-                </div>
-            </div>
-        </div>
-        @endif
-    @endforeach
-
-</section>
 @endsection
 
 @push('scripts')
-@include('components.alerts')
 <script>
     function confirmArchive(id) {
         Swal.fire({
-            title: 'Archive User?',
-            text: "This user will be hidden but their transaction history will be preserved.",
+            title: 'Deactivate User?',
+            text: "Account will be archived. Transactions stay safe.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#f59e0b',
             confirmButtonText: 'Yes, Archive'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById(`archive-form-${id}`).submit();
-            }
-        });
+        }).then((result) => { if (result.isConfirmed) document.getElementById(`archive-form-${id}`).submit(); });
     }
 
-    function forceDelete(id) {
+    function confirmWipe(id) {
         Swal.fire({
-            title: 'Delete Forever?',
-            text: "WARNING: This is permanent. This may cause issues with linked transaction data!",
+            title: 'Permanent Wipe?',
+            text: "Warning: All user data and linked histories will be erased forever!",
             icon: 'error',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
-            confirmButtonText: 'Delete Permanently'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = `/admin/users/force-delete/${id}`;
-            }
-        });
+            confirmButtonText: 'Delete Forever'
+        }).then((result) => { if (result.isConfirmed) document.getElementById(`wipe-form-${id}`).submit(); });
     }
 </script>
 @endpush
