@@ -11,8 +11,8 @@
         {{-- Header & Navigation --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
-                <a href="{{ route('priest.dashboard') }}" class="text-sm text-blue-600 font-bold flex items-center gap-1 mb-2 hover:underline">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                <a href="{{ route('priest.dashboard') }}" class="text-sm text-blue-600 font-bold flex items-center gap-1 mb-2 hover:underline transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                     Back to Dashboard
                 </a>
                 <h2 class="text-3xl font-black text-gray-900 uppercase tracking-tighter">
@@ -20,82 +20,70 @@
                 </h2>
             </div>
 
-            <div class="flex items-center gap-2 bg-white p-1 rounded-xl shadow-sm border">
-                {{-- These routes assume you have a method to handle month offsets --}}
-                <a href="?month={{ $startOfMonth->copy()->subMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+            {{-- Month Navigation --}}
+            <div class="flex items-center gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-200">
+                <a href="?month={{ $startOfMonth->copy()->subMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </a>
-                <span class="px-4 text-sm font-bold text-gray-700">Today</span>
-                <a href="?month={{ $startOfMonth->copy()->addMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                <a href="?month={{ now()->format('Y-m') }}" class="px-4 text-sm font-bold text-gray-700 hover:text-blue-600 transition">Today</a>
+                <a href="?month={{ $startOfMonth->copy()->addMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
             </div>
         </div>
 
-        {{-- Legend --}}
-        <div class="flex flex-wrap gap-4 mb-6">
-            <div class="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                <span class="w-3 h-3 bg-blue-500 rounded-full"></span> Baptism
-            </div>
-            <div class="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                <span class="w-3 h-3 bg-amber-500 rounded-full"></span> Wedding
-            </div>
-            <div class="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                <span class="w-3 h-3 bg-purple-500 rounded-full"></span> Funeral
-            </div>
-        </div>
-
-        {{-- Calendar Card --}}
+        {{-- Calendar Grid --}}
         <div class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
             {{-- Weekday Headers --}}
             <div class="grid grid-cols-7 border-b border-gray-100 bg-gray-50">
-                @foreach(['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] as $day)
-                <div class="py-4 text-center text-xs font-black text-gray-400 uppercase tracking-widest">{{ $day }}</div>
+                @foreach(['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $dayName)
+                <div class="py-4 text-center text-xs font-black text-gray-400 uppercase tracking-widest">{{ $dayName }}</div>
                 @endforeach
             </div>
 
-            {{-- Calendar Grid --}}
-            <div class="grid grid-cols-7 auto-rows-[minmax(120px,_auto)]">
+            {{-- Grid Cells --}}
+            <div class="grid grid-cols-7 auto-rows-[minmax(130px,_auto)]">
                 @php
                     $daysInMonth = $startOfMonth->daysInMonth;
                     $firstDayOfWeek = $startOfMonth->dayOfWeek;
                 @endphp
 
+                {{-- Blank days at start --}}
                 @for($i=0; $i<$firstDayOfWeek; $i++)
-                    <div class="border-r border-b border-gray-50 bg-gray-50/50"></div>
+                    <div class="border-r border-b border-gray-50 bg-gray-50/30"></div>
                 @endfor
 
+                {{-- Actual days --}}
                 @for($day=1; $day<=$daysInMonth; $day++)
                     @php
                         $dateString = $startOfMonth->copy()->day($day)->format('Y-m-d');
                         $dayReservations = $reservations[$dateString] ?? collect();
-                        $isToday = \Carbon\Carbon::today()->format('Y-m-d') === $dateString;
+                        $isToday = now()->format('Y-m-d') === $dateString;
                     @endphp
 
-                    <div class="p-3 border-r border-b border-gray-100 flex flex-col gap-2 transition hover:bg-gray-50 {{ $isToday ? 'bg-blue-50/30' : '' }}">
+                    <div class="p-3 border-r border-b border-gray-100 flex flex-col gap-2 transition hover:bg-gray-50/80 {{ $isToday ? 'bg-blue-50/50' : '' }}">
                         <div class="flex justify-between items-start">
-                            <span class="inline-flex items-center justify-center w-7 h-7 text-sm font-bold rounded-full {{ $isToday ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400' }}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 text-sm font-black rounded-full {{ $isToday ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400' }}">
                                 {{ $day }}
                             </span>
                         </div>
 
-                        <div class="flex flex-col gap-1 overflow-y-auto max-h-24 custom-scrollbar">
+                        {{-- Event List within Day --}}
+                        <div class="flex flex-col gap-1.5 overflow-y-auto max-h-32 custom-scrollbar pr-1">
                             @foreach($dayReservations as $res)
                                 @php
                                     $type = $res->sacrament->sacrament_type ?? 'Other';
-                                    $colorClass = match($type) {
-                                        'Baptism' => 'bg-blue-100 text-blue-700 border-blue-200',
-                                        'Wedding' => 'bg-amber-100 text-amber-700 border-amber-200',
-                                        'Funeral' => 'bg-purple-100 text-purple-700 border-purple-200',
-                                        default   => 'bg-gray-100 text-gray-700 border-gray-200'
+                                    $color = match($type) {
+                                        'Baptism' => 'bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100',
+                                        'Wedding' => 'bg-amber-50 text-amber-700 border-amber-100 hover:bg-amber-100',
+                                        'Funeral' => 'bg-purple-50 text-purple-700 border-purple-100 hover:bg-purple-100',
+                                        default   => 'bg-gray-50 text-gray-700 border-gray-100 hover:bg-gray-100'
                                     };
                                 @endphp
-                                <button onclick="openDetailsModal({{ $res->id }})"
-                                    class="text-[10px] font-bold py-1 px-2 rounded-lg border {{ $colorClass }} truncate text-left transition transform hover:scale-95 active:scale-90">
-                                    {{ $res->reservation_date?->format('H:i') }} | {{ $res->member->user->firstname }}
+                                <button type="button" onclick="openCalModal({{ $res->id }})"
+                                    class="text-[10px] font-bold py-1.5 px-2 rounded-lg border {{ $color }} truncate text-left transition transform active:scale-95">
+                                    {{ $res->reservation_date?->format('h:i A') }} | {{ $res->member->user->firstname }}
                                 </button>
-
-                                {{-- Details Modal Moved to End of File for better DOM structure --}}
                             @endforeach
                         </div>
                     </div>
@@ -105,52 +93,103 @@
     </div>
 </section>
 
-{{-- Modals Container --}}
-@foreach($reservations->flatten() as $res)
-    <div id="details-modal-{{ $res->id }}" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div class="bg-gray-900 px-8 py-5 flex justify-between items-center text-white">
-                <h3 class="font-bold uppercase tracking-widest text-sm text-gray-300">Schedule Details</h3>
-                <button onclick="closeDetailsModal({{ $res->id }})" class="hover:text-white">✕</button>
-            </div>
-
-            <div class="p-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+{{-- MODALS SECTION: Placed outside the loop to prevent layout breakage --}}
+<div id="modal-container">
+    @foreach($reservations->flatten() as $res)
+        <div id="details-modal-{{ $res->id }}" class="fixed inset-0 bg-gray-900/70 backdrop-blur-md hidden items-center justify-center z-[100] p-4 transition-all duration-300">
+            <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all scale-95 opacity-0 modal-content-inner">
+                {{-- Modal Header --}}
+                <div class="bg-gray-900 px-8 py-5 flex justify-between items-center text-white">
                     <div>
-                        <h4 class="text-[10px] font-black text-blue-600 uppercase mb-3">Service Info</h4>
-                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                            <p class="text-xl font-black text-gray-900">{{ $res->sacrament->sacrament_type }}</p>
-                            <p class="text-sm font-bold text-blue-600 mt-1">{{ $res->reservation_date?->format('l, F d @ h:i A') }}</p>
-                        </div>
+                        <h3 class="font-bold uppercase tracking-widest text-xs text-gray-400">Appointment Details</h3>
+                        <p class="text-lg font-black">{{ $res->sacrament->sacrament_type }}</p>
                     </div>
-                    <div>
-                        <h4 class="text-[10px] font-black text-blue-600 uppercase mb-3">Contact Person</h4>
-                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                            <p class="text-sm font-bold text-gray-900">{{ $res->member->user->firstname }} {{ $res->member->user->lastname }}</p>
-                            <p class="text-xs text-gray-500">{{ $res->member->user->phone_number }}</p>
-                        </div>
-                    </div>
+                    <button onclick="closeCalModal({{ $res->id }})" class="p-2 hover:bg-white/10 rounded-full transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
                 </div>
 
-                @if($res->remarks)
-                <div class="mt-6">
-                    <h4 class="text-[10px] font-black text-blue-600 uppercase mb-3">Note for Priest</h4>
-                    <p class="text-sm text-gray-600 italic bg-amber-50 p-4 rounded-2xl border border-amber-100">"{{ $res->remarks }}"</p>
-                </div>
-                @endif
-            </div>
+                {{-- Modal Body --}}
+                <div class="p-8 space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">Schedule</h4>
+                            <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                                <p class="text-lg font-black text-blue-900">{{ $res->reservation_date?->format('F d, Y') }}</p>
+                                <p class="text-sm font-bold text-blue-600">{{ $res->reservation_date?->format('l @ h:i A') }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">Member Details</h4>
+                            <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                                <p class="text-sm font-bold text-gray-900">{{ $res->member->user->firstname }} {{ $res->member->user->lastname }}</p>
+                                <p class="text-xs text-gray-500 mt-1">{{ $res->member->user->phone_number }}</p>
+                                <p class="text-xs text-gray-500 italic">{{ $res->member->user->email }}</p>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="bg-gray-50 px-8 py-5 flex justify-end">
-                <button onclick="closeDetailsModal({{ $res->id }})" class="bg-gray-900 text-white px-8 py-2 rounded-xl text-sm font-bold hover:bg-black transition">Close</button>
+                    @if($res->remarks)
+                    <div>
+                        <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Special Remarks</h4>
+                        <div class="p-5 bg-amber-50 rounded-2xl border border-amber-100 text-sm text-gray-700 italic">
+                            "{{ $res->remarks }}"
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+                <div class="bg-gray-50 px-8 py-5 flex justify-end">
+                    <button onclick="closeCalModal({{ $res->id }})" class="bg-gray-900 text-white px-10 py-3 rounded-xl text-sm font-bold hover:bg-black transition shadow-lg shadow-gray-200">
+                        Dismiss
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
+</div>
 
 <style>
-    .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+
+    /* Animation classes */
+    .modal-active .modal-content-inner {
+        transform: scale(1);
+        opacity: 1;
+    }
 </style>
 
 @endsection
+
+@push('scripts')
+<script>
+    function openCalModal(id) {
+        const modal = document.getElementById(`details-modal-${id}`);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        // Add small timeout to allow animation to trigger
+        setTimeout(() => {
+            modal.classList.add('modal-active');
+        }, 10);
+    }
+
+    function closeCalModal(id) {
+        const modal = document.getElementById(`details-modal-${id}`);
+        modal.classList.remove('modal-active');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 200);
+    }
+
+    // Close on background click
+    window.onclick = function(event) {
+        if (event.target.id.startsWith('details-modal-')) {
+            const id = event.target.id.replace('details-modal-', '');
+            closeCalModal(id);
+        }
+    }
+</script>
+@endpush
