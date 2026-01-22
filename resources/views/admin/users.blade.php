@@ -1,379 +1,160 @@
 @extends('components.default')
 
-@section('title', 'Users | Santo Niño Parish Church')
+@section('title', 'User Management | Santo Niño Parish Church')
 
 @section('content')
 
 <section>
-    <div class="min-h-screen pt-24">
+    <div class="min-h-screen pt-24 bg-gray-50">
         @include('components.admin.bg')
-        {{-- Include Top Navigation --}}
         @include('components.admin.topnav')
-        <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-4 gap-6">
 
-            {{-- Include Sidebar --}}
+        <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-10 gap-6">
+            {{-- Sidebar --}}
             <div class="lg:w-2/12 w-full">
                 @include('components.admin.sidebar')
             </div>
 
             {{-- Main Content --}}
             <div class="lg:w-10/12 w-full">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
 
-                <div class="bg-white rounded-xl shadow-lg">
-                    <div class="px-6 py-6">
-
-                        <!-- Breadcrumb -->
-                        <nav class="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
-                            aria-label="Breadcrumb">
-                            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                                <li class="inline-flex items-center">
-                                    <a href="#"
-                                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
-                                        <svg class="w-3 h-3 me-2.5" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                                        </svg>
-                                        Admin
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <div class="flex items-center">
-                                        <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4" />
-                                        </svg>
-                                        <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600">
-                                            Dashboard
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li aria-current="page">
-                                    <div class="flex items-center">
-                                        <svg class="rtl:rotate-180 w-3 h-3 mx-1 text-gray-400" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 9 4-4-4-4" />
-                                        </svg>
-                                        <span class="ms-1 text-sm font-medium text-gray-500">Users</span>
-                                    </div>
-                                </li>
-                            </ol>
-                        </nav>
-
-                        <div class="flex justify-end py-2">
-                            <button id="defaultModalButton" data-modal-target="createUserModal"
-                                data-modal-toggle="createUserModal" class="flex items-center gap-2 text-white bg-blue-600 hover:bg-blue-700
-                focus:ring-4 focus:outline-none focus:ring-blue-300
-                font-medium rounded-lg text-sm px-5 py-2.5 shadow-md hover:shadow-lg transition">
-
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                </svg>
-
+                    {{-- Header Section --}}
+                    <div class="px-8 py-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div>
+                            <h2 class="text-2xl font-black text-gray-900 uppercase tracking-tighter">System Users</h2>
+                            <p class="text-sm text-gray-500">Manage church accounts and access levels.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            {{-- Archive Trigger --}}
+                            <button data-modal-target="archiveModal" data-modal-toggle="archiveModal"
+                                class="inline-flex items-center gap-2 rounded-xl bg-amber-50 px-5 py-2.5 text-sm font-bold text-amber-700 hover:bg-amber-100 transition border border-amber-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                                Archives ({{ $archivedUsers->count() }})
+                            </button>
+                            {{-- Add User Trigger --}}
+                            <button data-modal-target="createUserModal" data-modal-toggle="createUserModal"
+                                class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                                 Add User
                             </button>
                         </div>
-
                     </div>
 
-                    <div class="relative overflow-x-auto sm:rounded-lg px-6 py-6">
-
-                        <table id="datatable" class="w-full text-sm text-left text-gray-700">
-
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                    {{-- Main Users Table --}}
+                    <div class="p-6 overflow-x-auto">
+                        <table id="datatable" class="w-full text-sm text-left">
+                            <thead class="text-[10px] text-gray-400 uppercase font-black tracking-widest bg-gray-50/50">
                                 <tr>
-                                    <th class="px-6 py-3">Firstname</th>
-                                    <th class="px-6 py-3">Lastname</th>
-                                    <th class="px-6 py-3">Email</th>
-                                    <th class="px-6 py-3">Role</th>
-                                    <th class="px-6 py-3">Contact Number</th>
-                                    <th class="px-6 py-3 text-center">Actions</th>
+                                    <th class="px-6 py-4 text-center">Name</th>
+                                    <th class="px-6 py-4 text-center">Contact Info</th>
+                                    <th class="px-6 py-4 text-center">Role</th>
+                                    <th class="px-6 py-4 text-right">Actions</th>
                                 </tr>
                             </thead>
-
-                            <tbody>
+                            <tbody class="divide-y divide-gray-100">
                                 @foreach($users as $user)
-                                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
-
-                                    <td class="px-6 py-4 font-medium text-gray-900">
-                                        {{ $user->firstname }}
+                                <tr class="hover:bg-blue-50/30 transition">
+                                    <td class="px-6 py-4 text-center font-bold text-gray-900">{{ $user->firstname }} {{ $user->lastname }}</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="text-gray-700 font-medium">{{ $user->email }}</div>
+                                        <div class="text-[10px] text-gray-400">{{ $user->phone_number ?? 'No Phone' }}</div>
                                     </td>
-
-                                    <td class="px-6 py-4">
-                                        {{ $user->lastname }}
-                                    </td>
-
-                                    <td class="px-6 py-4">
-                                        {{ $user->email }}
-                                    </td>
-
-                                    {{-- <td class="px-6 py-4">
-                                        {{ ucfirst($user->role) }}
-                                    </td> --}}
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 text-center">
                                         @php
-                                        $roleColors = [
-                                        'admin' => 'bg-purple-100 text-purple-700',
-                                        'staff' => 'bg-blue-100 text-blue-700',
-                                        'priest' => 'bg-amber-100 text-amber-700',
-                                        'member' => 'bg-gray-100 text-gray-700',
-                                        ];
+                                            $roleColors = [
+                                                'admin' => 'bg-purple-100 text-purple-700 border-purple-200',
+                                                'staff' => 'bg-blue-100 text-blue-700 border-blue-200',
+                                                'priest' => 'bg-amber-100 text-amber-700 border-amber-200',
+                                                'member' => 'bg-gray-100 text-gray-700 border-gray-200',
+                                            ];
                                         @endphp
-                                        <span
-                                            class="{{ $roleColors[$user->role] ?? 'bg-gray-50' }} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                                        <span class="{{ $roleColors[$user->role] ?? 'bg-gray-50' }} px-3 py-1 rounded-lg text-[10px] font-black uppercase border">
                                             {{ $user->role }}
                                         </span>
                                     </td>
-
-                                    <td class="px-6 py-4">
-                                        {{ $user->phone_number ?? 'N/A' }}
-                                    </td>
                                     <td class="px-6 py-4 text-right">
-                                        <div class="relative inline-block text-left">
-                                            <!-- Dropdown button -->
-                                            <button type="button"
-                                                class="inline-flex justify-center w-10 h-10 text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                id="menu-button-{{ $user->id }}" aria-expanded="true"
-                                                aria-haspopup="true">
-                                                <!-- Three dots icon -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"
-                                                    fill="currentColor" viewBox="0 0 24 24">
-                                                    <circle cx="5" cy="12" r="2" />
-                                                    <circle cx="12" cy="12" r="2" />
-                                                    <circle cx="19" cy="12" r="2" />
-                                                </svg>
-
+                                        <div class="flex justify-end items-center gap-2">
+                                            @if($user->role === 'member')
+                                            <button data-modal-target="memberModal{{ $user->id }}" data-modal-toggle="memberModal{{ $user->id }}" class="p-2 text-gray-400 hover:text-blue-600 transition">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                             </button>
-
-                                            <!-- Dropdown panel -->
-                                            <div class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50"
-                                                role="menu" aria-orientation="vertical"
-                                                aria-labelledby="menu-button-{{ $user->id }}"
-                                                id="dropdown-{{ $user->id }}">
-                                                <div class="py-1">
-                                                    <a href="{{ route('admin.users.edit', ['id' => $user->id]) }}"
-                                                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                            stroke-width="2" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M16 7l-8 8H4v-4l8-8 4 4z" />
-                                                        </svg>
-                                                        Edit
-                                                    </a>
-                                                    <a href="#" data-id="{{ $user->id }}"
-                                                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 delete-user-btn">
-                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                            stroke-width="2" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M19 7L5 7M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7M10 11v6M14 11v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
-                                                        </svg>
-                                                        Delete
-                                                    </a>
-                                                    @if($user->role === 'member')
-                                                    <button data-modal-target="memberModal{{ $user->id }}"
-                                                        data-modal-toggle="memberModal{{ $user->id }}"
-                                                        class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                            stroke-width="2" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                        </svg>
-                                                        More Info
-                                                    </button>
-                                                    @endif
-                                                </div>
-                                            </div>
+                                            @endif
+                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="p-2 text-gray-400 hover:text-blue-600 transition">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                            </a>
+                                            <button onclick="confirmArchive({{ $user->id }})" class="p-2 text-gray-400 hover:text-amber-600 transition">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                                            </button>
+                                            <form id="archive-form-{{ $user->id }}" action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="hidden">
+                                                @csrf @method('DELETE')
+                                            </form>
                                         </div>
                                     </td>
-
-
-
                                 </tr>
-                                @if($user->role === 'member')
-                                <!-- Member Modal -->
-                                <div id="memberModal{{ $user->id }}" tabindex="-1" aria-hidden="true"
-                                    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-
-                                    <div class="relative w-full max-w-2xl p-4 animate-fadeIn">
-                                        <div
-                                            class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
-
-                                            <!-- Header -->
-                                            <div
-                                                class="flex items-center justify-between px-6 py-4 bg-blue-50 border-b">
-                                                <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24"
-                                                        stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.79.597 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    </svg>
-                                                    Member Information
-                                                </h3>
-
-                                                <button type="button" data-modal-toggle="memberModal{{ $user->id }}"
-                                                    class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200 transition">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-
-                                            <!-- Body -->
-                                            <div class="px-6 py-6 space-y-6">
-
-                                                <!-- Personal Details Card -->
-                                                <div class="bg-gray-50 rounded-lg p-4 shadow-inner">
-                                                    <h4
-                                                        class="text-lg font-medium text-gray-700 mb-4 flex items-center gap-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-gray-600" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.79.597 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                        </svg>
-                                                        Personal Details
-                                                    </h4>
-                                                    <div class="grid grid-cols-2 gap-4 text-sm">
-                                                        <p class="flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.79.597 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z">
-                                                                </path>
-                                                            </svg> <strong>First Name:</strong> {{ $user->firstname }}
-                                                        </p>
-                                                        <p class="flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M12 4v1m0 14v1m8-8h1M3 12H2m15.364-6.364l.707.707M6.343 17.657l-.707.707M17.657 17.657l.707-.707M6.343 6.343l-.707-.707">
-                                                                </path>
-                                                            </svg> <strong>Last Name:</strong> {{ $user->lastname }}</p>
-                                                        <p class="flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M16 12H8m0 0H4m8 0h4m0 0h4M12 4v16">
-                                                                </path>
-                                                            </svg> <strong>Email:</strong> {{ $user->email }}</p>
-                                                        <p class="flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M3 5a2 2 0 012-2h3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z">
-                                                                </path>
-                                                            </svg> <strong>Phone:</strong> {{ $user->phone_number ??
-                                                            'N/A' }}</p>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Member Profile Card -->
-                                                @if($user->member)
-                                                <div class="bg-gray-50 rounded-lg p-4 shadow-inner">
-                                                    <h4
-                                                        class="text-lg font-medium text-gray-700 mb-4 flex items-center gap-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-gray-600" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M3 10h4l3 6H5l-2 4h16l-2-4h-5l3-6h4">
-                                                            </path>
-                                                        </svg>
-                                                        Member Profile
-                                                    </h4>
-                                                    <div class="grid grid-cols-2 gap-4 text-sm">
-                                                        <p class="flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M12 4v16m8-8H4"></path>
-                                                            </svg> <strong>Middle Name:</strong> {{
-                                                            $user->member->middle_name ?? 'N/A' }}</p>
-                                                        <p class="flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M8 7V3m8 4V3M4 11h16M5 21h14M12 17v4">
-                                                                </path>
-                                                            </svg> <strong>Birth Date:</strong> {{
-                                                            $user->member->birth_date ?? 'N/A' }}</p>
-                                                        <p class="col-span-2 flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M17 20h5v-2a2 2 0 00-2-2h-3v4zM3 20h5v-4H5a2 2 0 00-2 2v2z">
-                                                                </path>
-                                                            </svg> <strong>Place of Birth:</strong> {{
-                                                            $user->member->place_of_birth ?? 'N/A' }}</p>
-                                                        <p class="col-span-2 flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7H3z"></path>
-                                                            </svg> <strong>Address:</strong> {{ $user->member->address
-                                                            ?? 'N/A' }}</p>
-                                                        <p class="col-span-2 flex items-center gap-2"><svg
-                                                                class="w-4 h-4 text-gray-500" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18">
-                                                                </path>
-                                                            </svg> <strong>Contact Number:</strong> {{
-                                                            $user->member->contact_number ?? 'N/A' }}</p>
-                                                    </div>
-                                                </div>
-                                                @endif
-
-                                            </div>
-
-                                            <!-- Footer -->
-                                            <div class="px-6 py-4 border-t bg-gray-50 flex justify-end">
-                                                <button data-modal-toggle="memberModal{{ $user->id }}"
-                                                    class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow transition">
-                                                    Close
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                @endif
-
                                 @endforeach
                             </tbody>
-
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
+    {{-- 1. ADD USER MODAL --}}
+    <div id="createUserModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
+            <div class="bg-blue-600 px-8 py-5 flex justify-between items-center text-white">
+                <h3 class="text-lg font-bold uppercase tracking-widest">New System User</h3>
+                <button data-modal-toggle="createUserModal" class="hover:text-blue-100">✕</button>
+            </div>
+            <form action="{{ route('admin.users.add') }}" method="POST" class="p-8 space-y-4">
+                @csrf
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Firstname</label>
+                        <input type="text" name="firstname" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Lastname</label>
+                        <input type="text" name="lastname" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Email</label>
+                    <input type="email" name="email" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Phone</label>
+                    <input type="text" name="phone_number" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Role</label>
+                    <select name="role" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                        <option value="staff">Staff</option>
+                        <option value="priest">Priest</option>
+                        <option value="admin">Admin</option>
+                        <option value="member">Member</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4 pb-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Password</label>
+                        <input type="password" name="password" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Confirm</label>
+                        <input type="password" name="password_confirmation" required class="w-full rounded-xl border-gray-200 bg-gray-50 focus:ring-blue-500 text-sm">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg">Create Account</button>
+            </form>
+        </div>
+    </div>
 
-    {{-- ARCHIVE LIST MODAL --}}
-    <div id="archiveModal" tabindex="-1" aria-hidden="true"
-        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
-        <div
-            class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden animate-in zoom-in duration-200">
+    {{-- 2. ARCHIVE LIST MODAL --}}
+    <div id="archiveModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden animate-in zoom-in duration-200">
             <div class="bg-amber-600 px-8 py-5 flex justify-between items-center text-white">
                 <h3 class="text-lg font-bold uppercase tracking-widest">Archived Users</h3>
                 <button data-modal-toggle="archiveModal" class="hover:text-amber-100 transition">✕</button>
@@ -389,30 +170,24 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse($archivedUsers as $archived)
-                        <tr class="hover:bg-amber-50/30">
-                            <td class="px-6 py-4 font-bold text-gray-700">{{ $archived->firstname }} {{
-                                $archived->lastname }}</td>
-                            <td class="px-6 py-4 text-xs text-gray-500">{{ $archived->deleted_at->format('M d, Y h:i A')
-                                }}</td>
+                        <tr class="hover:bg-amber-50/30 transition">
+                            <td class="px-6 py-4">
+                                <div class="font-bold text-gray-700">{{ $archived->firstname }} {{ $archived->lastname }}</div>
+                                <div class="text-[10px] text-gray-400 italic">ID #{{ $archived->id }}</div>
+                            </td>
+                            <td class="px-6 py-4 text-xs text-gray-500">{{ $archived->deleted_at->format('M d, Y h:i A') }}</td>
                             <td class="px-6 py-4 text-right">
-                                <div class="flex justify-end gap-3">
-                                    {{-- Restore Button --}}
+                                <div class="flex justify-end gap-3 items-center">
                                     <form action="{{ route('admin.users.restore', $archived->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit"
-                                            class="text-blue-600 font-bold text-xs hover:underline">Restore</button>
+                                        <button type="submit" class="text-blue-600 font-black text-[10px] uppercase hover:underline">Restore</button>
                                     </form>
-                                    {{-- Permanently Delete Button --}}
-                                    <button onclick="forceDelete({{ $archived->id }})"
-                                        class="text-red-600 font-bold text-xs hover:underline">Delete Forever</button>
+                                    <button onclick="forceDelete({{ $archived->id }})" class="text-red-600 font-black text-[10px] uppercase hover:underline">Delete Forever</button>
                                 </div>
                             </td>
                         </tr>
                         @empty
-                        <tr>
-                            <td colspan="3" class="px-6 py-10 text-center text-gray-400 italic">No archived users found.
-                            </td>
-                        </tr>
+                        <tr><td colspan="3" class="px-6 py-10 text-center text-gray-400 italic">No archived users found.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -420,98 +195,44 @@
         </div>
     </div>
 
-
-
-    <!-- Create User Modal -->
-    <div id="createUserModal" tabindex="-1" aria-hidden="true"
-        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-
-        <div class="relative w-full max-w-lg p-4">
-            <div class="relative bg-white rounded-2xl shadow-2xl p-6">
-
-                <!-- Modal header -->
-                <div class="flex items-center justify-between border-b pb-3 mb-4">
-                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        Add User
-                    </h3>
-
-                    <button type="button" data-modal-toggle="createUserModal"
-                        class="p-2 rounded-full hover:bg-gray-200 text-gray-500 hover:text-gray-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+    {{-- 3. MEMBER MODALS --}}
+    @foreach($users as $user)
+        @if($user->role === 'member')
+        <div id="memberModal{{ $user->id }}" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden border border-gray-200">
+                <div class="flex items-center justify-between px-6 py-4 bg-blue-50 border-b">
+                    <h3 class="text-lg font-bold text-gray-800">Member Profile</h3>
+                    <button data-modal-toggle="memberModal{{ $user->id }}" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
                 </div>
-
-                <!-- Modal Form -->
-                <form action="{{ route('admin.users.add') }}" method="POST" class="space-y-4">
-                    @csrf
-
-                    <div>
-                        <label class="text-sm font-medium">Firstname</label>
-                        <input type="text" name="firstname" required
-                            class="w-full p-2.5 border rounded-lg bg-gray-50" />
+                <div class="p-8 space-y-6">
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h4 class="text-xs font-black text-blue-600 uppercase mb-4">Personal Details</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <p><strong>Firstname:</strong> {{ $user->firstname }}</p>
+                            <p><strong>Lastname:</strong> {{ $user->lastname }}</p>
+                            <p><strong>Birth Date:</strong> {{ $user->member->birth_date ?? 'N/A' }}</p>
+                            <p><strong>Phone:</strong> {{ $user->phone_number ?? 'N/A' }}</p>
+                        </div>
                     </div>
-
-                    <div>
-                        <label class="text-sm font-medium">Lastname</label>
-                        <input type="text" name="lastname" required class="w-full p-2.5 border rounded-lg bg-gray-50" />
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium">Email</label>
-                        <input type="email" name="email" required class="w-full p-2.5 border rounded-lg bg-gray-50" />
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium">Phone Number</label>
-                        <input type="text" name="phone_number" required
-                            class="w-full p-2.5 border rounded-lg bg-gray-50" placeholder="e.g., +63 912 345 6789" />
-                    </div>
-
-
-                    <div>
-                        <label class="text-sm font-medium">Password</label>
-                        <input type="password" name="password" required
-                            class="w-full p-2.5 border rounded-lg bg-gray-50" />
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium">Confirm Password</label>
-                        <input type="password" name="password_confirmation" required
-                            class="w-full p-2.5 border rounded-lg bg-gray-50" />
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium">Role</label>
-                        <select name="role" class="w-full p-2.5 border rounded-lg bg-gray-50" required>
-                            <option value="admin">Admin</option>
-                            <option value="staff">Staff</option>
-                            <option value="member">Member</option>
-                            <option value="priest">Priest</option>
-                        </select>
-                    </div>
-
-
-                    <button type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-5 py-2.5">
-                        Add User
-                    </button>
-                </form>
-
+                </div>
+                <div class="px-6 py-4 border-t bg-gray-50 flex justify-end">
+                    <button data-modal-toggle="memberModal{{ $user->id }}" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold">Close</button>
+                </div>
             </div>
         </div>
-    </div>
+        @endif
+    @endforeach
+
 </section>
 @endsection
+
 @push('scripts')
 @include('components.alerts')
 <script>
     function confirmArchive(id) {
         Swal.fire({
             title: 'Archive User?',
-            text: "User records will be hidden but transaction history is preserved.",
+            text: "This user will be hidden but their transaction history will be preserved.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#f59e0b',
@@ -525,15 +246,14 @@
 
     function forceDelete(id) {
         Swal.fire({
-            title: 'Delete Permanently?',
-            text: "WARNING: This will permanently erase this user. Transactions might be affected!",
+            title: 'Delete Forever?',
+            text: "WARNING: This is permanent. This may cause issues with linked transaction data!",
             icon: 'error',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
-            confirmButtonText: 'Delete Forever'
+            confirmButtonText: 'Delete Permanently'
         }).then((result) => {
             if (result.isConfirmed) {
-                // You would need a specific route for force deleting if you want this
                 window.location.href = `/admin/users/force-delete/${id}`;
             }
         });
