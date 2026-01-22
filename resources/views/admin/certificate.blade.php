@@ -12,29 +12,24 @@
 
     <div class="certificate bg-white">
 
-        <!-- WATERMARK -->
         <div class="watermark">
             <img src="{{ asset('images/stparish.jpg') }}" alt="Watermark Logo">
         </div>
 
-        <!-- LOGO (TOP CENTER) -->
         <div class="logo-container">
             <img src="{{ asset('images/stparish.jpg') }}" alt="Santo Niño Parish Logo" class="logo">
         </div>
 
-        <!-- CHURCH HEADER -->
         <div class="church-header">
             <div class="church-name">SANTO NIÑO PARISH CHURCH</div>
             <div class="church-location">Sta. Maria, Tangub City</div>
             <div class="church-diocese">Archdiocese of Ozamis</div>
         </div>
 
-        <!-- CERTIFICATE TITLE -->
         <div class="title">
             Certificate of Approval
         </div>
 
-        <!-- CONTENT -->
         <div class="content">
             This is to formally certify that the reservation of
             <strong>
@@ -69,15 +64,12 @@
             </strong>
         </div>
 
-        <!-- SIGNATURE SECTION -->
         <div class="footer">
-            <!-- Parish Secretary -->
             <div class="signature-block">
                 ___________________________<br>
                 <span class="signature-title">Parish Secretary</span>
             </div>
 
-            <!-- Parish Priest with Approved By -->
             <div class="signature-block">
                 @if ($reservation->approved_by)
                     <strong>FR. {{ $reservation->approvedBy->firstname }} {{ $reservation->approvedBy->lastname }}</strong><br>
@@ -121,9 +113,12 @@
         width: 400px;
     }
 
-    /* LOGO */
+    /* LOGO CENTERING */
     .logo-container {
-        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
         margin-bottom: 15px;
         position: relative;
         z-index: 1;
@@ -132,6 +127,7 @@
     .logo {
         width: 110px;
         height: auto;
+        display: block;
     }
 
     /* CHURCH HEADER */
@@ -209,6 +205,10 @@
     @media print {
         button {
             display: none !important;
+        }
+        .certificate {
+            border: 6px double #000 !important;
+            -webkit-print-color-adjust: exact;
         }
     }
 </style>
