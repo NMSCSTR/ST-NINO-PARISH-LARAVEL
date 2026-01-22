@@ -15,7 +15,14 @@ class UserController extends Controller
     public function index()
     {
         $users = UserModel::with('member')->get();
+        $archivedUsers = UserModel::onlyTrashed()->with('member')->get();
         return view('admin.users', compact('users'));
+    }
+
+    public function archives()
+    {
+        $users = UserModel::onlyTrashed()->with('member')->get();
+        return view('admin.users', compact('users', 'archivedUsers'));
     }
 
     /**
@@ -150,8 +157,16 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = UserModel::findOrFail($id);
-        $user->delete();
+        $user->delete(); // Automatically sets deleted_at timestamp
 
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully. You can login now!');
+        return redirect()->route('admin.users')->with('success', 'User archived. Transactions preserved.');
+    }
+
+    public function restore($id)
+    {
+        $user = UserModel::onlyTrashed()->findOrFail($id);
+        $user->restore();
+
+        return redirect()->route('admin.users')->with('success', 'User restored successfully.');
     }
 }

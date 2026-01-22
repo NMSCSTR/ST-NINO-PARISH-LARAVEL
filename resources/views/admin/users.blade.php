@@ -117,14 +117,15 @@
                                     </td> --}}
                                     <td class="px-6 py-4">
                                         @php
-                                            $roleColors = [
-                                                'admin' => 'bg-purple-100 text-purple-700',
-                                                'staff' => 'bg-blue-100 text-blue-700',
-                                                'priest' => 'bg-amber-100 text-amber-700',
-                                                'member' => 'bg-gray-100 text-gray-700',
-                                            ];
+                                        $roleColors = [
+                                        'admin' => 'bg-purple-100 text-purple-700',
+                                        'staff' => 'bg-blue-100 text-blue-700',
+                                        'priest' => 'bg-amber-100 text-amber-700',
+                                        'member' => 'bg-gray-100 text-gray-700',
+                                        ];
                                         @endphp
-                                        <span class="{{ $roleColors[$user->role] ?? 'bg-gray-50' }} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                                        <span
+                                            class="{{ $roleColors[$user->role] ?? 'bg-gray-50' }} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                                             {{ $user->role }}
                                         </span>
                                     </td>
@@ -368,6 +369,56 @@
     </div>
 
 
+    {{-- ARCHIVE LIST MODAL --}}
+    <div id="archiveModal" tabindex="-1" aria-hidden="true"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
+        <div
+            class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden animate-in zoom-in duration-200">
+            <div class="bg-amber-600 px-8 py-5 flex justify-between items-center text-white">
+                <h3 class="text-lg font-bold uppercase tracking-widest">Archived Users</h3>
+                <button data-modal-toggle="archiveModal" class="hover:text-amber-100 transition">✕</button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-[10px] text-gray-400 uppercase font-black tracking-widest bg-gray-50/50">
+                        <tr>
+                            <th class="px-6 py-4">Name</th>
+                            <th class="px-6 py-4">Archived At</th>
+                            <th class="px-6 py-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($archivedUsers as $archived)
+                        <tr class="hover:bg-amber-50/30">
+                            <td class="px-6 py-4 font-bold text-gray-700">{{ $archived->firstname }} {{
+                                $archived->lastname }}</td>
+                            <td class="px-6 py-4 text-xs text-gray-500">{{ $archived->deleted_at->format('M d, Y h:i A')
+                                }}</td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex justify-end gap-3">
+                                    {{-- Restore Button --}}
+                                    <form action="{{ route('admin.users.restore', $archived->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit"
+                                            class="text-blue-600 font-bold text-xs hover:underline">Restore</button>
+                                    </form>
+                                    {{-- Permanently Delete Button --}}
+                                    <button onclick="forceDelete({{ $archived->id }})"
+                                        class="text-red-600 font-bold text-xs hover:underline">Delete Forever</button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="px-6 py-10 text-center text-gray-400 italic">No archived users found.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -457,45 +508,35 @@
 @push('scripts')
 @include('components.alerts')
 <script>
-    document.querySelectorAll('.delete-user-btn').forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-            const userId = this.getAttribute('data-id');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "This user will be deleted permanently!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = document.getElementById('delete-user-form');
-                    form.setAttribute('action', `/admin/users/${userId}`);
-                    form.submit();
-                }
-            });
+    function confirmArchive(id) {
+        Swal.fire({
+            title: 'Archive User?',
+            text: "User records will be hidden but transaction history is preserved.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#f59e0b',
+            confirmButtonText: 'Yes, Archive'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`archive-form-${id}`).submit();
+            }
         });
-    });
-</script>
-<script>
-    document.querySelectorAll('[id^="menu-button-"]').forEach(button => {
-    const id = button.id.split('-')[2];
-    const dropdown = document.getElementById(`dropdown-${id}`);
+    }
 
-    button.addEventListener('click', () => {
-        dropdown.classList.toggle('hidden');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-            dropdown.classList.add('hidden');
-        }
-    });
-});
-
+    function forceDelete(id) {
+        Swal.fire({
+            title: 'Delete Permanently?',
+            text: "WARNING: This will permanently erase this user. Transactions might be affected!",
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            confirmButtonText: 'Delete Forever'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // You would need a specific route for force deleting if you want this
+                window.location.href = `/admin/users/force-delete/${id}`;
+            }
+        });
+    }
 </script>
 @endpush
