@@ -16,13 +16,13 @@ class UserController extends Controller
     {
         $users = UserModel::with('member')->get();
         $archivedUsers = UserModel::onlyTrashed()->with('member')->get();
-        return view('admin.users', compact('users'));
+        return view('admin.users', compact('users', 'archivedUsers'));
     }
 
     public function archives()
     {
         $users = UserModel::onlyTrashed()->with('member')->get();
-        return view('admin.users', compact('users', 'archivedUsers'));
+        return view('admin.users', compact('users'));
     }
 
     /**
