@@ -112,8 +112,21 @@
                                         {{ $user->email }}
                                     </td>
 
-                                    <td class="px-6 py-4">
+                                    {{-- <td class="px-6 py-4">
                                         {{ ucfirst($user->role) }}
+                                    </td> --}}
+                                    <td class="px-6 py-4">
+                                        @php
+                                            $roleColors = [
+                                                'admin' => 'bg-purple-100 text-purple-700',
+                                                'staff' => 'bg-blue-100 text-blue-700',
+                                                'priest' => 'bg-amber-100 text-amber-700',
+                                                'member' => 'bg-gray-100 text-gray-700',
+                                            ];
+                                        @endphp
+                                        <span class="{{ $roleColors[$user->role] ?? 'bg-gray-50' }} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                                            {{ $user->role }}
+                                        </span>
                                     </td>
 
                                     <td class="px-6 py-4">
