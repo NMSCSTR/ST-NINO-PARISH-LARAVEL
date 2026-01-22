@@ -30,6 +30,8 @@ class ReservationController extends Controller
             'reservation.sacrament'
         ])->latest()->get();
 
+        dd($documents);
+
         return view('admin.documents', compact('documents'));
     }
 
