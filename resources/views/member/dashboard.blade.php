@@ -56,7 +56,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ route('reservation') }}" class="group bg-white p-1 rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <a href="{{ route('member.reservation') }}" class="group bg-white p-1 rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <div class="p-6 flex items-center justify-between">
                             <div>
                                 <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide">My Reservations</p>
