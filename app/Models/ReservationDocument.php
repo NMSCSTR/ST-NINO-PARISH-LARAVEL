@@ -13,7 +13,8 @@ class ReservationDocument extends Model
 
     public function reservation()
     {
-        return $this->belongsTo(Reservation::class);
+        // Make sure this matches the foreign key in your migration
+        return $this->belongsTo(Reservation::class, 'reservation_id');
     }
 
 }

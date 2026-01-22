@@ -25,9 +25,10 @@ class ReservationController extends Controller
     public function allDocuments()
     {
 
-        $documents = ReservationDocument::with(['reservation.member.user', 'reservation.sacrament'])
-            ->latest()
-            ->get();
+        $documents = ReservationDocument::with([
+            'reservation.member.user',
+            'reservation.sacrament'
+        ])->latest()->get();
 
         return view('admin.documents', compact('documents'));
     }
