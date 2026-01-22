@@ -40,7 +40,7 @@
                 {{-- Stats Cards --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10" data-aos="fade-up">
 
-                    <a href="{{ route('events.page') }}" class="group bg-white p-1 rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <a href="{{ route('member.events.page') }}" class="group bg-white p-1 rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <div class="p-6 flex items-center justify-between">
                             <div>
                                 <p class="text-gray-500 text-sm font-semibold uppercase tracking-wide">Upcoming Events</p>
