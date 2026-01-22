@@ -78,7 +78,7 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
                     <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center">
                         <h3 class="text-xl font-bold text-slate-800">Recent Church Activities</h3>
-                        <a href="{{ route('events.page') }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-800">View Calendar →</a>
+                        <a href="{{ route('member.events.page') }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-800">View Calendar →</a>
                     </div>
 
                     <div class="overflow-x-auto">
