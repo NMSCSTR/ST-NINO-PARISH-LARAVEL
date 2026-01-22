@@ -83,8 +83,7 @@
                 <div class="text-center mb-6">
                     <div class="flex justify-between items-center">
                         <div class="w-24 h-24 flex items-center justify-center">
-                            <div class="border-2 border-dashed border-gray-300 rounded-full p-4 text-[10px] text-gray-400 no-print"><img src="{{ asset('images/stparish.jpg') }}" alt="Santo Niño Parish Logo" class="max-h-full max-w-full object-contain"></div>
-                        </div>
+                            <img src="{{ asset('images/stparish.jpg') }}" alt="Santo Niño Parish Logo" class="max-h-full max-w-full object-contain"></div>
                         <div class="text-center">
                             <p class="text-[13px] uppercase tracking-wide leading-tight">Archdiocese of Ozamis</p>
                             <h1 class="text-3xl font-bold tracking-tighter">SANTO NIÑO PARISH</h1>
