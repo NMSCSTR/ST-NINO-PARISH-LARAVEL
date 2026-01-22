@@ -88,6 +88,8 @@
                                 </option>
                                 <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' : '' }}>Staff
                                 </option>
+                                <option value="priest" {{ old('role', $user->role) === 'priest' ? 'selected' : '' }}>Priest
+                                </option>
                                 <option value="member" {{ old('role', $user->role) === 'member' ? 'selected' : ''
                                     }}>Member</option>
                             </select>
