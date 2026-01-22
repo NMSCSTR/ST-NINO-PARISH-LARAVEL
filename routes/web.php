@@ -84,6 +84,8 @@ Route::middleware('auth')->group(function () {
             return 'SMS sent successfully! Response: ' . $response->body();
         });
 
+        Route::get('/documents', [ReservationController::class, 'allDocuments'])->name('documents');
+
         // Reservations
         Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations');
         Route::post('/reservations/{id}/approve', [ReservationController::class, 'approve'])->name('reservations.approve');

@@ -22,6 +22,16 @@ class ReservationController extends Controller
         return view('admin.reservations', compact('reservations'));
     }
 
+    public function allDocuments()
+    {
+
+        $documents = ReservationDocument::with(['reservation.member.user', 'reservation.sacrament'])
+            ->latest()
+            ->get();
+
+        return view('admin.documents', compact('documents'));
+    }
+
     public function memberReservations()
     {
         $memberId = auth()->user()->member->id;
