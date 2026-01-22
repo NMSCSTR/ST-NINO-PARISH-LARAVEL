@@ -38,7 +38,7 @@ class ReservationController extends Controller
     {
         $request->validate([
             'phone_number' => 'required',
-            'message' => 'required|string',
+            'message'      => 'required|string',
         ]);
 
         try {
@@ -60,8 +60,6 @@ class ReservationController extends Controller
             return response()->json(['success' => false, 'error' => 'Exception occurred']);
         }
     }
-
-
 
     public function makeReservation(Request $request)
     {
@@ -319,6 +317,68 @@ class ReservationController extends Controller
         return view('admin.certificate', compact('reservation'));
     }
 
+    // public function priestApprove(Request $request, $id)
+    // {
+    //     $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
+
+    //     if ($reservation->status !== 'forwarded_to_priest') {
+    //         return back()->with('error', 'Only forwarded reservations can be approved.');
+    //     }
+
+    //     // Add remarks with approver name if provided
+    //     $remarks = $request->remarks
+    //         ? $request->remarks . ' (by ' . auth()->user()->firstname . ' ' . auth()->user()->lastname . ')'
+    //         : null;
+
+    //     // Update reservation
+    //     $reservation->update([
+    //         'status'      => 'approved',
+    //         'approved_by' => auth()->user()->id,
+    //         'remarks'     => $remarks,
+    //     ]);
+
+    //     // Get member name
+    //     $memberName = $reservation->member && $reservation->member->user
+    //         ? $reservation->member->user->firstname . ' ' . $reservation->member->user->lastname
+    //         : 'N/A';
+
+    //     // Get reservation date & time
+    //     $reservationDate = $reservation->reservation_date
+    //         ? $reservation->reservation_date->format('M d, Y')
+    //         : 'N/A';
+    //     $reservationTime = $reservation->reservation_date
+    //         ? $reservation->reservation_date->format('h:i A')
+    //         : 'N/A';
+
+    //     // Get sacrament type
+    //     $sacramentType = $reservation->sacrament ? $reservation->sacrament->sacrament_type : 'N/A';
+
+    //     // Prepare SMS message
+    //     $message = "Good day {$memberName}, your reservation has been approved by Priest "
+    //     . auth()->user()->firstname . " " . auth()->user()->lastname . ".\n"
+    //         . "Sacrament: {$sacramentType}\n"
+    //         . "Date: {$reservationDate}\n"
+    //         . (! empty($remarks) ? "Remarks: {$remarks}\n" : "")
+    //         . "Thank you for using our service.";
+
+    //     // Send SMS if member phone exists
+    //     $memberPhone = optional($reservation->member->user)->phone_number;
+    //     if ($memberPhone) {
+    //         $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+    //             'apikey'     => config('services.semaphore.key'),
+    //             'number'     => $memberPhone,
+    //             'message'    => $message,
+    //             'sendername' => 'SalnPlatfrm',
+    //         ]);
+
+    //         if ($response->failed()) {
+    //             return back()->with('warning', 'Reservation approved, but SMS failed to send.');
+    //         }
+    //     }
+
+    //     return back()->with('success', 'Reservation approved successfully and member notified.');
+    // }
+
     public function priestApprove(Request $request, $id)
     {
         $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
@@ -327,58 +387,40 @@ class ReservationController extends Controller
             return back()->with('error', 'Only forwarded reservations can be approved.');
         }
 
-        // Add remarks with approver name if provided
         $remarks = $request->remarks
             ? $request->remarks . ' (by ' . auth()->user()->firstname . ' ' . auth()->user()->lastname . ')'
             : null;
 
-        // Update reservation
+        // 1. Update reservation status
         $reservation->update([
             'status'      => 'approved',
             'approved_by' => auth()->user()->id,
             'remarks'     => $remarks,
         ]);
 
-        // Get member name
-        $memberName = $reservation->member && $reservation->member->user
-            ? $reservation->member->user->firstname . ' ' . $reservation->member->user->lastname
-            : 'N/A';
+        // 2. NEW: Generate the Payment Record now that it is approved
+        Payment::create([
+            'reservation_id' => $reservation->id,
+            'member_id'      => $reservation->member_id,
+            'amount'         => $reservation->fee,
+            'method'         => 'GCash', // Default method
+            'status'         => 'pending',
+        ]);
 
-        // Get reservation date & time
-        $reservationDate = $reservation->reservation_date
-            ? $reservation->reservation_date->format('M d, Y')
-            : 'N/A';
-        $reservationTime = $reservation->reservation_date
-            ? $reservation->reservation_date->format('h:i A')
-            : 'N/A';
-
-        // Get sacrament type
-        $sacramentType = $reservation->sacrament ? $reservation->sacrament->sacrament_type : 'N/A';
-
-        // Prepare SMS message
-        $message = "Good day {$memberName}, your reservation has been approved by Priest "
-        . auth()->user()->firstname . " " . auth()->user()->lastname . ".\n"
-            . "Sacrament: {$sacramentType}\n"
-            . "Date: {$reservationDate}\n"
-            . (! empty($remarks) ? "Remarks: {$remarks}\n" : "")
-            . "Thank you for using our service.";
-
-        // Send SMS if member phone exists
+        // 3. Notify the user via SMS that they can now pay
         $memberPhone = optional($reservation->member->user)->phone_number;
         if ($memberPhone) {
-            $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+            $message = "Good day {$reservation->member->user->firstname}, your reservation for {$reservation->sacrament->sacrament_type} is APPROVED. You may now settle your payment of ₱" . number_format($reservation->fee, 2) . " via the portal. Thank you!";
+
+            Http::asForm()->post('https://semaphore.co/api/v4/messages', [
                 'apikey'     => config('services.semaphore.key'),
                 'number'     => $memberPhone,
                 'message'    => $message,
                 'sendername' => 'SalnPlatfrm',
             ]);
-
-            if ($response->failed()) {
-                return back()->with('warning', 'Reservation approved, but SMS failed to send.');
-            }
         }
 
-        return back()->with('success', 'Reservation approved successfully and member notified.');
+        return back()->with('success', 'Reservation approved. Payment request sent to member.');
     }
 
     public function approve($id)

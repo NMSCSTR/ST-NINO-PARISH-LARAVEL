@@ -59,15 +59,17 @@
                                                         -
                                                     @endif
                                                 </td>
-                                                <td class="px-4 py-2">
-                                                    @if($payment->status === 'pending')
-                                                        <!-- Button to trigger modal -->
-                                                        <button onclick="openUploadModal({{ $payment->id }})"
-                                                            class="px-3 py-1 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-                                                            Pay Now
-                                                        </button>
+                                               <td class="px-4 py-2">
+                                                    @if($payment->status === 'paid')
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" /></svg>
+                                                            Paid
+                                                        </span>
                                                     @else
-                                                        -
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" /></svg>
+                                                            Pending Payment
+                                                        </span>
                                                     @endif
                                                 </td>
                                                 <td class="px-4 py-2">{{ $payment->created_at->format('M d, Y') }}</td>

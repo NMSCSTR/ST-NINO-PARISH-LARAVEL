@@ -63,111 +63,84 @@
                     </div>
 
                     {{-- Form --}}
-                    <div class="px-6 py-8 border-t">
-                        <form method="POST" action="{{ route('member.makeReservation') }}"
-                            enctype="multipart/form-data">
+                    {{-- Modernized Form Card --}}
+                    <div
+                        class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="bg-blue-600 px-8 py-4 text-white">
+                            <h3 class="text-lg font-semibold">New Reservation Request</h3>
+                            <p class="text-blue-100 text-xs">Fill out the details below. Payment is required only after
+                                approval.</p>
+                        </div>
+
+                        <form method="POST" action="{{ route('member.makeReservation') }}" class="p-8 space-y-6">
                             @csrf
-
-                            <div class="grid gap-6 sm:grid-cols-2">
-
-                                {{-- Sacrament --}}
-                                <div class="sm:col-span-2">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Select Sacrament Type
-                                    </label>
-                                    <select id="sacrament_id" name="sacrament_id" required
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
-                                               focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition">
-                                        <option value="">-- Choose sacrament type --</option>
-                                        @foreach ($sacraments as $sacrament)
-                                        <option value="{{ $sacrament->id }}">
-                                            {{ ucfirst($sacrament->sacrament_type) }}
-                                        </option>
-                                        @endforeach
-                                    </select>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {{-- Sacrament Selection --}}
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Sacrament Type</label>
+                                    <div class="relative">
+                                        <select id="sacrament_id" name="sacrament_id" required
+                                            class="appearance-none w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                            <option value="">Select a service...</option>
+                                            @foreach ($sacraments as $sacrament)
+                                            <option value="{{ $sacrament->id }}">{{ ucfirst($sacrament->sacrament_type)
+                                                }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
-                                {{-- Fee Display --}}
-                                <div class="sm:col-span-2">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Fee
-                                    </label>
-                                    <input type="text" id="fee_display" readonly
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-2.5 text-sm"
-                                        placeholder="Select a sacrament first">
-                                    {{-- Hidden numeric input to submit --}}
-                                    <input type="hidden" name="fee" id="fee_input">
+                                {{-- Fee Info Box (Auto-updated) --}}
+                                <div
+                                    class="md:col-span-2 bg-blue-50 rounded-xl p-4 flex items-center justify-between border border-blue-100">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 bg-blue-500 rounded-lg text-white">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-blue-600 font-medium uppercase tracking-wider">
+                                                Estimated Fee</p>
+                                            <input type="text" id="fee_display" readonly
+                                                class="bg-transparent font-bold text-blue-900 outline-none text-xl"
+                                                value="₱ 0.00">
+                                            <input type="hidden" name="fee" id="fee_input">
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {{-- Date --}}
-                                <div class="sm:col-span-2">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Reservation Date
-                                    </label>
-                                    <input type="date" name="reservation_date" class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
-                                               focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition">
+                                {{-- Date & Submission Method --}}
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Preferred Date</label>
+                                    <input type="date" name="reservation_date"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 transition">
                                 </div>
 
-                                {{-- Remarks --}}
-                                <div class="sm:col-span-2">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Remarks
-                                    </label>
-                                    <textarea name="remarks" rows="5" class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm
-                                               focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition"
-                                        placeholder="Optional notes or instructions"></textarea>
-                                </div>
-
-                                {{-- Payment Option --}}
-                                <div class="sm:col-span-2">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Payment Option
-                                    </label>
-                                    <select id="payment_option" name="payment_option" required
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm">
-                                        <option value="">-- Choose Payment Option --</option>
-                                        <option value="pay_now">Pay Now</option>
-                                        <option value="pay_later">Pay Later</option>
-                                    </select>
-                                </div>
-
-                                {{-- Receipt --}}
-                                <div class="sm:col-span-2 hidden" id="receipt_upload_div">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Upload Payment Receipt
-                                    </label>
-                                    <input type="file" name="receipt"
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm">
-                                </div>
-
-                                {{-- Submission --}}
-                                <div class="sm:col-span-2">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Requirement Submission Method
-                                    </label>
-                                    <select id="submission_method" name="submission_method" required
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm">
-                                        <option value="">-- Choose Method --</option>
-                                        <option value="online">Submit Online</option>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Submission
+                                        Method</label>
+                                    <select name="submission_method"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 transition">
                                         <option value="walkin">Walk-in</option>
+                                        <option value="online">Online Upload</option>
                                     </select>
                                 </div>
 
-                                {{-- Documents --}}
-                                <div class="sm:col-span-2 hidden" id="document_upload_div">
-                                    <label class="block mb-2 text-sm font-medium text-gray-700">
-                                        Upload Required Documents
-                                    </label>
-                                    <input type="file" name="documents[]" multiple
-                                        class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm">
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Remarks</label>
+                                    <textarea name="remarks" rows="3"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                        placeholder="Any special requests?"></textarea>
                                 </div>
                             </div>
 
-                            {{-- Submit --}}
-                            <div class="mt-8 flex justify-end border-t pt-6">
-                                <button type="submit" class="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white
-                                           hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30 transition">
-                                    Submit Reservation
+                            <div class="pt-4">
+                                <button type="submit"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1">
+                                    Submit for Approval
                                 </button>
                             </div>
                         </form>
@@ -193,7 +166,7 @@
         const found = sacraments.find(item => item.id == this.value);
         if (found) {
             feeDisplay.value = `₱ ${parseFloat(found.fee).toFixed(2)}`;
-            feeInput.value = parseFloat(found.fee).toFixed(2); // numeric
+            feeInput.value = parseFloat(found.fee).toFixed(2);
         } else {
             feeDisplay.value = '';
             feeInput.value = '';
