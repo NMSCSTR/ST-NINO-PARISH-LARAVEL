@@ -103,8 +103,8 @@
                             <p class="text-[11px]">Santa Maria, Tangub City 7214</p>
                             <p class="text-[11px]">Misamis Occidental, Philippines</p>
                         </div>
-                        <div class="w-28 h-28 flex items-center justify-center border border-dashed border-gray-200 no-print text-[10px] text-gray-400">
-                           Archdiocese Logo
+                        <div class="w-28 h-28 flex items-center justify-center">
+                           <img src="{{ asset('images/archoz.png') }}" alt="Santo Niño Parish Logo" class="max-h-full max-w-full object-contain">
                         </div>
                     </div>
                 </div>
