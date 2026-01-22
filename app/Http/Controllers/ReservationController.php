@@ -35,6 +35,8 @@ class ReservationController extends Controller
         return view('admin.documents', compact('documents'));
     }
 
+    
+
     public function memberReservations()
     {
         $memberId = auth()->user()->member->id;
