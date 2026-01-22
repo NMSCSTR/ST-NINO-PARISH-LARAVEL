@@ -3,130 +3,154 @@
 @section('title', 'My Approved Schedule | Calendar View')
 
 @section('content')
-<section>
+<section class="bg-gray-50 min-h-screen">
     @include('components.priest.topnav')
-    <div class="min-h-screen pt-24 px-4 lg:px-10">
 
-        {{-- Back Button --}}
-        <div class="mb-4">
-            <a href="{{ route('priest.dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-100">
-                ← Back to Dashboard
-            </a>
+    <div class="pt-24 px-4 lg:px-10 pb-10">
+
+        {{-- Header & Navigation --}}
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div>
+                <a href="{{ route('priest.dashboard') }}" class="text-sm text-blue-600 font-bold flex items-center gap-1 mb-2 hover:underline">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                    Back to Dashboard
+                </a>
+                <h2 class="text-3xl font-black text-gray-900 uppercase tracking-tighter">
+                    {{ $startOfMonth->format('F Y') }}
+                </h2>
+            </div>
+
+            <div class="flex items-center gap-2 bg-white p-1 rounded-xl shadow-sm border">
+                {{-- These routes assume you have a method to handle month offsets --}}
+                <a href="?month={{ $startOfMonth->copy()->subMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                </a>
+                <span class="px-4 text-sm font-bold text-gray-700">Today</span>
+                <a href="?month={{ $startOfMonth->copy()->addMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                </a>
+            </div>
         </div>
 
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">YOUR APPROVED SCHEDULE THIS MONTH</h2>
-
-        {{-- Instruction --}}
-        <p class="mb-4 text-sm text-gray-500">💡 Click on any green button to view full reservation details.</p>
-
-        @php
-        $daysInMonth = $startOfMonth->daysInMonth;
-        $firstDayOfWeek = $startOfMonth->dayOfWeek; // 0 = Sunday
-        @endphp
-
-        {{-- Weekday Headers --}}
-        <div class="grid grid-cols-7 gap-2 text-center mb-2">
-            @foreach(['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $day)
-            <div class="font-semibold text-gray-700">{{ $day }}</div>
-            @endforeach
+        {{-- Legend --}}
+        <div class="flex flex-wrap gap-4 mb-6">
+            <div class="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
+                <span class="w-3 h-3 bg-blue-500 rounded-full"></span> Baptism
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
+                <span class="w-3 h-3 bg-amber-500 rounded-full"></span> Wedding
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
+                <span class="w-3 h-3 bg-purple-500 rounded-full"></span> Funeral
+            </div>
         </div>
 
-        {{-- Calendar Grid --}}
-        <div class="grid grid-cols-7 gap-2">
-            {{-- Empty cells for first day offset --}}
-            @for($i=0; $i<$firstDayOfWeek; $i++)
-            <div class="p-4 border h-32 bg-gray-50"></div>
-            @endfor
+        {{-- Calendar Card --}}
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+            {{-- Weekday Headers --}}
+            <div class="grid grid-cols-7 border-b border-gray-100 bg-gray-50">
+                @foreach(['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] as $day)
+                <div class="py-4 text-center text-xs font-black text-gray-400 uppercase tracking-widest">{{ $day }}</div>
+                @endforeach
+            </div>
 
-            {{-- Days of the month --}}
-            @for($day=1; $day<=$daysInMonth; $day++)
+            {{-- Calendar Grid --}}
+            <div class="grid grid-cols-7 auto-rows-[minmax(120px,_auto)]">
                 @php
-                    $date = $startOfMonth->copy()->day($day)->format('Y-m-d');
-                    $dayReservations = $reservations[$date] ?? collect();
-                    $isToday = \Carbon\Carbon::today()->format('Y-m-d') === $date;
+                    $daysInMonth = $startOfMonth->daysInMonth;
+                    $firstDayOfWeek = $startOfMonth->dayOfWeek;
                 @endphp
-                <div class="p-2 border h-32 flex flex-col gap-1 text-xs rounded-lg
-                    @if($isToday) border-blue-500 bg-blue-50 @endif">
 
-                    {{-- Day Number --}}
-                    <div class="font-semibold text-gray-700">{{ $day }}</div>
+                @for($i=0; $i<$firstDayOfWeek; $i++)
+                    <div class="border-r border-b border-gray-50 bg-gray-50/50"></div>
+                @endfor
 
-                    {{-- Reservations --}}
-                    @if($dayReservations->count())
-                        @foreach($dayReservations as $res)
-                        <button onclick="openDetailsModal({{ $res->id }})"
-                            class="bg-green-100 text-green-800 rounded px-1 py-0.5 truncate text-left text-xs hover:bg-green-200 cursor-pointer">
-                            {{ $res->member->user->firstname }}
-                            ({{ $res->sacrament->sacrament_type ?? 'N/A' }})
-                        </button>
+                @for($day=1; $day<=$daysInMonth; $day++)
+                    @php
+                        $dateString = $startOfMonth->copy()->day($day)->format('Y-m-d');
+                        $dayReservations = $reservations[$dateString] ?? collect();
+                        $isToday = \Carbon\Carbon::today()->format('Y-m-d') === $dateString;
+                    @endphp
 
-                        {{-- Details Modal --}}
-                        <div id="details-modal-{{ $res->id }}" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
-                            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl p-6 relative overflow-y-auto max-h-[90vh]">
-                                <div class="flex items-center justify-between mb-6">
-                                    <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">📋 Reservation Details</h3>
-                                    <button onclick="closeDetailsModal({{ $res->id }})" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                                    <div class="bg-gray-50 rounded-xl p-4">
-                                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">👤 Member Information</h4>
-                                        <p><strong>Name:</strong> {{ $res->member->user->firstname }} {{ $res->member->user->lastname }}</p>
-                                        <p><strong>Phone:</strong> {{ $res->member->user->phone_number }}</p>
-                                        <p><strong>Email:</strong> {{ $res->member->user->email }}</p>
-                                        <p><strong>Address:</strong> {{ $res->member->address ?? 'N/A' }}</p>
-                                    </div>
-
-                                    <div class="bg-gray-50 rounded-xl p-4">
-                                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">🗓️ Reservation Info</h4>
-                                        <p><strong>Sacrament:</strong> {{ $res->sacrament->sacrament_type ?? 'N/A' }}</p>
-                                        <p><strong>Date:</strong> {{ $res->reservation_date?->format('M d, Y') }}</p>
-                                        <p><strong>Fee:</strong> ₱{{ number_format($res->fee, 2) }}</p>
-                                        <p><strong>Status:</strong>
-                                            <span class="font-semibold text-green-600">
-                                                {{ ucfirst(str_replace('_',' ',$res->status)) }}
-                                            </span>
-                                        </p>
-                                    </div>
-
-                                    {{-- Sacrament-specific details --}}
-                                    <div class="bg-gray-50 rounded-xl p-4 md:col-span-2">
-                                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">🕊️ Sacrament Details</h4>
-                                        @if($res->sacrament->sacrament_type === 'Baptism')
-                                            <p><strong>Child Name:</strong> {{ $res->member->user->firstname }}</p>
-                                            <p><strong>Date of Birth:</strong> {{ $res->member->birth_date }}</p>
-                                        @elseif($res->sacrament->sacrament_type === 'Wedding')
-                                            <p><strong>Groom:</strong> {{ $res->member->user->firstname }}</p>
-                                            <p><strong>Bride:</strong> (Bride details here)</p>
-                                        @else
-                                            <p class="text-gray-500 italic">No additional sacrament data available.</p>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="mt-6 flex justify-end gap-3">
-                                    <button onclick="closeDetailsModal({{ $res->id }})" class="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100">Close</button>
-                                </div>
-                            </div>
+                    <div class="p-3 border-r border-b border-gray-100 flex flex-col gap-2 transition hover:bg-gray-50 {{ $isToday ? 'bg-blue-50/30' : '' }}">
+                        <div class="flex justify-between items-start">
+                            <span class="inline-flex items-center justify-center w-7 h-7 text-sm font-bold rounded-full {{ $isToday ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400' }}">
+                                {{ $day }}
+                            </span>
                         </div>
-                        @endforeach
-                    @else
-                        <div class="text-gray-400 italic mt-1">No events</div>
-                    @endif
-                </div>
-            @endfor
+
+                        <div class="flex flex-col gap-1 overflow-y-auto max-h-24 custom-scrollbar">
+                            @foreach($dayReservations as $res)
+                                @php
+                                    $type = $res->sacrament->sacrament_type ?? 'Other';
+                                    $colorClass = match($type) {
+                                        'Baptism' => 'bg-blue-100 text-blue-700 border-blue-200',
+                                        'Wedding' => 'bg-amber-100 text-amber-700 border-amber-200',
+                                        'Funeral' => 'bg-purple-100 text-purple-700 border-purple-200',
+                                        default   => 'bg-gray-100 text-gray-700 border-gray-200'
+                                    };
+                                @endphp
+                                <button onclick="openDetailsModal({{ $res->id }})"
+                                    class="text-[10px] font-bold py-1 px-2 rounded-lg border {{ $colorClass }} truncate text-left transition transform hover:scale-95 active:scale-90">
+                                    {{ $res->reservation_date?->format('H:i') }} | {{ $res->member->user->firstname }}
+                                </button>
+
+                                {{-- Details Modal Moved to End of File for better DOM structure --}}
+                            @endforeach
+                        </div>
+                    </div>
+                @endfor
+            </div>
         </div>
     </div>
 </section>
 
-<script>
-    function openDetailsModal(id) {
-        document.getElementById(`details-modal-${id}`).classList.remove('hidden');
-        document.getElementById(`details-modal-${id}`).classList.add('flex');
-    }
-    function closeDetailsModal(id) {
-        document.getElementById(`details-modal-${id}`).classList.remove('flex');
-        document.getElementById(`details-modal-${id}`).classList.add('hidden');
-    }
-</script>
+{{-- Modals Container --}}
+@foreach($reservations->flatten() as $res)
+    <div id="details-modal-{{ $res->id }}" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="bg-gray-900 px-8 py-5 flex justify-between items-center text-white">
+                <h3 class="font-bold uppercase tracking-widest text-sm text-gray-300">Schedule Details</h3>
+                <button onclick="closeDetailsModal({{ $res->id }})" class="hover:text-white">✕</button>
+            </div>
+
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-[10px] font-black text-blue-600 uppercase mb-3">Service Info</h4>
+                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                            <p class="text-xl font-black text-gray-900">{{ $res->sacrament->sacrament_type }}</p>
+                            <p class="text-sm font-bold text-blue-600 mt-1">{{ $res->reservation_date?->format('l, F d @ h:i A') }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-black text-blue-600 uppercase mb-3">Contact Person</h4>
+                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                            <p class="text-sm font-bold text-gray-900">{{ $res->member->user->firstname }} {{ $res->member->user->lastname }}</p>
+                            <p class="text-xs text-gray-500">{{ $res->member->user->phone_number }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                @if($res->remarks)
+                <div class="mt-6">
+                    <h4 class="text-[10px] font-black text-blue-600 uppercase mb-3">Note for Priest</h4>
+                    <p class="text-sm text-gray-600 italic bg-amber-50 p-4 rounded-2xl border border-amber-100">"{{ $res->remarks }}"</p>
+                </div>
+                @endif
+            </div>
+
+            <div class="bg-gray-50 px-8 py-5 flex justify-end">
+                <button onclick="closeDetailsModal({{ $res->id }})" class="bg-gray-900 text-white px-8 py-2 rounded-xl text-sm font-bold hover:bg-black transition">Close</button>
+            </div>
+        </div>
+    </div>
+@endforeach
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; }
+</style>
+
 @endsection
