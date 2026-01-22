@@ -61,85 +61,85 @@ class ReservationController extends Controller
         }
     }
 
-    public function makeReservation(Request $request)
-    {
-        $request->validate([
-            'sacrament_id'      => 'required|exists:sacraments,id',
-            'reservation_date'  => 'nullable|date',
-            'remarks'           => 'nullable|string',
-            'payment_option'    => 'required|in:pay_now,pay_later',
-            'receipt'           => 'nullable|image|max:2048',
-            'submission_method' => 'required|in:online,walkin',
-            'documents.*'       => 'nullable|image|max:2048',
-            'fee'               => 'required|numeric',
-        ]);
+    // public function makeReservation(Request $request)
+    // {
+    //     $request->validate([
+    //         'sacrament_id'      => 'required|exists:sacraments,id',
+    //         'reservation_date'  => 'nullable|date',
+    //         'remarks'           => 'nullable|string',
+    //         'payment_option'    => 'required|in:pay_now,pay_later',
+    //         'receipt'           => 'nullable|image|max:2048',
+    //         'submission_method' => 'required|in:online,walkin',
+    //         'documents.*'       => 'nullable|image|max:2048',
+    //         'fee'               => 'required|numeric',
+    //     ]);
 
-        $reservation = Reservation::create([
-            'member_id'        => auth()->user()->member->id,
-            'sacrament_id'     => $request->sacrament_id,
-            'fee'              => $request->fee,
-            'reservation_date' => $request->reservation_date,
-            'remarks'          => $request->remarks,
-            'status'           => 'pending',
-        ]);
+    //     $reservation = Reservation::create([
+    //         'member_id'        => auth()->user()->member->id,
+    //         'sacrament_id'     => $request->sacrament_id,
+    //         'fee'              => $request->fee,
+    //         'reservation_date' => $request->reservation_date,
+    //         'remarks'          => $request->remarks,
+    //         'status'           => 'pending',
+    //     ]);
 
-        // Payment handling
-        if ($request->payment_option === 'pay_now' && $request->hasFile('receipt')) {
-            $path = $request->file('receipt')->store('receipts', 'public');
+    //     // Payment handling
+    //     if ($request->payment_option === 'pay_now' && $request->hasFile('receipt')) {
+    //         $path = $request->file('receipt')->store('receipts', 'public');
 
-            Payment::create([
-                'reservation_id' => $reservation->id,
-                'member_id'      => auth()->user()->member->id,
-                'amount'         => $reservation->fee,
-                'method'         => 'GCash',
-                'status'         => 'pending',
-                'receipt_path'   => $path,
-            ]);
-        }
+    //         Payment::create([
+    //             'reservation_id' => $reservation->id,
+    //             'member_id'      => auth()->user()->member->id,
+    //             'amount'         => $reservation->fee,
+    //             'method'         => 'GCash',
+    //             'status'         => 'pending',
+    //             'receipt_path'   => $path,
+    //         ]);
+    //     }
 
-        if ($request->payment_option === 'pay_later') {
-            Payment::create([
-                'reservation_id' => $reservation->id,
-                'member_id'      => auth()->user()->member->id,
-                'amount'         => $reservation->fee,
-                'method'         => 'Pay-later',
-                'status'         => 'pending',
-                'receipt_path'   => null,
-            ]);
-        }
+    //     if ($request->payment_option === 'pay_later') {
+    //         Payment::create([
+    //             'reservation_id' => $reservation->id,
+    //             'member_id'      => auth()->user()->member->id,
+    //             'amount'         => $reservation->fee,
+    //             'method'         => 'Pay-later',
+    //             'status'         => 'pending',
+    //             'receipt_path'   => null,
+    //         ]);
+    //     }
 
-        if ($request->submission_method === 'online' && $request->hasFile('documents')) {
-            foreach ($request->file('documents') as $file) {
-                $path = $file->store('documents', 'public');
+    //     if ($request->submission_method === 'online' && $request->hasFile('documents')) {
+    //         foreach ($request->file('documents') as $file) {
+    //             $path = $file->store('documents', 'public');
 
-                ReservationDocument::create([
-                    'reservation_id' => $reservation->id,
-                    'file_path'      => $path,
-                ]);
-            }
-        }
+    //             ReservationDocument::create([
+    //                 'reservation_id' => $reservation->id,
+    //                 'file_path'      => $path,
+    //             ]);
+    //         }
+    //     }
 
-        $message = "🔔 NEW RESERVATION
-                    Sacrament: {$reservation->sacrament->name}
-                    Status: Pending
-                    Date Submitted: " . now()->format('M d, Y h:i A');
+    //     $message = "🔔 NEW RESERVATION
+    //                 Sacrament: {$reservation->sacrament->name}
+    //                 Status: Pending
+    //                 Date Submitted: " . now()->format('M d, Y h:i A');
 
-        $users = User::whereIn('role', ['staff', 'admin'])
-            ->whereNotNull('phone_number')
-            ->get();
+    //     $users = User::whereIn('role', ['staff', 'admin'])
+    //         ->whereNotNull('phone_number')
+    //         ->get();
 
-        foreach ($users as $user) {
-            Http::asForm()->post('https://semaphore.co/api/v4/messages', [
-                'apikey'     => config('services.semaphore.key'),
-                'number'     => $user->phone_number,
-                'message'    => $message,
-                'sendername' => 'SalnPlatfrm',
-            ]);
-        }
+    //     foreach ($users as $user) {
+    //         Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+    //             'apikey'     => config('services.semaphore.key'),
+    //             'number'     => $user->phone_number,
+    //             'message'    => $message,
+    //             'sendername' => 'SalnPlatfrm',
+    //         ]);
+    //     }
 
-        return redirect()->route('member.reservation')
-            ->with('success', 'Reservation created successfully.');
-    }
+    //     return redirect()->route('member.reservation')
+    //         ->with('success', 'Reservation created successfully.');
+    // }
 
     /**
      * Forward reservation to priest
@@ -178,6 +178,54 @@ class ReservationController extends Controller
 
     //     return back()->with('success', 'Reservation forwarded to the priest.');
     // }
+
+    public function makeReservation(Request $request)
+    {
+        $request->validate([
+            'sacrament_id'      => 'required|exists:sacraments,id',
+            'reservation_date'  => 'required|date|after:today', // Improved validation
+            'remarks'           => 'nullable|string',
+            'submission_method' => 'required|in:online,walkin',
+            'documents.*'       => 'nullable|image|max:2048',
+            'fee'               => 'required|numeric',
+        ]);
+
+        $reservation = Reservation::create([
+            'member_id'        => auth()->user()->member->id,
+            'sacrament_id'     => $request->sacrament_id,
+            'fee'              => $request->fee,
+            'reservation_date' => $request->reservation_date,
+            'remarks'          => $request->remarks,
+            'status'           => 'pending',
+        ]);
+
+        // Save Documents (if online)
+        if ($request->submission_method === 'online' && $request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $path = $file->store('documents', 'public');
+                ReservationDocument::create([
+                    'reservation_id' => $reservation->id,
+                    'file_path'      => $path,
+                ]);
+            }
+        }
+
+        // Notify Staff/Admin via SMS (logic unchanged)
+        $message = "🔔 NEW RESERVATION\nSacrament: {$reservation->sacrament->sacrament_type}\nStatus: Pending Approval";
+        $users   = User::whereIn('role', ['staff', 'admin'])->whereNotNull('phone_number')->get();
+
+        foreach ($users as $user) {
+            Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                'apikey'     => config('services.semaphore.key'),
+                'number'     => $user->phone_number,
+                'message'    => $message,
+                'sendername' => 'SalnPlatfrm',
+            ]);
+        }
+
+        return redirect()->route('member.reservation')
+            ->with('success', 'Reservation request submitted successfully. Please wait for the priest to review and approve.');
+    }
 
     public function forward($id)
     {
