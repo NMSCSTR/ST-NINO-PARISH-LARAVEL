@@ -1,153 +1,182 @@
 @extends('components.default')
 
-@section('title', 'My Profile')
+@section('title', 'Events Calendar | Santo Niño Parish Church')
 
 @section('content')
-<section class="pt-24 px-6">
-    @include('components.member.topnav')
+<section class="bg-gray-50 min-h-screen">
+    <div class="pt-24 pb-10">
+        @include('components.member.topnav')
 
-    <div class="flex flex-col lg:flex-row gap-6">
-        <div class="lg:w-2/12">
-            @include('components.member.sidebar')
+        <div class="flex flex-col lg:flex-row px-4 lg:px-10 gap-8">
+            {{-- Sidebar --}}
+            <div class="lg:w-2/12 w-full">
+                @include('components.member.sidebar')
+            </div>
+
+            {{-- Main Content --}}
+            <div class="lg:w-10/12 w-full" data-aos="fade-up">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
+                        <h2 class="text-2xl font-bold text-gray-800">Parish Events Calendar</h2>
+
+                        {{-- Legend --}}
+                        <div class="flex flex-wrap gap-3">
+                            <div class="flex items-center text-xs font-bold text-slate-500">
+                                <span class="w-3 h-3 bg-emerald-500 rounded-full mr-1"></span> Mass
+                            </div>
+                            <div class="flex items-center text-xs font-bold text-slate-500">
+                                <span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span> Wedding
+                            </div>
+                            <div class="flex items-center text-xs font-bold text-slate-500">
+                                <span class="w-3 h-3 bg-purple-500 rounded-full mr-1"></span> Baptism
+                            </div>
+                            <div class="flex items-center text-xs font-bold text-slate-500">
+                                <span class="w-3 h-3 bg-slate-400 rounded-full mr-1"></span> Others
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="calendar" class="w-full min-h-[75vh]"></div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="lg:w-10/12">
+    {{-- Event Modal --}}
+    <div id="eventModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden z-[60] p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden relative animate-in fade-in zoom-in duration-200">
+            <div id="modalAccent" class="h-2 w-full bg-indigo-600 transition-colors duration-500"></div>
 
-            <!-- PROFILE CARD -->
-            <div class="bg-white shadow-xl rounded-xl p-6">
+            <div class="p-8">
+                <button id="closeModal" class="absolute top-6 right-6 text-gray-400 hover:text-rose-500 transition-colors">
+                    <span class="material-icons text-2xl font-bold">close</span>
+                </button>
 
-                <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
-                    <span class="material-icons-outlined text-blue-600">person</span>
-                    My Profile
-                </h2>
-
-                <!-- Notice / Reminder -->
-                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg mb-6">
-                    <p class="text-sm font-medium">
-                        ⚠️ Please complete your personal details to ensure accurate sacrament records.
-                    </p>
+                <div class="flex items-center mb-4">
+                    <span id="modalTypeBadge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border">
+                        General
+                    </span>
                 </div>
 
-                <form action="{{ route('member.profile.update') }}" method="POST">
-                    @csrf
+                <h2 id="modalTitle" class="text-3xl font-black text-slate-800 mb-4 leading-tight"></h2>
 
-                    <h3 class="text-lg font-semibold mb-4 text-gray-700">Personal Information</h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <!-- FIRST NAME -->
-                        <div>
-                            <label class="text-sm font-medium">First Name</label>
-                            <input type="text" name="firstname" value="{{ $user->firstname ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50" required>
-                        </div>
-
-                        <!-- LAST NAME -->
-                        <div>
-                            <label class="text-sm font-medium">Last Name</label>
-                            <input type="text" name="lastname" value="{{ $user->lastname ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50" required>
-                        </div>
-
-                        <!-- PHONE -->
-                        <div>
-                            <label class="text-sm font-medium">Phone Number</label>
-                            <input type="text" name="phone_number" value="{{ $user->phone_number ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50">
-                        </div>
-
-                        <!-- MIDDLE NAME -->
-                        <div>
-                            <label class="text-sm font-medium">Middle Name</label>
-                            <input type="text" name="middle_name" value="{{ $member->middle_name ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50">
-                        </div>
-
-                        <!-- BIRTHDATE -->
-                        <div>
-                            <label class="text-sm font-medium">Birth Date</label>
-                            <input type="date" name="birth_date" value="{{ $member->birth_date ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50">
-                        </div>
-
-                        <!-- PLACE OF BIRTH -->
-                        <div>
-                            <label class="text-sm font-medium">Place of Birth</label>
-                            <input type="text" name="place_of_birth" value="{{ $member->place_of_birth ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50">
-                        </div>
-
-                        <!-- ADDRESS -->
-                        <div class="md:col-span-2">
-                            <label class="text-sm font-medium">Address</label>
-                            <input type="text" name="address" value="{{ $member->address ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50">
-                        </div>
-
-                        <!-- CONTACT NUMBER -->
-                        {{-- <div class="md:col-span-2">
-                            <label class="text-sm font-medium">Contact Number</label>
-                            <input type="text" name="contact_number" value="{{ $member->contact_number ?? '' }}"
-                                class="w-full border p-2 rounded-lg bg-gray-50">
-                        </div> --}}
-
+                <div class="space-y-4 mb-8">
+                    <div class="flex items-start text-slate-600">
+                        <span class="material-icons-outlined text-indigo-500 mr-3">notes</span>
+                        <p id="modalDescription" class="whitespace-pre-line text-sm leading-relaxed"></p>
                     </div>
 
-                    <button class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold">
-                        Save Changes
-                    </button>
-                </form>
-            </div>
-
-
-            <!-- CHANGE PASSWORD CARD -->
-            <div class="bg-white shadow-xl rounded-xl p-6 mt-6">
-
-                <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-gray-800">
-                    <span class="material-icons-outlined text-red-500">lock</span>
-                    Change Password
-                </h3>
-
-                <form action="{{ route('member.profile.changePassword') }}" method="POST">
-                    @csrf
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <!-- CURRENT PASSWORD -->
-                        <div class="md:col-span-2">
-                            <label class="text-sm font-medium">Current Password</label>
-                            <input type="password" name="current_password"
-                                class="w-full border p-2 rounded-lg bg-gray-50" required>
+                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Starts</span>
+                            <div class="flex items-center text-slate-700 font-semibold text-sm">
+                                <span class="material-icons-outlined text-xs mr-2 text-slate-400">schedule</span>
+                                <span id="modalStart"></span>
+                            </div>
                         </div>
-
-                        <!-- NEW PASSWORD -->
-                        <div class="md:col-span-1">
-                            <label class="text-sm font-medium">New Password</label>
-                            <input type="password" name="new_password" class="w-full border p-2 rounded-lg bg-gray-50"
-                                required>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Ends</span>
+                            <div class="flex items-center text-slate-700 font-semibold text-sm">
+                                <span class="material-icons-outlined text-xs mr-2 text-slate-400">event_available</span>
+                                <span id="modalEnd"></span>
+                            </div>
                         </div>
-
-                        <!-- CONFIRM PASSWORD -->
-                        <div class="md:col-span-1">
-                            <label class="text-sm font-medium">Confirm New Password</label>
-                            <input type="password" name="new_password_confirmation"
-                                class="w-full border p-2 rounded-lg bg-gray-50" required>
-                        </div>
-
                     </div>
+                </div>
 
-                    <button class="mt-6 w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold">
-                        Update Password
-                    </button>
-
-                </form>
+                <button onclick="document.getElementById('eventModal').classList.add('hidden')"
+                    class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-colors">
+                    Close Details
+                </button>
             </div>
-
         </div>
     </div>
 </section>
 @endsection
 
-@push('scripts')
-@include('components.alerts')
-@endpush
+@section('scripts')
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
+<style>
+    :root {
+        --fc-border-color: #f1f5f9;
+        --fc-button-bg-color: #ffffff;
+        --fc-button-text-color: #475569;
+        --fc-button-border-color: #e2e8f0;
+        --fc-button-active-bg-color: #4f46e5;
+    }
+    .fc .fc-toolbar-title { font-size: 1.25rem !important; font-weight: 800; color: #1e293b; }
+    .fc-theme-standard td, .fc-theme-standard th { border-color: #f8fafc !important; }
+    .fc-event {
+        border: none !important;
+        padding: 3px 6px !important;
+        border-radius: 6px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        margin-bottom: 2px !important;
+    }
+    .fc-event-title { font-weight: 700 !important; font-size: 0.75rem !important; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+    const modal = document.getElementById('eventModal');
+    const modalAccent = document.getElementById('modalAccent');
+    const modalTypeBadge = document.getElementById('modalTypeBadge');
+
+    // Color Configuration
+    const eventColors = {
+        mass: { bg: '#10b981', accent: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
+        wedding: { bg: '#3b82f6', accent: 'bg-blue-500', badge: 'bg-blue-50 text-blue-600 border-blue-100' },
+        baptism: { bg: '#a855f7', accent: 'bg-purple-500', badge: 'bg-purple-50 text-purple-600 border-purple-100' },
+        funeral: { bg: '#64748b', accent: 'bg-slate-500', badge: 'bg-slate-50 text-slate-600 border-slate-100' },
+        default: { bg: '#6366f1', accent: 'bg-indigo-500', badge: 'bg-indigo-50 text-indigo-600 border-indigo-100' }
+    };
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: 'events/data',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek'
+        },
+
+        // Color Logic: Applies color to the calendar items
+        eventDidMount: function(info) {
+            const type = (info.event.extendedProps.type || '').toLowerCase();
+            const colorSet = eventColors[type] || eventColors.default;
+
+            info.el.style.backgroundColor = colorSet.bg;
+        },
+
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            const type = (info.event.extendedProps.type || '').toLowerCase();
+            const colorSet = eventColors[type] || eventColors.default;
+
+            // Update Modal UI based on event type
+            modalTitle.textContent = info.event.title;
+            modalDescription.textContent = info.event.extendedProps.description || 'No description provided.';
+
+            modalTypeBadge.textContent = info.event.extendedProps.type || 'General';
+            modalTypeBadge.className = `px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${colorSet.badge}`;
+
+            modalAccent.className = `h-2 w-full transition-colors duration-500 ${colorSet.accent}`;
+
+            const options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            modalStart.textContent = info.event.start ? info.event.start.toLocaleString(undefined, options) : 'N/A';
+            modalEnd.textContent = info.event.end ? info.event.end.toLocaleString(undefined, options) : 'Ends Same Day';
+
+            modal.classList.remove('hidden');
+        }
+    });
+
+    calendar.render();
+
+    document.getElementById('closeModal').onclick = () => modal.classList.add('hidden');
+    window.onclick = (e) => { if (e.target === modal) modal.classList.add('hidden'); };
+});
+</script>
+@endsection
