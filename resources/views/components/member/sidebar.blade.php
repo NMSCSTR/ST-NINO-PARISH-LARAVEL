@@ -38,6 +38,16 @@
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
+    <a href="{{ route('member.gskcert') }}"
+    class="flex items-center justify-between my-4 {{ request()->routeIs('member.member.gskcert') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
+        <span class="flex items-center">
+            <span class="material-icons-outlined pr-2">payments</span>
+            Payments
+        </span>
+        <span class="material-icons-outlined">keyboard_arrow_right</span>
+    </a>
+
+
 </div>
 
 
