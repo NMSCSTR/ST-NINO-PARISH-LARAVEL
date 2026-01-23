@@ -42,14 +42,13 @@
     class="flex items-center justify-between my-4 {{ request()->routeIs('member.member.gskcert') ? 'text-blue-600 font-bold' : 'text-gray-600 hover:text-black' }}">
         <span class="flex items-center">
             <span class="material-icons-outlined pr-2">requirements</span>
-            Printable Requirements
+            Requirements
         </span>
         <span class="material-icons-outlined">keyboard_arrow_right</span>
     </a>
 
 
 </div>
-
 
 
 <div class="bg-white rounded-xl shadow-lg px-6 py-4" data-aos="slide-right">
