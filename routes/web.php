@@ -163,8 +163,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/reservations/{reservation}/documents', [ReservationController::class, 'getDocuments']);
 
-        Route::post('/member/reservations/{id}/cancel', [ReservationController::class, 'cancel'])->name('member.reservations.cancel');
-        Route::post('/member/reservations/{id}/reschedule', [ReservationController::class, 'reschedule'])->name('member.reservations.reschedule');
+        Route::post('/member/reservations/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
+        Route::post('/member/reservations/{id}/reschedule', [ReservationController::class, 'reschedule'])->name('reservations.reschedule');
 
     });
 
