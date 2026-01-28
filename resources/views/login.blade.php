@@ -14,7 +14,7 @@
     <!-- 🔐 Login Form -->
     <div class="relative z-10 w-full max-w-md mx-auto p-8 bg-white/80 rounded-xl shadow-lg border border-[#d4af37] animate-fade-in">
         <div class="text-center mb-6">
-            <img src="https://pbs.twimg.com/profile_images/1018602821086691328/ZB3pi7f9_400x400.jpg"
+            <img src="{{ asset('images/stparish.jpg') }}"
                  alt="Santo Niño Logo"
                  class="w-24 h-24 mx-auto rounded-full mb-4">
             <h2 class="text-2xl font-bold text-[#6b4226]">Welcome Back</h2>
