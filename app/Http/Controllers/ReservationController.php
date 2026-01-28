@@ -27,15 +27,13 @@ class ReservationController extends Controller
 
         $documents = ReservationDocument::with([
             'reservation.member.user',
-            'reservation.sacrament'
+            'reservation.sacrament',
         ])->latest()->get();
 
         dd($documents);
 
         return view('admin.documents', compact('documents'));
     }
-
-    
 
     public function memberReservations()
     {
@@ -576,6 +574,30 @@ class ReservationController extends Controller
 
         return redirect()->route('admin.reservations')
             ->with('success', 'Reservation updated successfully.');
+    }
+
+    public function cancel($id)
+    {
+        $reservation = Reservation::where('id', $id)->where('member_id', auth()->user()->member->id)->firstOrFail();
+
+        // Only allow cancellation if not already processed/approved
+        if ($reservation->status === 'pending' || $reservation->status === 'forwarded_to_priest') {
+            $reservation->update(['status' => 'cancelled']);
+            return back()->with('success', 'Reservation cancelled successfully.');
+        }
+        return back()->with('error', 'Approved or rejected reservations cannot be cancelled.');
+    }
+
+    public function reschedule(Request $request, $id)
+    {
+        $request->validate(['reservation_date' => 'required|date|after:today']);
+        $reservation = Reservation::where('id', $id)->where('member_id', auth()->user()->member->id)->firstOrFail();
+
+        $reservation->update([
+            'reservation_date' => $request->reservation_date,
+            'status'           => 'pending', // Reset to pending so staff can re-verify the date
+        ]);
+        return back()->with('success', 'Reschedule request submitted.');
     }
 
     public function destroy(Reservation $reservation)

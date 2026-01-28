@@ -81,21 +81,38 @@
                                 $statusClasses = [
                                     'approved' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
                                     'pending' => 'bg-amber-100 text-amber-700 border-amber-200',
-                                    'rejected' => 'bg-rose-100 text-rose-700 border-rose-200'
+                                    'forwarded_to_priest' => 'bg-blue-100 text-blue-700 border-blue-200',
+                                    'rejected' => 'bg-rose-100 text-rose-700 border-rose-200',
+                                    'cancelled' => 'bg-slate-100 text-slate-400 border-slate-200'
                                 ];
                                 $currentClass = $statusClasses[strtolower($res->status)] ?? 'bg-slate-100 text-slate-700';
                             @endphp
                             <span class="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-tighter border {{ $currentClass }}">
-                                {{ $res->status }}
+                                {{ str_replace('_', ' ', $res->status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-5 text-center">
+                        <td class="px-6 py-5 text-center flex items-center justify-center gap-2">
                             <button
                                 class="inline-flex items-center bg-white border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 text-slate-600 px-4 py-2 rounded-xl shadow-sm transition-all duration-200 detailBtn font-bold text-sm"
                                 data-id="{{ $res->id }}">
                                 <span class="material-icons text-base mr-2">visibility</span>
                                 Details
                             </button>
+
+                            @if(in_array($res->status, ['pending', 'forwarded_to_priest']))
+                                <button
+                                    onclick="openRescheduleModal({{ $res->id }}, '{{ $res->reservation_date?->format('Y-m-d\TH:i') }}')"
+                                    class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-indigo-100 transition">
+                                    Reschedule
+                                </button>
+
+                                <form action="{{ route('member.reservations.cancel', $res->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this reservation?')">
+                                    @csrf
+                                    <button type="submit" class="text-rose-600 hover:text-rose-800 font-bold text-sm px-2">
+                                        Cancel
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -121,6 +138,35 @@
         <div id="modalContent" class="p-8 overflow-y-auto flex-1">
             {{-- Dynamically loaded content --}}
         </div>
+    </div>
+</div>
+
+{{-- RESCHEDULE MODAL --}}
+<div id="rescheduleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-[60]">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-slideUp">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 mr-4">
+                <span class="material-icons">update</span>
+            </div>
+            <h2 class="text-2xl font-black text-slate-800">Reschedule</h2>
+        </div>
+
+        <form id="rescheduleForm" method="POST">
+            @csrf
+            <div class="mb-8">
+                <label class="block text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">New Date & Time</label>
+                <input type="datetime-local" name="reservation_date" id="rescheduleInput"
+                    class="w-full border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-4 font-bold text-slate-700 bg-slate-50" required>
+                <p class="mt-2 text-xs text-slate-400">Note: Rescheduling will return the status to 'Pending' for church review.</p>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" onclick="closeRescheduleModal()"
+                    class="flex-1 px-4 py-4 text-slate-500 font-bold hover:bg-slate-50 rounded-2xl transition">Cancel</button>
+                <button type="submit"
+                    class="flex-1 bg-indigo-600 text-white px-4 py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">Confirm</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -156,6 +202,22 @@
     const docImg = document.getElementById('docImg');
     const receiptModal = document.getElementById('receiptModal');
     const receiptImage = document.getElementById('receiptImage');
+    const reschedModal = document.getElementById('rescheduleModal');
+
+    // Reschedule Logic
+    function openRescheduleModal(id, currentDate) {
+        const form = document.getElementById('rescheduleForm');
+        const input = document.getElementById('rescheduleInput');
+
+        // Match the route name defined in web.php
+        form.action = `/member/reservations/${id}/reschedule`;
+        input.value = currentDate;
+        reschedModal.classList.remove('hidden');
+    }
+
+    function closeRescheduleModal() {
+        reschedModal.classList.add('hidden');
+    }
 
     // Filter Logic
     function filterTable(status) {
@@ -210,7 +272,7 @@
                             <div class="lg:col-span-2">
                                 <h3 class="text-xl font-black text-slate-800 mb-4">Payment History</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    ${data.payments.map(p => `
+                                    ${data.payments.length > 0 ? data.payments.map(p => `
                                         <div class="p-5 border border-slate-100 rounded-2xl bg-white shadow-sm">
                                             <div class="flex justify-between mb-2">
                                                 <span class="text-2xl font-black text-slate-800">₱${p.amount}</span>
@@ -224,7 +286,7 @@
                                                 </button>
                                             ` : ''}
                                         </div>
-                                    `).join('')}
+                                    `).join('') : '<p class="text-slate-400 italic text-sm">No payment records found.</p>'}
                                 </div>
                             </div>
                         </div>
@@ -250,7 +312,6 @@
         });
     });
 
-    // In-Page Document Viewer
     function viewFile(url, title) {
         const isPdf = url.toLowerCase().endsWith('.pdf');
         document.getElementById('docTitle').innerText = title;
@@ -271,7 +332,7 @@
 
     closeDocViewer.addEventListener('click', () => {
         docViewerModal.classList.add('hidden');
-        docFrame.src = ""; // Stop PDF loading
+        docFrame.src = "";
     });
 
     closeModal.addEventListener('click', () => modal.classList.add('hidden'));
