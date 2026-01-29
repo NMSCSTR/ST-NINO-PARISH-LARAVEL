@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Priest;
 use App\Models\Reservation;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class PriestController extends Controller
 {
@@ -24,9 +24,9 @@ class PriestController extends Controller
 
     public function scheduleCalendar()
     {
-        $user = auth()->user();
+        $user         = auth()->user();
         $startOfMonth = \Carbon\Carbon::now()->startOfMonth();
-        $endOfMonth = \Carbon\Carbon::now()->endOfMonth();
+        $endOfMonth   = \Carbon\Carbon::now()->endOfMonth();
 
         $reservations = \App\Models\Reservation::with(['member.user', 'sacrament', 'documents', 'payments'])
             ->where('approved_by', $user->id)
@@ -34,7 +34,7 @@ class PriestController extends Controller
             ->whereBetween('reservation_date', [$startOfMonth, $endOfMonth])
             ->orderBy('reservation_date')
             ->get()
-            ->groupBy(function($res) {
+            ->groupBy(function ($res) {
                 return $res->reservation_date->format('Y-m-d');
             });
 
@@ -47,7 +47,7 @@ class PriestController extends Controller
 
         // Current month start and end
         $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
+        $endOfMonth   = Carbon::now()->endOfMonth();
 
         $reservations = Reservation::with(['member.user', 'sacrament'])
             ->where('approved_by', $user->id)
@@ -93,6 +93,68 @@ class PriestController extends Controller
     public function show(Priest $priest)
     {
         //
+    }
+
+    public function reschedule(Request $request, $id)
+    {
+        $request->validate([
+            'reservation_date' => 'required|date|after:today',
+        ]);
+
+        $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
+        $oldDate     = $reservation->reservation_date->format('M d, Y h:i A');
+        $newDate     = Carbon::parse($request->reservation_date)->format('M d, Y h:i A');
+
+        // Update the date
+        $reservation->update([
+            'reservation_date' => $request->reservation_date,
+            // Keep status as forwarded_to_priest so they can still 'approve' it later
+        ]);
+
+        // Notify Member via SMS
+        if ($reservation->member->user->phone_number) {
+            $msg = "Notice: Father has changed your {$reservation->sacrament->sacrament_type} schedule from {$oldDate} to {$newDate}. Please check your portal.";
+
+            try {
+                Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                    'apikey'     => config('services.semaphore.key'), // Ensure this is in your .env
+                    'number'     => $reservation->member->user->phone_number,
+                    'message'    => $msg,
+                    'sendername' => 'SalnPlatfrm',
+                ]);
+            } catch (\Exception $e) {
+                // Log error if SMS fails but allow the process to continue
+                \Log::error("SMS Failure: " . $e->getMessage());
+            }
+        }
+
+        return back()->with('success', 'The reservation date has been updated and the member has been notified.');
+    }
+
+    public function approve(Request $request, $id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        $reservation->update([
+            'status'      => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'remarks'     => $request->remarks,
+        ]);
+
+        return back()->with('success', 'Reservation has been officially approved.');
+    }
+
+    public function reject(Request $request, $id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        $reservation->update([
+            'status'  => 'rejected',
+            'remarks' => $request->remarks,
+        ]);
+
+        return back()->with('success', 'Reservation has been rejected.');
     }
 
     public function updateProfile(Request $request)

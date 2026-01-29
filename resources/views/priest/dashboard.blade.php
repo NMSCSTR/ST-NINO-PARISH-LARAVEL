@@ -10,7 +10,6 @@
         @include('components.priest.topnav')
 
         <div class="px-4 lg:px-10 pb-10">
-
             {{-- Quick Stats Header --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500">
@@ -96,6 +95,13 @@
                                                 class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-600 hover:bg-gray-50 transition">
                                             Details
                                         </button>
+
+                                        {{-- RESCHEDULE BUTTON --}}
+                                        <button onclick="openRescheduleModal({{ $reservation->id }}, '{{ $reservation->reservation_date?->format('Y-m-d\TH:i') }}')"
+                                                class="px-3 py-1.5 rounded-lg border border-amber-200 text-xs font-bold text-amber-600 hover:bg-amber-50 transition">
+                                            Reschedule
+                                        </button>
+
                                         @if($reservation->status === 'forwarded_to_priest')
                                         <button onclick="openActionModal({{ $reservation->id }})"
                                                 class="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-bold hover:bg-black transition shadow-sm">
@@ -197,6 +203,35 @@
     </div>
 </section>
 
+{{-- UNIVERSAL RESCHEDULE MODAL --}}
+<div id="priestRescheduleModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden items-center justify-center z-[60] p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8 animate-in fade-in slide-in-from-top-4 duration-300">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 mr-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800">Change Date</h2>
+        </div>
+
+        <form id="priestRescheduleForm" method="POST">
+            @csrf
+            <div class="mb-8">
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">New Scheduled Date & Time</label>
+                <input type="datetime-local" name="reservation_date" id="priestRescheduleInput"
+                    class="w-full border-gray-200 rounded-xl focus:ring-amber-500 focus:border-amber-500 p-3 font-bold text-gray-700 bg-gray-50" required>
+                <p class="mt-3 text-xs text-gray-500 italic">This will update the schedule and notify the member immediately.</p>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" onclick="closeRescheduleModal()"
+                    class="flex-1 px-4 py-3 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition">Cancel</button>
+                <button type="submit"
+                    class="flex-1 bg-amber-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-amber-700 transition shadow-lg shadow-amber-100">Update Schedule</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -217,6 +252,22 @@
     function closeActionModal(id) {
         document.getElementById(`modal-${id}`).classList.add('hidden');
         document.getElementById(`modal-${id}`).classList.remove('flex');
+    }
+
+    // NEW RESCHEDULE LOGIC
+    function openRescheduleModal(id, currentDate) {
+        const form = document.getElementById('priestRescheduleForm');
+        const baseUrl = "{{ url('/') }}";
+        form.action = `${baseUrl}/priest/reservations/${id}/reschedule`;
+
+        document.getElementById('priestRescheduleInput').value = currentDate;
+        document.getElementById('priestRescheduleModal').classList.remove('hidden');
+        document.getElementById('priestRescheduleModal').classList.add('flex');
+    }
+
+    function closeRescheduleModal() {
+        document.getElementById('priestRescheduleModal').classList.add('hidden');
+        document.getElementById('priestRescheduleModal').classList.remove('flex');
     }
 </script>
 @endpush

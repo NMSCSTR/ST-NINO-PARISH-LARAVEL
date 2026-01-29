@@ -183,8 +183,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', [PriestController::class, 'editProfile'])->name('profile.edit');
         Route::post('/profile', [PriestController::class, 'updateProfile'])->name('profile.update');
 
-
-        Route::post('/priest/reservations/{id}/reschedule', [PriestController::class, 'reschedule'])->name('priest.reservations.reschedule');
+        Route::post('/reservations/{id}/reschedule', [PriestController::class, 'reschedule'])->name('reservations.reschedule');
     });
 
 });
