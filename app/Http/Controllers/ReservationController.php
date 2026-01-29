@@ -580,7 +580,7 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::where('id', $id)->where('member_id', auth()->user()->member->id)->firstOrFail();
 
-        // Only allow cancellation if not already processed/approved
+    
         if ($reservation->status === 'pending' || $reservation->status === 'forwarded_to_priest') {
             $reservation->update(['status' => 'cancelled']);
             return back()->with('success', 'Reservation cancelled successfully.');
@@ -595,7 +595,7 @@ class ReservationController extends Controller
 
         $reservation->update([
             'reservation_date' => $request->reservation_date,
-            'status'           => 'pending', // Reset to pending so staff can re-verify the date
+            'status'           => 'pending',
         ]);
         return back()->with('success', 'Reschedule request submitted.');
     }

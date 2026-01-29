@@ -141,7 +141,7 @@
 
                 <div class="bg-gray-50 px-8 py-5 flex justify-end">
                     <button onclick="closeCalModal({{ $res->id }})" class="bg-gray-900 text-white px-10 py-3 rounded-xl text-sm font-bold hover:bg-black transition shadow-lg shadow-gray-200">
-                        Dismiss
+                        Close
                     </button>
                 </div>
             </div>
