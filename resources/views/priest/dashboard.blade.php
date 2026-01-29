@@ -258,7 +258,7 @@
     function openRescheduleModal(id, currentDate) {
         const form = document.getElementById('priestRescheduleForm');
         const baseUrl = "{{ url('/') }}";
-        form.action = `${baseUrl}/priest/reservations/${id}/reschedule`;
+        form.action = baseUrl.replace(/\/$/, "") + "/priest/reservations/" + id + "/reschedule";
 
         document.getElementById('priestRescheduleInput').value = currentDate;
         document.getElementById('priestRescheduleModal').classList.remove('hidden');

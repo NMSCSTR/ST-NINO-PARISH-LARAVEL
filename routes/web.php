@@ -175,7 +175,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/schedule', [PriestController::class, 'schedule'])->name('schedule');
         Route::get('/schedule-calendar', [PriestController::class, 'scheduleCalendar'])->name('schedule.calendar');
 
-
+        Route::post('/reservations/{id}/reschedule', [PriestController::class, 'reschedule'])->name('reservations.reschedule');
+        
         Route::post('/reservations/{id}/approve', [ReservationController::class, 'priestApprove'])->name('reservations.approve');
         Route::post('/reservations/{id}/reject', [ReservationController::class, 'priestReject'])->name('reservations.reject');
 
@@ -183,7 +184,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', [PriestController::class, 'editProfile'])->name('profile.edit');
         Route::post('/profile', [PriestController::class, 'updateProfile'])->name('profile.update');
 
-        Route::post('/reservations/{id}/reschedule', [PriestController::class, 'reschedule'])->name('reservations.reschedule');
+
     });
 
 });
