@@ -204,13 +204,15 @@
     const receiptImage = document.getElementById('receiptImage');
     const reschedModal = document.getElementById('rescheduleModal');
 
-    // Reschedule Logic
+    // Reschedule Logic - FIXED PATHING
     function openRescheduleModal(id, currentDate) {
         const form = document.getElementById('rescheduleForm');
         const input = document.getElementById('rescheduleInput');
 
-        // Match the route name defined in web.php
-        form.action = `/member/reservations/${id}/reschedule`;
+        // This uses the absolute base URL to prevent 404s
+        const baseUrl = "{{ url('/') }}";
+        form.action = `${baseUrl}/member/reservations/${id}/reschedule`;
+
         input.value = currentDate;
         reschedModal.classList.remove('hidden');
     }
@@ -229,8 +231,10 @@
             btn.classList.add('text-slate-500');
         });
 
-        event.target.classList.add('active-filter', 'bg-indigo-600', 'text-white');
-        event.target.classList.remove('text-slate-500');
+        if(event) {
+            event.target.classList.add('active-filter', 'bg-indigo-600', 'text-white');
+            event.target.classList.remove('text-slate-500');
+        }
 
         rows.forEach(row => {
             if (status === 'all' || row.dataset.status === status) {
@@ -248,8 +252,9 @@
             modalContent.innerHTML = `<div class="flex justify-center py-20"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div></div>`;
 
             let id = this.dataset.id;
+            const baseUrl = "{{ url('/') }}";
 
-            fetch(`/member/payments/${id}`)
+            fetch(`${baseUrl}/member/payments/${id}`)
                 .then(res => res.json())
                 .then(data => {
                     let html = `
@@ -293,7 +298,7 @@
                     `;
                     modalContent.innerHTML = html;
 
-                    fetch(`/member/reservations/${id}/documents`)
+                    fetch(`${baseUrl}/member/reservations/${id}/documents`)
                         .then(res => res.json())
                         .then(docData => {
                             const docContainer = document.getElementById('docList');
