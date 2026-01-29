@@ -580,7 +580,6 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::where('id', $id)->where('member_id', auth()->user()->member->id)->firstOrFail();
 
-    
         if ($reservation->status === 'pending' || $reservation->status === 'forwarded_to_priest') {
             $reservation->update(['status' => 'cancelled']);
             return back()->with('success', 'Reservation cancelled successfully.');
@@ -590,14 +589,55 @@ class ReservationController extends Controller
 
     public function reschedule(Request $request, $id)
     {
-        $request->validate(['reservation_date' => 'required|date|after:today']);
-        $reservation = Reservation::where('id', $id)->where('member_id', auth()->user()->member->id)->firstOrFail();
+        $request->validate([
+            'reservation_date' => 'required|date|after:today',
+        ]);
 
+        // Ensure the reservation belongs to the authenticated member
+        $reservation = Reservation::with(['member.user', 'sacrament'])
+            ->where('id', $id)
+            ->where('member_id', auth()->user()->member->id)
+            ->firstOrFail();
+
+        $oldDate    = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y h:i A') : 'N/A';
+        $newDate    = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y h:i A');
+        $memberName = auth()->user()->firstname . ' ' . auth()->user()->lastname;
+        $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
+
+        // 1. Update the record
         $reservation->update([
             'reservation_date' => $request->reservation_date,
-            'status'           => 'pending',
+            'status'           => 'pending', // Reset to pending for review
         ]);
-        return back()->with('success', 'Reschedule request submitted.');
+
+        // 2. Prepare the SMS Message
+        $message = "🔔 RESCHEDULE ALERT\n"
+            . "Member: {$memberName}\n"
+            . "Sacrament: {$sacrament}\n"
+            . "Old Date: {$oldDate}\n"
+            . "New Date: {$newDate}\n"
+            . "Please log in to review the change.";
+
+        // 3. Get Recipients (Admin, Staff, and Priests)
+        $recipients = User::whereIn('role', ['admin', 'staff', 'priest'])
+            ->whereNotNull('phone_number')
+            ->get();
+
+        // 4. Send SMS Notifications
+        foreach ($recipients as $user) {
+            try {
+                Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                    'apikey'     => config('services.semaphore.key'),
+                    'number'     => $user->phone_number,
+                    'message'    => $message,
+                    'sendername' => 'SalnPlatfrm',
+                ]);
+            } catch (\Exception $e) {
+                \Log::error("Failed to send reschedule SMS to {$user->phone_number}: " . $e->getMessage());
+            }
+        }
+
+        return back()->with('success', 'Reschedule request submitted. Admin and Priests have been notified via SMS.');
     }
 
     public function destroy(Reservation $reservation)
