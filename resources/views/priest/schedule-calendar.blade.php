@@ -1,6 +1,6 @@
 @extends('components.default')
 
-@section('title', 'My Approved Schedule | Calendar View')
+@section('title', "Approved Schedule | Year $year")
 
 @section('content')
 <section class="bg-gray-50 min-h-screen">
@@ -8,7 +8,7 @@
 
     <div class="pt-24 px-4 lg:px-10 pb-10">
 
-        {{-- Header & Navigation --}}
+        {{-- Header & Year Navigation --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
                 <a href="{{ route('priest.dashboard') }}" class="text-sm text-blue-600 font-bold flex items-center gap-1 mb-2 hover:underline transition">
@@ -16,84 +16,97 @@
                     Back to Dashboard
                 </a>
                 <h2 class="text-3xl font-black text-gray-900 uppercase tracking-tighter">
-                    {{ $startOfMonth->format('F Y') }}
+                    Yearly Schedule: {{ $year }}
                 </h2>
             </div>
 
-            {{-- Month Navigation --}}
+            {{-- Year Selection Navigation --}}
             <div class="flex items-center gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-200">
-                <a href="?month={{ $startOfMonth->copy()->subMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600">
+                <a href="?year={{ $year - 1 }}" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </a>
-                <a href="?month={{ now()->format('Y-m') }}" class="px-4 text-sm font-bold text-gray-700 hover:text-blue-600 transition">Today</a>
-                <a href="?month={{ $startOfMonth->copy()->addMonth()->format('Y-m') }}" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600">
+                <span class="px-4 text-sm font-black text-blue-600">{{ $year }}</span>
+                <a href="?year={{ $year + 1 }}" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
             </div>
         </div>
 
-        {{-- Calendar Grid --}}
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
-            {{-- Weekday Headers --}}
-            <div class="grid grid-cols-7 border-b border-gray-100 bg-gray-50">
-                @foreach(['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $dayName)
-                <div class="py-4 text-center text-xs font-black text-gray-400 uppercase tracking-widest">{{ $dayName }}</div>
-                @endforeach
-            </div>
-
-            {{-- Grid Cells --}}
-            <div class="grid grid-cols-7 auto-rows-[minmax(130px,_auto)]">
+        {{-- Months Grid --}}
+        <div class="space-y-16">
+            @for ($m = 1; $m <= 12; $m++)
                 @php
+                    $startOfMonth = \Carbon\Carbon::createFromDate($year, $m, 1);
                     $daysInMonth = $startOfMonth->daysInMonth;
                     $firstDayOfWeek = $startOfMonth->dayOfWeek;
                 @endphp
 
-                {{-- Blank days at start --}}
-                @for($i=0; $i<$firstDayOfWeek; $i++)
-                    <div class="border-r border-b border-gray-50 bg-gray-50/30"></div>
-                @endfor
-
-                {{-- Actual days --}}
-                @for($day=1; $day<=$daysInMonth; $day++)
-                    @php
-                        $dateString = $startOfMonth->copy()->day($day)->format('Y-m-d');
-                        $dayReservations = $reservations[$dateString] ?? collect();
-                        $isToday = now()->format('Y-m-d') === $dateString;
-                    @endphp
-
-                    <div class="p-3 border-r border-b border-gray-100 flex flex-col gap-2 transition hover:bg-gray-50/80 {{ $isToday ? 'bg-blue-50/50' : '' }}">
-                        <div class="flex justify-between items-start">
-                            <span class="inline-flex items-center justify-center w-8 h-8 text-sm font-black rounded-full {{ $isToday ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400' }}">
-                                {{ $day }}
-                            </span>
-                        </div>
-
-                        {{-- Event List within Day --}}
-                        <div class="flex flex-col gap-1.5 overflow-y-auto max-h-32 custom-scrollbar pr-1">
-                            @foreach($dayReservations as $res)
-                                @php
-                                    $type = $res->sacrament->sacrament_type ?? 'Other';
-                                    $color = match($type) {
-                                        'Baptism' => 'bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100',
-                                        'Wedding' => 'bg-amber-50 text-amber-700 border-amber-100 hover:bg-amber-100',
-                                        'Funeral' => 'bg-purple-50 text-purple-700 border-purple-100 hover:bg-purple-100',
-                                        default   => 'bg-gray-50 text-gray-700 border-gray-100 hover:bg-gray-100'
-                                    };
-                                @endphp
-                                <button type="button" onclick="openCalModal({{ $res->id }})"
-                                    class="text-[10px] font-bold py-1.5 px-2 rounded-lg border {{ $color }} truncate text-left transition transform active:scale-95">
-                                    {{ $res->reservation_date?->format('h:i A') }} | {{ $res->member->user->firstname }}
-                                </button>
-                            @endforeach
-                        </div>
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+                    {{-- Month Label --}}
+                    <div class="bg-gray-900 px-6 py-4">
+                        <h3 class="text-xl font-black text-white uppercase tracking-widest">
+                            {{ $startOfMonth->format('F') }}
+                        </h3>
                     </div>
-                @endfor
-            </div>
+
+                    {{-- Weekday Headers --}}
+                    <div class="grid grid-cols-7 border-b border-gray-100 bg-gray-50">
+                        @foreach(['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $dayName)
+                            <div class="py-4 text-center text-xs font-black text-gray-400 uppercase tracking-widest">{{ $dayName }}</div>
+                        @endforeach
+                    </div>
+
+                    {{-- Grid Cells --}}
+                    <div class="grid grid-cols-7 auto-rows-[minmax(100px,_auto)]">
+                        {{-- Blank days at start --}}
+                        @for($i=0; $i<$firstDayOfWeek; $i++)
+                            <div class="border-r border-b border-gray-50 bg-gray-50/30"></div>
+                        @endfor
+
+                        {{-- Actual days --}}
+                        @for($day=1; $day<=$daysInMonth; $day++)
+                            @php
+                                $dateObj = \Carbon\Carbon::createFromDate($year, $m, $day);
+                                $dateString = $dateObj->format('Y-m-d');
+                                $dayReservations = $reservations[$dateString] ?? collect();
+                                $isToday = now()->format('Y-m-d') === $dateString;
+                            @endphp
+
+                            <div class="p-2 border-r border-b border-gray-100 flex flex-col gap-2 transition hover:bg-gray-50/80 {{ $isToday ? 'bg-blue-50/50' : '' }}">
+                                <div class="flex justify-between items-start">
+                                    <span class="inline-flex items-center justify-center w-7 h-7 text-xs font-black rounded-full {{ $isToday ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400' }}">
+                                        {{ $day }}
+                                    </span>
+                                </div>
+
+                                {{-- Event List --}}
+                                <div class="flex flex-col gap-1 overflow-y-auto max-h-24 custom-scrollbar">
+                                    @foreach($dayReservations as $res)
+                                        @php
+                                            $type = $res->sacrament->sacrament_type ?? 'Other';
+                                            $color = match($type) {
+                                                'Baptism' => 'bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100',
+                                                'Wedding' => 'bg-amber-50 text-amber-700 border-amber-100 hover:bg-amber-100',
+                                                'Funeral' => 'bg-purple-50 text-purple-700 border-purple-100 hover:bg-purple-100',
+                                                default   => 'bg-gray-50 text-gray-700 border-gray-100 hover:bg-gray-100'
+                                            };
+                                        @endphp
+                                        <button type="button" onclick="openCalModal({{ $res->id }})"
+                                            class="text-[9px] font-bold py-1 px-1.5 rounded border {{ $color }} truncate text-left transition transform active:scale-95">
+                                            {{ $res->reservation_date?->format('h:i A') }} | {{ $res->member->user->firstname }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            @endfor
         </div>
     </div>
 </section>
 
-{{-- MODALS SECTION: Placed outside the loop to prevent layout breakage --}}
+{{-- MODALS SECTION --}}
 <div id="modal-container">
     @foreach($reservations->flatten() as $res)
         <div id="details-modal-{{ $res->id }}" class="fixed inset-0 bg-gray-900/70 backdrop-blur-md hidden items-center justify-center z-[100] p-4 transition-all duration-300">
@@ -154,13 +167,11 @@
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
 
-    /* Animation classes */
     .modal-active .modal-content-inner {
         transform: scale(1);
         opacity: 1;
     }
 </style>
-
 @endsection
 
 @push('scripts')
@@ -169,7 +180,6 @@
         const modal = document.getElementById(`details-modal-${id}`);
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-        // Add small timeout to allow animation to trigger
         setTimeout(() => {
             modal.classList.add('modal-active');
         }, 10);
@@ -184,7 +194,6 @@
         }, 200);
     }
 
-    // Close on background click
     window.onclick = function(event) {
         if (event.target.id.startsWith('details-modal-')) {
             const id = event.target.id.replace('details-modal-', '');

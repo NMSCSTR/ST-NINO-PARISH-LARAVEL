@@ -23,23 +23,47 @@ class PriestController extends Controller
         return view('priest.dashboard', compact('reservations'));
     }
 
-    public function scheduleCalendar()
+    // public function scheduleCalendar()
+    // {
+    //     $user         = auth()->user();
+    //     $startOfMonth = \Carbon\Carbon::now()->startOfMonth();
+    //     $endOfMonth   = \Carbon\Carbon::now()->endOfMonth();
+
+    //     $reservations = \App\Models\Reservation::with(['member.user', 'sacrament', 'documents', 'payments'])
+    //         ->where('approved_by', $user->id)
+    //         ->where('status', 'approved')
+    //         ->whereBetween('reservation_date', [$startOfMonth, $endOfMonth])
+    //         ->orderBy('reservation_date')
+    //         ->get()
+    //         ->groupBy(function ($res) {
+    //             return $res->reservation_date->format('Y-m-d');
+    //         });
+
+    //     return view('priest.schedule-calendar', compact('reservations', 'startOfMonth'));
+    // }
+
+    public function scheduleCalendar(Request $request)
     {
-        $user         = auth()->user();
-        $startOfMonth = \Carbon\Carbon::now()->startOfMonth();
-        $endOfMonth   = \Carbon\Carbon::now()->endOfMonth();
+        $user = auth()->user();
+
+        // Get the year from the request, or default to the current year
+        $year = $request->get('year', date('Y'));
+
+        // Define the start and end of the chosen year
+        $startOfYear = Carbon::createFromDate($year, 1, 1)->startOfDay();
+        $endOfYear = Carbon::createFromDate($year, 12, 31)->endOfDay();
 
         $reservations = \App\Models\Reservation::with(['member.user', 'sacrament', 'documents', 'payments'])
             ->where('approved_by', $user->id)
             ->where('status', 'approved')
-            ->whereBetween('reservation_date', [$startOfMonth, $endOfMonth])
+            ->whereBetween('reservation_date', [$startOfYear, $endOfYear])
             ->orderBy('reservation_date')
             ->get()
             ->groupBy(function ($res) {
                 return $res->reservation_date->format('Y-m-d');
             });
 
-        return view('priest.schedule-calendar', compact('reservations', 'startOfMonth'));
+        return view('priest.schedule-calendar', compact('reservations', 'year'));
     }
 
     public function schedule()
