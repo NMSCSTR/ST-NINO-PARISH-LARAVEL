@@ -666,7 +666,7 @@ class ReservationController extends Controller
 
     public function reschedule(Request $request, $id)
     {
-        // Validate both the date and the new reason field
+
         $request->validate([
             'reservation_date' => 'required|date|after:today',
             'reason'           => 'required|string|max:500',
@@ -677,7 +677,7 @@ class ReservationController extends Controller
             ->where('member_id', auth()->user()->member->id)
             ->firstOrFail();
 
-        // Prepare variables
+
         $user       = auth()->user();
         $memberName = "{$user->firstname} {$user->lastname}";
         $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
@@ -690,7 +690,7 @@ class ReservationController extends Controller
 
         $newDate = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y h:i A');
 
-        // Option 2: Structured Log Format
+
         $detailedRemarks = "--- RESCHEDULE LOG [$timestamp] ---\n"
             . "Requested By: {$memberName}\n"
             . "From: {$oldDate}\n"
@@ -698,14 +698,14 @@ class ReservationController extends Controller
             . "Reason: {$reason}\n"
             . "Status: Forwarded for Review";
 
-        // Update Database
+
         $reservation->update([
             'status'           => 'forwarded_to_priest',
             'remarks'          => $detailedRemarks,
-            'reservation_date' => $request->reservation_date, // Updating the date field
+            'reservation_date' => $request->reservation_date,
         ]);
 
-        // SMS Notification
+        
         $message = "🔔 RESCHEDULE ALERT\n"
             . "Member: {$memberName}\n"
             . "Sacrament: {$sacrament}\n"

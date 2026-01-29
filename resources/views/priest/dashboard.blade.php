@@ -86,7 +86,7 @@
                                         <div class="text-xs font-bold text-gray-700">By: {{ $reservation->forwardedByUser->firstname }}</div>
                                         <div class="text-[10px] text-gray-400">{{ \Carbon\Carbon::parse($reservation->forwarded_at)->format('M d, g:i A') }}</div>
                                     @else
-                                        <span class="text-gray-300 italic">N/A</span>
+                                        <span class="text-gray-300 italic">RESCHEDULE REQUEST by (Member)</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-right">
