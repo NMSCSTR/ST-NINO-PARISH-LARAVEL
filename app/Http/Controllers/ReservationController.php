@@ -732,11 +732,11 @@ class ReservationController extends Controller
     //     return back()->with('success', 'Reschedule request submitted and staff notified.');
     // }
 
-    public function reschedule(Request $request, $id)
+public function reschedule(Request $request, $id)
 {
     $request->validate([
         'reservation_date' => 'required|date|after:today',
-        'reason'           => 'required|string|max:100',
+        'reason'           => 'required|string|max:100', // Keep reason short for SMS
     ]);
 
     $reservation = Reservation::with(['member.user', 'sacrament'])
@@ -750,21 +750,22 @@ class ReservationController extends Controller
     $reason     = $request->input('reason');
     $timestamp  = now()->format('M d, g:i A');
 
-    $oldDate = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y') : 'N/A';
-    $newDate = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y');
+    // Dates for the Database (Detailed)
+    $oldDateStr = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y') : 'N/A';
+    $newDateStr = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y');
 
-
+    // 1. Update Database with FULL details (No character limit here)
     $reservation->update([
         'status'  => 'forwarded_to_priest',
-        'remarks' => "RESCHEDULE LOG [$timestamp]\nBy: $memberName\nFrom: $oldDate\nTo: $newDate\nReason: $reason",
+        'remarks' => "RESCHEDULE LOG [$timestamp]\nBy: $memberName\nFrom: $oldDateStr\nTo: $newDateStr\nReason: $reason",
         'reservation_date' => $request->reservation_date
     ]);
 
-
-    $message = "🔔 RESCHEDULE ALERT\n"
+    // 2. Short SMS Message (STRICTLY matching your working Cancel format)
+    // We keep this under 160 characters
+    $message = "🔔 RESCHEDULE: {$sacrament}\n"
              . "Member: {$memberName}\n"
-             . "Type: {$sacrament}\n"
-             . "New Date: {$newDate}\n"
+             . "New Date: {$newDateStr}\n"
              . "Reason: {$reason}";
 
     $recipients = User::whereIn('role', ['admin', 'staff', 'priest'])
@@ -772,7 +773,7 @@ class ReservationController extends Controller
         ->get();
 
     foreach ($recipients as $recipient) {
-        // Using the exact syntax from your working 'cancel' function
+        // Exact same Http call as your working cancel function
         Http::asForm()->post('https://semaphore.co/api/v4/messages', [
             'apikey'     => config('services.semaphore.key'),
             'number'     => $recipient->phone_number,
