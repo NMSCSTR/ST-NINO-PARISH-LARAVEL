@@ -99,7 +99,7 @@
                                 Details
                             </button>
 
-                            @if(in_array($res->status, ['pending', 'forwarded_to_priest']))
+                            @if(in_array($res->status, ['pending', 'approved', 'forwarded_to_priest']))
                                 <button
                                     onclick="openRescheduleModal({{ $res->id }}, '{{ $res->reservation_date?->format('Y-m-d\TH:i') }}')"
                                     class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-indigo-100 transition">
@@ -157,7 +157,7 @@
                 <label class="block text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">New Date & Time</label>
                 <input type="datetime-local" name="reservation_date" id="rescheduleInput"
                     class="w-full border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-4 font-bold text-slate-700 bg-slate-50" required>
-                <p class="mt-2 text-xs text-slate-400">Note: Rescheduling will return the status to 'Pending' for church review.</p>
+                <p class="mt-2 text-xs text-slate-400">Note: Rescheduling will return the status to 'Forwarded_to_priest' for priest review.</p>
             </div>
 
             <div class="flex gap-3">

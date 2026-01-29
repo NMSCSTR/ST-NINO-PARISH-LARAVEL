@@ -634,10 +634,10 @@ class ReservationController extends Controller
         $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
 
         // 1. Update the record
-        $reservation->update([
-            'reservation_date' => $request->reservation_date,
-            'status'           => 'pending', // Reset to pending for review
-        ]);
+        // $reservation->update([
+        //     'reservation_date' => $request->reservation_date,
+        //     'status'           => 'pending',
+        // ]);
 
         // 2. Prepare the SMS Message
         $message = "🔔 RESCHEDULE ALERT\n"
