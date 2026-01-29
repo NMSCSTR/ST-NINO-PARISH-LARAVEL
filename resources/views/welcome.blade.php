@@ -55,7 +55,7 @@
         <div class="lg:col-span-5 flex justify-center items-center animate-fade-in delay-500" data-aos="zoom-in" data-aos-delay="200">
             <div
                 class="p-5 sm:p-6 bg-white/70 backdrop-blur-lg rounded-3xl shadow-xl border border-[#d4af37] w-full max-w-xs sm:max-w-sm transition-transform duration-300 hover:scale-105">
-                <img src="https://pbs.twimg.com/profile_images/1018602821086691328/ZB3pi7f9_400x400.jpg"
+                <img src="{{ asset('images/stparish.jpg') }}"
                     alt="Santo Niño Logo" class="w-full object-contain rounded-2xl shadow-inner">
             </div>
         </div>

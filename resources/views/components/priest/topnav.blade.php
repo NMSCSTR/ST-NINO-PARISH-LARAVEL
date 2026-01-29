@@ -4,7 +4,7 @@
     <!-- Logo + Title -->
     <div class="flex items-center space-x-3">
       <img
-        src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLFkl6AqLR7rpJM-jmmf8a6YTXinAhu0_XYTB_wfT7x_qmVRzeeMXS5D0248sAyMfkSaEfCbUoI_UYUuChsdJjcWMP1TSuL_JFSvEWq8jTmHo4Nl7GwJlszGdJktCWi6oHSFgpCz1Xg8TqttFtMMSeCoidgn6iisdiH8oRsZWW4SUNDHfkq7FO2sArww/s1500/Sto.%20Ni%C3%B1o%20Parish%20-%20Tampakan,%20South%20Cotabato%20-%20Logo.jpg"
+        src="{{ asset('images/stparish.jpg') }}"
         alt="Santo Niño Parish Logo"
         class="h-10 w-10 object-contain"
       />
