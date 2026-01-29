@@ -141,7 +141,7 @@
     </div>
 </div>
 
-{{-- RESCHEDULE MODAL --}}
+{{-- RESCHEDULE MODAL (REVISED WITH REASON) --}}
 <div id="rescheduleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-[60]">
     <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-slideUp">
         <div class="flex items-center mb-6">
@@ -153,11 +153,25 @@
 
         <form id="rescheduleForm" method="POST">
             @csrf
-            <div class="mb-8">
-                <label class="block text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">New Date & Time</label>
-                <input type="datetime-local" name="reservation_date" id="rescheduleInput"
-                    class="w-full border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-4 font-bold text-slate-700 bg-slate-50" required>
-                <p class="mt-2 text-xs text-slate-400">Note: Rescheduling will return the status to 'Forwarded_to_priest' for priest review.</p>
+            <div class="space-y-5 mb-8">
+                {{-- Date Input --}}
+                <div>
+                    <label class="block text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">New Date & Time</label>
+                    <input type="datetime-local" name="reservation_date" id="rescheduleInput"
+                        class="w-full border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-4 font-bold text-slate-700 bg-slate-50" required>
+                </div>
+
+                {{-- Reason Input --}}
+                <div>
+                    <label class="block text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">Reason for Rescheduling</label>
+                    <textarea name="reason" id="rescheduleReason" rows="3"
+                        class="w-full border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-4 font-medium text-slate-700 bg-slate-50 resize-none"
+                        placeholder="Explain why you are requesting a reschedule..." required></textarea>
+                </div>
+
+                <p class="text-xs text-slate-400 leading-relaxed italic">
+                    Note: Rescheduling will return the status to 'Forwarded to Priest' for review.
+                </p>
             </div>
 
             <div class="flex gap-3">
@@ -184,7 +198,7 @@
     </div>
 </div>
 
-{{-- RECEIPT ZOOM (For images only) --}}
+{{-- RECEIPT ZOOM --}}
 <div id="receiptModal" class="fixed inset-0 bg-slate-950/90 hidden flex items-center justify-center p-8 z-[80] cursor-zoom-out">
     <img id="receiptImage" src="" class="max-w-full max-h-full rounded-lg shadow-2xl" alt="Receipt Preview">
 </div>
@@ -204,16 +218,17 @@
     const receiptImage = document.getElementById('receiptImage');
     const reschedModal = document.getElementById('rescheduleModal');
 
-    // Reschedule Logic - FIXED PATHING
+    // Reschedule Logic
     function openRescheduleModal(id, currentDate) {
         const form = document.getElementById('rescheduleForm');
         const input = document.getElementById('rescheduleInput');
+        const reasonInput = document.getElementById('rescheduleReason');
 
-        // This uses the absolute base URL to prevent 404s
         const baseUrl = "{{ url('/') }}";
         form.action = `${baseUrl}/member/reservations/${id}/reschedule`;
 
         input.value = currentDate;
+        reasonInput.value = ""; // Always clear the previous reason
         reschedModal.classList.remove('hidden');
     }
 
@@ -245,7 +260,7 @@
         });
     }
 
-    // Detail Modal Logic
+    // Detail Modal Logic (Updated to show Remarks Log)
     document.querySelectorAll('.detailBtn').forEach(btn => {
         btn.addEventListener('click', function () {
             modal.classList.remove('hidden');
@@ -269,6 +284,15 @@
                                         <p>${data.sacrament}</p>
                                     </div>
                                 </div>
+
+                                {{-- Added Remarks Display --}}
+                                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                    <h4 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest">Remarks Log</h4>
+                                    <div class="text-xs font-medium text-slate-600 whitespace-pre-line leading-relaxed">
+                                        ${data.remarks ? data.remarks : 'No activity recorded.'}
+                                    </div>
+                                </div>
+
                                 <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
                                     <h4 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest">Documents</h4>
                                     <div id="docList" class="space-y-3 font-bold text-sm text-slate-400 italic">Checking documents...</div>
