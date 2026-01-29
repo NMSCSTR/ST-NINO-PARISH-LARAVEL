@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('sacrament_id')->constrained()->onDelete('cascade');
             $table->decimal('fee', 8, 2)->nullable();
 
-            // Updated status enum
-            $table->enum('status', ['pending', 'forwarded_to_priest', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'forwarded_to_priest', 'approved', 'rejected', 'cancelled'])->default('pending');
 
             $table->unsignedBigInteger('forwarded_by')->nullable();
             $table->timestamp('forwarded_at')->nullable();

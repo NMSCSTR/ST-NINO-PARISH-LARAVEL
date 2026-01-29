@@ -575,15 +575,44 @@ class ReservationController extends Controller
         return redirect()->route('admin.reservations')
             ->with('success', 'Reservation updated successfully.');
     }
-
     public function cancel($id)
     {
-        $reservation = Reservation::where('id', $id)->where('member_id', auth()->user()->member->id)->firstOrFail();
+        $reservation = Reservation::with(['member.user', 'sacrament'])
+            ->where('id', $id)
+            ->where('member_id', auth()->user()->member->id)
+            ->firstOrFail();
 
-        if ($reservation->status === 'pending' || $reservation->status === 'forwarded_to_priest') {
+        if (in_array($reservation->status, ['pending', 'forwarded_to_priest'])) {
+            $memberName = auth()->user()->firstname . ' ' . auth()->user()->lastname;
+            $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
+            $oldDate    = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y') : 'N/A';
+
+            // 1. Update Status
             $reservation->update(['status' => 'cancelled']);
+
+            // 2. Notify Admin/Staff via SMS
+            $message = "⚠️ RESERVATION CANCELLED\n"
+                . "Member: {$memberName}\n"
+                . "Sacrament: {$sacrament}\n"
+                . "Original Date: {$oldDate}\n"
+                . "The slot is now available.";
+
+            $recipients = User::whereIn('role', ['admin', 'staff'])
+                ->whereNotNull('phone_number')
+                ->get();
+
+            foreach ($recipients as $user) {
+                Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                    'apikey'     => config('services.semaphore.key'),
+                    'number'     => $user->phone_number,
+                    'message'    => $message,
+                    'sendername' => 'SalnPlatfrm',
+                ]);
+            }
+
             return back()->with('success', 'Reservation cancelled successfully.');
         }
+
         return back()->with('error', 'Approved or rejected reservations cannot be cancelled.');
     }
 
