@@ -756,7 +756,6 @@ public function reschedule(Request $request, $id)
 
     // 1. Update Database with FULL details (No character limit here)
     $reservation->update([
-        'status'  => 'forwarded_to_priest',
         'remarks' => "RESCHEDULE LOG [$timestamp]\nBy: $memberName\nFrom: $oldDateStr\nTo: $newDateStr\nReason: $reason",
         'reservation_date' => $request->reservation_date
     ]);
