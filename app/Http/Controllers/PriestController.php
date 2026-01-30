@@ -51,7 +51,7 @@ class PriestController extends Controller
 
         // Define the start and end of the chosen year
         $startOfYear = Carbon::createFromDate($year, 1, 1)->startOfDay();
-        $endOfYear = Carbon::createFromDate($year, 12, 31)->endOfDay();
+        $endOfYear   = Carbon::createFromDate($year, 12, 31)->endOfDay();
 
         $reservations = \App\Models\Reservation::with(['member.user', 'sacrament', 'documents', 'payments'])
             ->where('approved_by', $user->id)
@@ -156,6 +156,20 @@ class PriestController extends Controller
         return back()->with('success', 'The reservation date has been updated and the member has been notified.');
     }
 
+    // public function approve(Request $request, $id)
+    // {
+    //     $reservation = Reservation::findOrFail($id);
+
+    //     $reservation->update([
+    //         'status'      => 'approved',
+    //         'approved_by' => auth()->id(),
+    //         'approved_at' => now(),
+    //         'remarks'     => $request->remarks,
+    //     ]);
+
+    //     return back()->with('success', 'Reservation has been officially approved.');
+    // }
+
     public function approve(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
@@ -167,7 +181,18 @@ class PriestController extends Controller
             'remarks'     => $request->remarks,
         ]);
 
-        return back()->with('success', 'Reservation has been officially approved.');
+        // REVISED: Sync payment record and prevent duplicates
+        Payment::updateOrCreate(
+            ['reservation_id' => $reservation->id],
+            [
+                'member_id' => $reservation->member_id,
+                'amount'    => $reservation->fee,
+                'method'    => 'GCash',
+                'status'    => 'pending',
+            ]
+        );
+
+        return back()->with('success', 'Reservation has been officially approved and payment record synced.');
     }
 
     public function reject(Request $request, $id)

@@ -36,8 +36,30 @@ class PaymentController extends Controller
         //
     }
 
+    // public function payNow(Request $request, Payment $payment)
+    // {
+    //     $request->validate([
+    //         'receipt' => 'required|image|max:2048',
+    //     ]);
+
+    //     $path = $request->file('receipt')->store('receipts', 'public');
+
+    //     $payment->update([
+    //         'receipt_path' => $path,
+    //         'method'       => 'GCash',
+    //         'status'       => 'pending',
+    //     ]);
+
+    //     return redirect()->route('member.member.payments')->with('success', 'Payment receipt uploaded successfully.');
+    // }
+
     public function payNow(Request $request, Payment $payment)
     {
+        // Safety: Ensure the reservation is still approved before accepting payment
+        if ($payment->reservation->status !== 'approved') {
+            return redirect()->back()->with('error', 'You can only pay for approved reservations.');
+        }
+
         $request->validate([
             'receipt' => 'required|image|max:2048',
         ]);

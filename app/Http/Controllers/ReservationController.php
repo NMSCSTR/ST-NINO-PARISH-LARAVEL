@@ -440,6 +440,50 @@ class ReservationController extends Controller
     //     return back()->with('success', 'Reservation approved successfully and member notified.');
     // }
 
+    // public function priestApprove(Request $request, $id)
+    // {
+    //     $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
+
+    //     if ($reservation->status !== 'forwarded_to_priest') {
+    //         return back()->with('error', 'Only forwarded reservations can be approved.');
+    //     }
+
+    //     $remarks = $request->remarks
+    //         ? $request->remarks . ' (by ' . auth()->user()->firstname . ' ' . auth()->user()->lastname . ')'
+    //         : null;
+
+    //     // 1. Update reservation status
+    //     $reservation->update([
+    //         'status'      => 'approved',
+    //         'approved_by' => auth()->user()->id,
+    //         'remarks'     => $remarks,
+    //     ]);
+
+    //     // 2. NEW: Generate the Payment Record now that it is approved
+    //     Payment::create([
+    //         'reservation_id' => $reservation->id,
+    //         'member_id'      => $reservation->member_id,
+    //         'amount'         => $reservation->fee,
+    //         'method'         => 'GCash', // Default method
+    //         'status'         => 'pending',
+    //     ]);
+
+    //     // 3. Notify the user via SMS that they can now pay
+    //     $memberPhone = optional($reservation->member->user)->phone_number;
+    //     if ($memberPhone) {
+    //         $message = "Good day {$reservation->member->user->firstname}, your reservation for {$reservation->sacrament->sacrament_type} is APPROVED. You may now settle your payment of ₱" . number_format($reservation->fee, 2) . " via the portal. Thank you!";
+
+    //         Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+    //             'apikey'     => config('services.semaphore.key'),
+    //             'number'     => $memberPhone,
+    //             'message'    => $message,
+    //             'sendername' => 'SalnPlatfrm',
+    //         ]);
+    //     }
+
+    //     return back()->with('success', 'Reservation approved. Payment request sent to member.');
+    // }
+
     public function priestApprove(Request $request, $id)
     {
         $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
@@ -459,16 +503,20 @@ class ReservationController extends Controller
             'remarks'     => $remarks,
         ]);
 
-        // 2. NEW: Generate the Payment Record now that it is approved
-        Payment::create([
-            'reservation_id' => $reservation->id,
-            'member_id'      => $reservation->member_id,
-            'amount'         => $reservation->fee,
-            'method'         => 'GCash', // Default method
-            'status'         => 'pending',
-        ]);
+        // 2. REVISED: Use updateOrCreate to prevent duplicates upon rescheduling
+        // This checks if a payment for this reservation already exists.
+        // If yes, it updates the fee; if no, it creates it.
+        Payment::updateOrCreate(
+            ['reservation_id' => $reservation->id],
+            [
+                'member_id' => $reservation->member_id,
+                'amount'    => $reservation->fee,
+                'method'    => 'GCash',
+                'status'    => 'pending',
+            ]
+        );
 
-        // 3. Notify the user via SMS that they can now pay
+        // 3. Notify the user via SMS
         $memberPhone = optional($reservation->member->user)->phone_number;
         if ($memberPhone) {
             $message = "Good day {$reservation->member->user->firstname}, your reservation for {$reservation->sacrament->sacrament_type} is APPROVED. You may now settle your payment of ₱" . number_format($reservation->fee, 2) . " via the portal. Thank you!";
@@ -481,7 +529,7 @@ class ReservationController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Reservation approved. Payment request sent to member.');
+        return back()->with('success', 'Reservation approved. Payment request updated/sent to member.');
     }
 
     public function approve($id)
@@ -677,7 +725,6 @@ class ReservationController extends Controller
     //         ->where('member_id', auth()->user()->member->id)
     //         ->firstOrFail();
 
-
     //     $user       = auth()->user();
     //     $memberName = "{$user->firstname} {$user->lastname}";
     //     $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
@@ -690,7 +737,6 @@ class ReservationController extends Controller
 
     //     $newDate = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y h:i A');
 
-
     //     $detailedRemarks = "--- RESCHEDULE LOG [$timestamp] ---\n"
     //         . "Requested By: {$memberName}\n"
     //         . "From: {$oldDate}\n"
@@ -698,13 +744,11 @@ class ReservationController extends Controller
     //         . "Reason: {$reason}\n"
     //         . "Status: Forwarded for Review";
 
-
     //     $reservation->update([
     //         'status'           => 'forwarded_to_priest',
     //         'remarks'          => $detailedRemarks,
     //         'reservation_date' => $request->reservation_date,
     //     ]);
-
 
     //     $message = "🔔 RESCHEDULE ALERT\n"
     //         . "Member: {$memberName}\n"
@@ -732,57 +776,57 @@ class ReservationController extends Controller
     //     return back()->with('success', 'Reschedule request submitted and staff notified.');
     // }
 
-public function reschedule(Request $request, $id)
-{
-    $request->validate([
-        'reservation_date' => 'required|date|after:today',
-        'reason'           => 'required|string|max:100', // Keep reason short for SMS
-    ]);
-
-    $reservation = Reservation::with(['member.user', 'sacrament'])
-        ->where('id', $id)
-        ->where('member_id', auth()->user()->member->id)
-        ->firstOrFail();
-
-    $user       = auth()->user();
-    $memberName = $user->firstname . ' ' . $user->lastname;
-    $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
-    $reason     = $request->input('reason');
-    $timestamp  = now()->format('M d, g:i A');
-
-    // Dates for the Database (Detailed)
-    $oldDateStr = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y') : 'N/A';
-    $newDateStr = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y');
-
-    // 1. Update Database with FULL details (No character limit here)
-    $reservation->update([
-        'remarks' => "RESCHEDULE LOG [$timestamp]\nBy: $memberName\nFrom: $oldDateStr\nTo: $newDateStr\nReason: $reason",
-        'reservation_date' => $request->reservation_date
-    ]);
-
-    // 2. Short SMS Message (STRICTLY matching your working Cancel format)
-    // We keep this under 160 characters
-    $message = "🔔 RESCHEDULE: {$sacrament}\n"
-             . "Member: {$memberName}\n"
-             . "New Date: {$newDateStr}\n"
-             . "Reason: {$reason}";
-
-    $recipients = User::whereIn('role', ['admin', 'staff', 'priest'])
-        ->whereNotNull('phone_number')
-        ->get();
-
-    foreach ($recipients as $recipient) {
-        // Exact same Http call as your working cancel function
-        Http::asForm()->post('https://semaphore.co/api/v4/messages', [
-            'apikey'     => config('services.semaphore.key'),
-            'number'     => $recipient->phone_number,
-            'message'    => $message,
-            'sendername' => 'SalnPlatfrm',
+    public function reschedule(Request $request, $id)
+    {
+        $request->validate([
+            'reservation_date' => 'required|date|after:today',
+            'reason'           => 'required|string|max:100', // Keep reason short for SMS
         ]);
-    }
 
-    return back()->with('success', 'Reschedule request submitted successfully.');
-}
+        $reservation = Reservation::with(['member.user', 'sacrament'])
+            ->where('id', $id)
+            ->where('member_id', auth()->user()->member->id)
+            ->firstOrFail();
+
+        $user       = auth()->user();
+        $memberName = $user->firstname . ' ' . $user->lastname;
+        $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
+        $reason     = $request->input('reason');
+        $timestamp  = now()->format('M d, g:i A');
+
+        // Dates for the Database (Detailed)
+        $oldDateStr = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y') : 'N/A';
+        $newDateStr = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y');
+
+        // 1. Update Database with FULL details (No character limit here)
+        $reservation->update([
+            'remarks'          => "RESCHEDULE LOG [$timestamp]\nBy: $memberName\nFrom: $oldDateStr\nTo: $newDateStr\nReason: $reason",
+            'reservation_date' => $request->reservation_date,
+        ]);
+
+        // 2. Short SMS Message (STRICTLY matching your working Cancel format)
+        // We keep this under 160 characters
+        $message = "🔔 RESCHEDULE: {$sacrament}\n"
+            . "Member: {$memberName}\n"
+            . "New Date: {$newDateStr}\n"
+            . "Reason: {$reason}";
+
+        $recipients = User::whereIn('role', ['admin', 'staff', 'priest'])
+            ->whereNotNull('phone_number')
+            ->get();
+
+        foreach ($recipients as $recipient) {
+            // Exact same Http call as your working cancel function
+            Http::asForm()->post('https://semaphore.co/api/v4/messages', [
+                'apikey'     => config('services.semaphore.key'),
+                'number'     => $recipient->phone_number,
+                'message'    => $message,
+                'sendername' => 'SalnPlatfrm',
+            ]);
+        }
+
+        return back()->with('success', 'Reschedule request submitted successfully.');
+    }
 
     public function destroy(Reservation $reservation)
     {
