@@ -255,18 +255,17 @@
                                         <p>${data.sacrament}</p>
                                     </div>
                                 </div>
-
-                                <div class="p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm">
-                                    <h4 class="text-xs font-black text-blue-500 uppercase mb-4 tracking-widest">Add Requirements</h4>
-                                    <form action="${baseUrl}/member/reservations/${id}/add-documents" method="POST" enctype="multipart/form-data" class="space-y-3">
-                                        @csrf
-                                        <input type="file" name="documents[]" multiple required
-                                            class="block w-full text-[10px] text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition cursor-pointer">
-                                        <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-black hover:bg-indigo-700 transition shadow-lg shadow-indigo-100">
-                                            Upload Files
-                                        </button>
-                                    </form>
-                                </div>
+<div class="p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm">
+                                <h4 class="text-xs font-black text-blue-500 uppercase mb-4 tracking-widest">Add Requirements</h4>
+                                <form action="${baseUrl}/member/reservations/${id}/add-documents" method="POST" enctype="multipart/form-data" class="space-y-3">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="file" name="documents[]" multiple required
+                                        class="block w-full text-[10px] text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition cursor-pointer">
+                                    <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-black hover:bg-indigo-700 transition shadow-lg shadow-indigo-100">
+                                        Upload Files
+                                    </button>
+                                </form>
+                            </div>
 
                                 <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
                                     <h4 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest">Remarks Log</h4>
