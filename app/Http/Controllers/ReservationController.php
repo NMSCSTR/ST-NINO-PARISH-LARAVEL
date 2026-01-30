@@ -35,7 +35,7 @@ class ReservationController extends Controller
         return view('admin.documents', compact('documents'));
     }
 
-    public function addDocuments(Requeswt $request, $id)
+    public function addDocuments(Request $request, $id)
     {
         $request->validate([
             'documents.*' => 'required|image|max:2048',
