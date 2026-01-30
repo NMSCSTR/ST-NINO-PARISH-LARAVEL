@@ -217,10 +217,10 @@ class ReservationController extends Controller
     {
         $request->validate([
             'sacrament_id'      => 'required|exists:sacraments,id',
-            'reservation_date'  => 'required|date|after:today', // Improved validation
+            'reservation_date'  => 'required|date|after:today', 
             'remarks'           => 'nullable|string',
             'submission_method' => 'required|in:online,walkin',
-            'documents.*'       => 'nullable|image|max:2048',
+            'documents.*'       => 'nullable|image',
             'fee'               => 'required|numeric',
         ]);
 
