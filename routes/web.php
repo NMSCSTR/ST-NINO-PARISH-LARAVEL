@@ -94,7 +94,6 @@ Route::middleware('auth')->group(function () {
         Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');
         Route::post('/reservations/send-sms', [ReservationController::class, 'sendSMS'])->name('reservations.sendSMS');
 
-
         // Members, Events, Payments, Documents
         Route::get('/members', [MemberController::class, 'index'])->name('members');
         Route::get('/members', [MemberController::class, 'adminMemberView'])->name('admin.members');
@@ -162,14 +161,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/member/profile/change-password', [MemberController::class, 'changePassword'])->name('profile.changePassword');
 
         Route::get('/reservations/{reservation}/documents', [ReservationController::class, 'getDocuments']);
-        Route::post('/member/reservations/{id}/add-documents', [ReservationController::class, 'addDocuments'])->name('reservations.addDocuments');
-
+        Route::post('/reservations/{id}/add-documents', [ReservationController::class, 'addDocuments'])
+            ->name('reservations.addDocuments');
 
         Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
         Route::post('/reservations/{id}/reschedule', [ReservationController::class, 'reschedule'])->name('reservations.reschedule');
 
     });
-
 
     Route::prefix('priest')->middleware('user_role:priest')->name('priest.')->group(function () {
         Route::get('/dashboard', [PriestController::class, 'index'])->name('dashboard');
@@ -184,7 +182,6 @@ Route::middleware('auth')->group(function () {
         // Profile routes
         Route::get('/profile', [PriestController::class, 'editProfile'])->name('profile.edit');
         Route::post('/profile', [PriestController::class, 'updateProfile'])->name('profile.update');
-
 
     });
 
