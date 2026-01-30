@@ -162,6 +162,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/member/profile/change-password', [MemberController::class, 'changePassword'])->name('profile.changePassword');
 
         Route::get('/reservations/{reservation}/documents', [ReservationController::class, 'getDocuments']);
+        Route::post('/member/reservations/{id}/add-documents', [ReservationController::class, 'addDocuments'])->name('reservations.addDocuments');
 
 
         Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
@@ -176,7 +177,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/schedule-calendar', [PriestController::class, 'scheduleCalendar'])->name('schedule.calendar');
 
         Route::post('/reservations/{id}/reschedule', [PriestController::class, 'reschedule'])->name('reservations.reschedule');
-        
+
         Route::post('/reservations/{id}/approve', [ReservationController::class, 'priestApprove'])->name('reservations.approve');
         Route::post('/reservations/{id}/reject', [ReservationController::class, 'priestReject'])->name('reservations.reject');
 

@@ -94,7 +94,8 @@
                         <td class="px-6 py-5 text-center flex items-center justify-center gap-2">
                             <button
                                 class="inline-flex items-center bg-white border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 text-slate-600 px-4 py-2 rounded-xl shadow-sm transition-all duration-200 detailBtn font-bold text-sm"
-                                data-id="{{ $res->id }}">
+                                data-id="{{ $res->id }}"
+                                data-remarks="{{ $res->remarks }}">
                                 <span class="material-icons text-base mr-2">visibility</span>
                                 Details
                             </button>
@@ -136,12 +137,12 @@
             </button>
         </div>
         <div id="modalContent" class="p-8 overflow-y-auto flex-1">
-            {{-- Dynamically loaded content --}}
+            {{-- Content built by JS --}}
         </div>
     </div>
 </div>
 
-{{-- RESCHEDULE MODAL (REVISED WITH REASON) --}}
+{{-- RESCHEDULE MODAL --}}
 <div id="rescheduleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-[60]">
     <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-slideUp">
         <div class="flex items-center mb-6">
@@ -154,37 +155,29 @@
         <form id="rescheduleForm" method="POST">
             @csrf
             <div class="space-y-5 mb-8">
-                {{-- Date Input --}}
                 <div>
                     <label class="block text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">New Date & Time</label>
                     <input type="datetime-local" name="reservation_date" id="rescheduleInput"
                         class="w-full border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-4 font-bold text-slate-700 bg-slate-50" required>
                 </div>
 
-                {{-- Reason Input --}}
                 <div>
                     <label class="block text-xs font-black uppercase text-slate-400 mb-2 tracking-widest">Reason for Rescheduling</label>
                     <textarea name="reason" id="rescheduleReason" rows="3"
                         class="w-full border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-4 font-medium text-slate-700 bg-slate-50 resize-none"
                         placeholder="Explain why you are requesting a reschedule..." required></textarea>
                 </div>
-
-                <p class="text-xs text-slate-400 leading-relaxed italic">
-                    Note: Rescheduling will return the status to 'Forwarded to Priest' for review.
-                </p>
             </div>
 
             <div class="flex gap-3">
-                <button type="button" onclick="closeRescheduleModal()"
-                    class="flex-1 px-4 py-4 text-slate-500 font-bold hover:bg-slate-50 rounded-2xl transition">Cancel</button>
-                <button type="submit"
-                    class="flex-1 bg-indigo-600 text-white px-4 py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">Confirm</button>
+                <button type="button" onclick="closeRescheduleModal()" class="flex-1 px-4 py-4 text-slate-500 font-bold hover:bg-slate-50 rounded-2xl transition">Cancel</button>
+                <button type="submit" class="flex-1 bg-indigo-600 text-white px-4 py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">Confirm</button>
             </div>
         </form>
     </div>
 </div>
 
-{{-- IN-PAGE DOCUMENT VIEWER MODAL --}}
+{{-- IN-PAGE DOCUMENT VIEWER --}}
 <div id="docViewerModal" class="fixed inset-0 bg-slate-950/95 hidden flex flex-col z-[70] animate-fadeIn">
     <div class="p-4 flex justify-between items-center text-white bg-slate-900">
         <span id="docTitle" class="font-bold truncate max-w-md">Document Viewer</span>
@@ -198,11 +191,6 @@
     </div>
 </div>
 
-{{-- RECEIPT ZOOM --}}
-<div id="receiptModal" class="fixed inset-0 bg-slate-950/90 hidden flex items-center justify-center p-8 z-[80] cursor-zoom-out">
-    <img id="receiptImage" src="" class="max-w-full max-h-full rounded-lg shadow-2xl" alt="Receipt Preview">
-</div>
-
 @endsection
 
 @push('scripts')
@@ -214,59 +202,42 @@
     const closeDocViewer = document.getElementById('closeDocViewer');
     const docFrame = document.getElementById('docFrame');
     const docImg = document.getElementById('docImg');
-    const receiptModal = document.getElementById('receiptModal');
-    const receiptImage = document.getElementById('receiptImage');
     const reschedModal = document.getElementById('rescheduleModal');
 
-    // Reschedule Logic
     function openRescheduleModal(id, currentDate) {
         const form = document.getElementById('rescheduleForm');
-        const input = document.getElementById('rescheduleInput');
-        const reasonInput = document.getElementById('rescheduleReason');
-
         const baseUrl = "{{ url('/') }}";
         form.action = `${baseUrl}/member/reservations/${id}/reschedule`;
-
-        input.value = currentDate;
-        reasonInput.value = ""; // Always clear the previous reason
+        document.getElementById('rescheduleInput').value = currentDate;
+        document.getElementById('rescheduleReason').value = "";
         reschedModal.classList.remove('hidden');
     }
 
-    function closeRescheduleModal() {
-        reschedModal.classList.add('hidden');
-    }
+    function closeRescheduleModal() { reschedModal.classList.add('hidden'); }
 
-    // Filter Logic
     function filterTable(status) {
         const rows = document.querySelectorAll('.reservation-row');
         const buttons = document.querySelectorAll('.filter-btn');
-
         buttons.forEach(btn => {
             btn.classList.remove('active-filter', 'bg-indigo-600', 'text-white');
             btn.classList.add('text-slate-500');
         });
-
         if(event) {
             event.target.classList.add('active-filter', 'bg-indigo-600', 'text-white');
             event.target.classList.remove('text-slate-500');
         }
-
         rows.forEach(row => {
-            if (status === 'all' || row.dataset.status === status) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+            row.style.display = (status === 'all' || row.dataset.status === status) ? '' : 'none';
         });
     }
 
-    // Detail Modal Logic (Updated to show Remarks Log)
     document.querySelectorAll('.detailBtn').forEach(btn => {
         btn.addEventListener('click', function () {
             modal.classList.remove('hidden');
             modalContent.innerHTML = `<div class="flex justify-center py-20"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div></div>`;
 
             let id = this.dataset.id;
+            let currentRemarks = this.dataset.remarks;
             const baseUrl = "{{ url('/') }}";
 
             fetch(`${baseUrl}/member/payments/${id}`)
@@ -285,16 +256,27 @@
                                     </div>
                                 </div>
 
-                                {{-- Added Remarks Display --}}
+                                <div class="p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm">
+                                    <h4 class="text-xs font-black text-blue-500 uppercase mb-4 tracking-widest">Add Requirements</h4>
+                                    <form action="${baseUrl}/member/reservations/${id}/add-documents" method="POST" enctype="multipart/form-data" class="space-y-3">
+                                        @csrf
+                                        <input type="file" name="documents[]" multiple required
+                                            class="block w-full text-[10px] text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition cursor-pointer">
+                                        <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-black hover:bg-indigo-700 transition shadow-lg shadow-indigo-100">
+                                            Upload Files
+                                        </button>
+                                    </form>
+                                </div>
+
                                 <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
                                     <h4 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest">Remarks Log</h4>
                                     <div class="text-xs font-medium text-slate-600 whitespace-pre-line leading-relaxed">
-                                        ${data.remarks ? data.remarks : 'No activity recorded.'}
+                                        ${currentRemarks ? currentRemarks : 'No activity recorded.'}
                                     </div>
                                 </div>
 
                                 <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <h4 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest">Documents</h4>
+                                    <h4 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest">Attached Documents</h4>
                                     <div id="docList" class="space-y-3 font-bold text-sm text-slate-400 italic">Checking documents...</div>
                                 </div>
                             </div>
@@ -328,10 +310,12 @@
                             const docContainer = document.getElementById('docList');
                             if (docData.documents.length > 0) {
                                 docContainer.innerHTML = docData.documents.map(doc => `
-                                    <button onclick="viewFile('${doc.url}', 'Document Viewer')" class="w-full flex items-center p-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-600 hover:text-indigo-600 transition-all text-left">
-                                        <span class="material-icons text-indigo-500 mr-3">file_present</span>
-                                        <span class="truncate font-bold text-sm">View Document</span>
-                                    </button>
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="viewFile('${doc.url}', 'Document Viewer')" class="flex-1 flex items-center p-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-600 hover:text-indigo-600 transition-all text-left">
+                                            <span class="material-icons text-indigo-500 mr-3 text-sm">file_present</span>
+                                            <span class="truncate font-bold text-xs">View Document</span>
+                                        </button>
+                                    </div>
                                 `).join('');
                             } else {
                                 docContainer.innerHTML = 'No documents attached.';
@@ -344,7 +328,6 @@
     function viewFile(url, title) {
         const isPdf = url.toLowerCase().endsWith('.pdf');
         document.getElementById('docTitle').innerText = title;
-
         if (isPdf) {
             docFrame.src = url;
             docFrame.classList.remove('hidden');
@@ -355,7 +338,6 @@
             docFrame.classList.add('hidden');
             docFrame.src = "";
         }
-
         docViewerModal.classList.remove('hidden');
     }
 
@@ -365,16 +347,10 @@
     });
 
     closeModal.addEventListener('click', () => modal.classList.add('hidden'));
-    receiptModal.addEventListener('click', () => receiptModal.classList.add('hidden'));
-
 </script>
 
 <style>
-    .active-filter {
-        background-color: #4f46e5;
-        color: white;
-        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-    }
+    .active-filter { background-color: #4f46e5; color: white; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3); }
     .animate-slideUp { animation: slideUp 0.3s ease-out forwards; }
     .animate-fadeIn { animation: fadeIn 0.2s ease-in forwards; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

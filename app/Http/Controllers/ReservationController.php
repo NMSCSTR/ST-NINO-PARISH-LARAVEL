@@ -35,6 +35,27 @@ class ReservationController extends Controller
         return view('admin.documents', compact('documents'));
     }
 
+    public function addDocuments(Requeswt $request, $id)
+    {
+        $request->validate([
+            'documents.*' => 'required|image|max:2048',
+        ]);
+
+        $reservation = Reservation::findOrFail($id);
+
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $path = $file->store('documents', 'public');
+                ReservationDocument::create([
+                    'reservation_id' => $reservation->id,
+                    'file_path'      => $path,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Additional documents uploaded successfully.');
+    }
+
     public function memberReservations()
     {
         $memberId = auth()->user()->member->id;
