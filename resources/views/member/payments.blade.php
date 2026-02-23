@@ -120,13 +120,13 @@
 
                 {{-- QR Code Image --}}
                 <div class="flex justify-center mb-3">
-                    <img src="{{ asset('images/gcash-qr.jpg') }}" alt="GCash QR Code" class="w-40 h-40 object-contain rounded-lg border-2 border-white shadow-sm bg-white">
+                    <img src="{{ asset('images/parishpayqr.jpg') }}" alt="GCash QR Code" class="w-40 h-40 object-contain rounded-lg border-2 border-white shadow-sm bg-white">
                 </div>
 
                 {{-- Account Info --}}
                 <div class="space-y-1">
                     <p class="text-sm font-bold text-gray-900">Account Name: <span class="text-blue-700">SANTO NIÑO PARISH</span></p>
-                    <p class="text-sm font-bold text-gray-900">Account Number: <span class="text-blue-700">0912 345 6789</span></p>
+                    <p class="text-sm font-bold text-gray-900">Account Number: <span class="text-blue-700">09754812059</span></p>
                 </div>
             </div>
 
