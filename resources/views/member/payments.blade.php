@@ -125,7 +125,7 @@
 
                 {{-- Account Info --}}
                 <div class="space-y-1">
-                    <p class="text-sm font-bold text-gray-900">Account Name: <span class="text-blue-700">SANTO NIÑO PARISH</span></p>
+                    {{-- <p class="text-sm font-bold text-gray-900">Account Name: <span class="text-blue-700">SANTO NIÑO PARISH</span></p> --}}
                     <p class="text-sm font-bold text-gray-900">Account Number: <span class="text-blue-700">09754812059</span></p>
                 </div>
             </div>
