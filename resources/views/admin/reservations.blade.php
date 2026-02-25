@@ -83,7 +83,7 @@
 
                             <tbody class="divide-y divide-gray-100">
                                 @foreach($reservations as $reservation)
-                                <tr class="hover:bg-gray-50 transition">
+                                <tr class="hover:bg-gray-50 transition @if(str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG')) bg-orange-50 @endif">
 
                                     <!-- Member -->
                                     <td class="px-6 py-4 font-medium text-gray-900">
