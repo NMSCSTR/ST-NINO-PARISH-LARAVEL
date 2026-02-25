@@ -83,7 +83,10 @@
 
                             <tbody class="divide-y divide-gray-100">
                                 @foreach($reservations as $reservation)
-                                <tr class="hover:bg-gray-50 transition @if(str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG')) bg-orange-50 @endif">
+                                @php
+                                    $isRescheduled = str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG');
+                                @endphp
+                                <tr class="hover:bg-gray-50 transition {{ $isRescheduled ? 'bg-orange-50 border-l-4 border-orange-500' : '' }}">
 
                                     <!-- Member -->
                                     <td class="px-6 py-4 font-medium text-gray-900">
@@ -148,12 +151,8 @@
                                     </td>
 
                                     <!-- Remarks -->
-                                    {{-- <td class="px-6 py-4 text-gray-500">
-                                        {{ $reservation->remarks ?? 'No remarks yet' }}
-                                    </td> --}}
-
                                     <td class="px-6 py-4">
-                                        @if(str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG'))
+                                        @if($isRescheduled)
                                             <div class="p-2 rounded-lg bg-orange-100 border border-orange-300 text-orange-800 font-bold">
                                                 {{ $reservation->remarks }}
                                             </div>
@@ -163,6 +162,7 @@
                                             </span>
                                         @endif
                                     </td>
+
 
                                     <!-- Actions Dropdown -->
                                     <td class="px-6 py-4 text-right">
