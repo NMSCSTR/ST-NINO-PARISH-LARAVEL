@@ -84,9 +84,12 @@
                             <tbody class="divide-y divide-gray-100">
                                 @foreach($reservations as $reservation)
                                 @php
+                                    // Identify if this row contains a rescheduling event
                                     $isRescheduled = str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG');
                                 @endphp
-                                <tr class="hover:bg-gray-50 transition {{ $isRescheduled ? 'bg-orange-50 border-l-4 border-orange-500' : '' }}">
+
+                                {{-- Highlight the entire row with a soft orange background and a left border if rescheduled --}}
+                                <tr class="hover:bg-gray-50 transition {{ $isRescheduled ? 'bg-orange-50 border-l-4 border-orange-400' : '' }}">
 
                                     <!-- Member -->
                                     <td class="px-6 py-4 font-medium text-gray-900">
@@ -153,11 +156,18 @@
                                     <!-- Remarks -->
                                     <td class="px-6 py-4">
                                         @if($isRescheduled)
-                                            <div class="p-2 rounded-lg bg-orange-100 border border-orange-300 text-orange-800 font-bold">
+                                            {{-- Use a distinct container for the reschedule log --}}
+                                            <div class="p-3 rounded-lg bg-orange-100 border border-orange-200 text-orange-900 text-xs shadow-sm">
+                                                <div class="flex items-center gap-1 mb-1 text-orange-700 font-bold uppercase tracking-wider">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    Reschedule Log
+                                                </div>
                                                 {{ $reservation->remarks }}
                                             </div>
                                         @else
-                                            <span class="text-gray-500">
+                                            <span class="text-gray-500 italic text-xs">
                                                 {{ $reservation->remarks ?? 'No remarks yet' }}
                                             </span>
                                         @endif
