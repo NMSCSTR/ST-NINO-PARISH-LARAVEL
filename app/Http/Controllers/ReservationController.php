@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Member;
+// use App\Models\Member;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\ReservationDocument;
@@ -13,11 +13,14 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        // dd(config('services.semaphore.key'));
-
         $reservations = Reservation::with([
             'member.user', 'sacrament', 'payments', 'approvedBy', 'forwardedByUser',
-        ])->get();
+        ])
+            ->get()
+        // Sort so 'RESCHEDULE LOG' comes first
+            ->sortBy(function ($reservation) {
+                return str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG') ? 0 : 1;
+            });
 
         return view('admin.reservations', compact('reservations'));
     }
@@ -217,7 +220,7 @@ class ReservationController extends Controller
     {
         $request->validate([
             'sacrament_id'      => 'required|exists:sacraments,id',
-            'reservation_date'  => 'required|date|after:today', 
+            'reservation_date'  => 'required|date|after:today',
             'remarks'           => 'nullable|string',
             'submission_method' => 'required|in:online,walkin',
             'documents.*'       => 'nullable|image',

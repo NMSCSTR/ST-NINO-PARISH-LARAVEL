@@ -148,8 +148,20 @@
                                     </td>
 
                                     <!-- Remarks -->
-                                    <td class="px-6 py-4 text-gray-500">
+                                    {{-- <td class="px-6 py-4 text-gray-500">
                                         {{ $reservation->remarks ?? 'No remarks yet' }}
+                                    </td> --}}
+
+                                    <td class="px-6 py-4">
+                                        @if(str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG'))
+                                            <div class="p-2 rounded-lg bg-orange-100 border border-orange-300 text-orange-800 font-bold">
+                                                {{ $reservation->remarks }}
+                                            </div>
+                                        @else
+                                            <span class="text-gray-500">
+                                                {{ $reservation->remarks ?? 'No remarks yet' }}
+                                            </span>
+                                        @endif
                                     </td>
 
                                     <!-- Actions Dropdown -->
@@ -463,3 +475,5 @@ document.getElementById('sendSMSForm').addEventListener('submit', function(e){
 </script>
 
 @endpush
+
+
