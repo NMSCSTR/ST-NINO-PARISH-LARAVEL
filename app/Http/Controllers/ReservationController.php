@@ -218,6 +218,13 @@ class ReservationController extends Controller
 
     public function makeReservation(Request $request)
     {
+        $user = auth()->user();
+
+        // Check if the member profile exists
+        if (!$user->member) {
+            return redirect()->back()->with('error', 'Your account is not fully set up as a member.');
+        }
+
         $request->validate([
             'sacrament_id'      => 'required|exists:sacraments,id',
             'reservation_date'  => 'required|date|after:today',
@@ -228,7 +235,7 @@ class ReservationController extends Controller
         ]);
 
         $reservation = Reservation::create([
-            'member_id'        => auth()->user()->member->id,
+            'member_id'        => auth()->user()->member?->id,
             'sacrament_id'     => $request->sacrament_id,
             'fee'              => $request->fee,
             'reservation_date' => $request->reservation_date,
