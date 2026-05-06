@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = UserModel::with('member')->get();
+        $users         = UserModel::with('member')->get();
         $archivedUsers = UserModel::onlyTrashed()->with('member')->get();
         return view('admin.users', compact('users', 'archivedUsers'));
     }
@@ -36,30 +36,30 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'firstname'    => 'required|string|max:100',
-            'lastname'     => 'required|string|max:100',
-            'phone_number' => 'nullable|string|max:20',
-            'email'        => 'required|string|email|max:255|unique:users,email',
-            'password'     => 'required|string|min:8|confirmed',
-            'role'         => 'required',
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'firstname'    => 'required|string|max:100',
+    //         'lastname'     => 'required|string|max:100',
+    //         'phone_number' => 'nullable|string|max:20',
+    //         'email'        => 'required|string|email|max:255|unique:users,email',
+    //         'password'     => 'required|string|min:8|confirmed',
+    //         'role'         => 'required',
+    //     ]);
 
-        UserModel::create([
-            'firstname'    => $validated['firstname'],
-            'lastname'     => $validated['lastname'],
-            'phone_number' => $validated['phone_number'] ?? null,
-            'email'        => $validated['email'],
-            'password'     => Hash::make($validated['password']),
-            'role'         => $validated['role'],
-        ]);
+    //     UserModel::create([
+    //         'firstname'    => $validated['firstname'],
+    //         'lastname'     => $validated['lastname'],
+    //         'phone_number' => $validated['phone_number'] ?? null,
+    //         'email'        => $validated['email'],
+    //         'password'     => Hash::make($validated['password']),
+    //         'role'         => $validated['role'],
+    //     ]);
 
-        return redirect()
-            ->route('login')
-            ->with('success', 'User added successfully!');
-    }
+    //     return redirect()
+    //         ->route('login')
+    //         ->with('success', 'User added successfully!');
+    // }
 
     public function addUser(Request $request)
     {
@@ -72,16 +72,55 @@ class UserController extends Controller
             'role'         => 'required|in:admin,staff,member,priest',
         ]);
 
-        UserModel::create([
+        $user = UserModel::create([
             'firstname'    => $request->firstname,
             'lastname'     => $request->lastname,
             'email'        => $request->email,
-            'phone_number' => $request->phone_number, // store phone number
+            'phone_number' => $request->phone_number,
             'password'     => bcrypt($request->password),
             'role'         => $request->role,
         ]);
 
+        // CRITICAL FIX: Create member profile if role is member
+        if ($user->role === 'member') {
+            $user->member()->create([
+                'contact_number' => $user->phone_number,
+            ]);
+        }
+
         return redirect()->route('admin.users')->with('success', 'User added successfully!');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'firstname'    => 'required|string|max:100',
+            'lastname'     => 'required|string|max:100',
+            'phone_number' => 'nullable|string|max:20',
+            'email'        => 'required|string|email|max:255|unique:users,email',
+            'password'     => 'required|string|min:8|confirmed',
+            'role'         => 'required',
+        ]);
+
+        $user = UserModel::create([
+            'firstname'    => $validated['firstname'],
+            'lastname'     => $validated['lastname'],
+            'phone_number' => $validated['phone_number'] ?? null,
+            'email'        => $validated['email'],
+            'password'     => Hash::make($validated['password']),
+            'role'         => $validated['role'],
+        ]);
+
+        // CRITICAL FIX: Create member profile if role is member
+        if ($user->role === 'member') {
+            $user->member()->create([
+                'contact_number' => $user->phone_number,
+            ]);
+        }
+
+        return redirect()
+            ->route('login')
+            ->with('success', 'User added successfully!');
     }
 
     /**
