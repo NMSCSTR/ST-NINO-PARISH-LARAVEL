@@ -7,11 +7,8 @@
 <section>
     <div class="min-h-screen pt-24">
         @include('components.admin.bg')
-        {{-- Include Top Navigation --}}
         @include('components.admin.topnav')
         <div class="flex flex-col lg:flex-row px-4 lg:px-10 pb-4 gap-6">
-
-            {{-- Include Sidebar --}}
             <div class="lg:w-2/12 w-full">
                 @include('components.admin.sidebar')
             </div>
@@ -21,9 +18,6 @@
 
                 <div class="bg-white rounded-xl shadow-lg">
                     <div class="px-6 py-6">
-
-
-                        <!-- Breadcrumb -->
                         <nav class="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
                             aria-label="Breadcrumb">
                             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">

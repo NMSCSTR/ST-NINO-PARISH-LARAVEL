@@ -81,7 +81,6 @@ class UserController extends Controller
             'role'         => $request->role,
         ]);
 
-        // CRITICAL FIX: Create member profile if role is member
         if ($user->role === 'member') {
             $user->member()->create([
                 'contact_number' => $user->phone_number,
@@ -111,7 +110,6 @@ class UserController extends Controller
             'role'         => $validated['role'],
         ]);
 
-        // CRITICAL FIX: Create member profile if role is member
         if ($user->role === 'member') {
             $user->member()->create([
                 'contact_number' => $user->phone_number,
@@ -147,7 +145,6 @@ class UserController extends Controller
     {
         $user = UserModel::findOrFail($id);
 
-        // Base validation for all users
         $validated = $request->validate([
             'firstname'    => 'required|string|max:255',
             'lastname'     => 'required|string|max:255',
@@ -177,7 +174,6 @@ class UserController extends Controller
                 'address'        => 'nullable|string|max:255',
             ]);
 
-            // Create member record if it doesn't exist
             if (! $user->member) {
                 $user->member()->create($memberValidated);
             } else {
@@ -196,7 +192,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = UserModel::findOrFail($id);
-        $user->delete(); // Automatically sets deleted_at timestamp
+        $user->delete();
 
         return redirect()->route('admin.users')->with('success', 'User archived. Transactions preserved.');
     }

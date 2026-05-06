@@ -51,13 +51,11 @@ class Reservation extends Model
         return $this->hasMany(ReservationDocument::class);
     }
 
-    // Staff forwarding relation
     public function forwardedByUser()
     {
         return $this->belongsTo(User::class, 'forwarded_by');
     }
 
-    // Priest approval relation
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');

@@ -55,7 +55,7 @@ class PaymentController extends Controller
 
     public function payNow(Request $request, Payment $payment)
     {
-        // Safety: Ensure the reservation is still approved before accepting payment
+
         if ($payment->reservation->status !== 'approved') {
             return redirect()->back()->with('error', 'You can only pay for approved reservations.');
         }

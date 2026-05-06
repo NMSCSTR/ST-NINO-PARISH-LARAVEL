@@ -95,7 +95,7 @@ class EventController extends Controller
         ]);
 
         Event::create([
-            'user_id'     => auth()->id(), // logged-in admin
+            'user_id'     => auth()->id(),
             'title'       => $request->title,
             'description' => $request->description,
             'start_date'  => $request->start_date,

@@ -81,7 +81,6 @@ class MemberController extends Controller
     {
         $user = auth()->user();
 
-        // Create member row if not exists
         if (! $user->member) {
             $user->member()->create([
                 'middle_name'    => null,

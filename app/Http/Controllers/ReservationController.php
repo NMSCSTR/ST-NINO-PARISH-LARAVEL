@@ -17,7 +17,6 @@ class ReservationController extends Controller
             'member.user', 'sacrament', 'payments', 'approvedBy', 'forwardedByUser',
         ])
             ->get()
-        // Sort so 'RESCHEDULE LOG' comes first
             ->sortBy(function ($reservation) {
                 return str_contains(strtoupper($reservation->remarks ?? ''), 'RESCHEDULE LOG') ? 0 : 1;
             });
@@ -220,7 +219,6 @@ class ReservationController extends Controller
     {
         $user = auth()->user();
 
-        // Check if the member profile exists
         if (!$user->member) {
             return redirect()->back()->with('error', 'Your account is not fully set up as a member.');
         }
@@ -243,7 +241,6 @@ class ReservationController extends Controller
             'status'           => 'pending',
         ]);
 
-        // Save Documents (if online)
         if ($request->submission_method === 'online' && $request->hasFile('documents')) {
             foreach ($request->file('documents') as $file) {
                 $path = $file->store('documents', 'public');
@@ -254,7 +251,6 @@ class ReservationController extends Controller
             }
         }
 
-        // Notify Staff/Admin via SMS (logic unchanged)
         $message = "🔔 NEW RESERVATION\nSacrament: {$reservation->sacrament->sacrament_type}\nStatus: Pending Approval";
         $users   = User::whereIn('role', ['staff', 'admin'])->whereNotNull('phone_number')->get();
 
@@ -273,22 +269,18 @@ class ReservationController extends Controller
 
     public function forward($id)
     {
-        // Eager load member.user and sacrament
         $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
 
-        // Cannot forward if already approved, rejected, or forwarded
         if (in_array($reservation->status, ['approved', 'rejected', 'forwarded_to_priest'])) {
             return back()->with('error', 'This reservation cannot be forwarded.');
         }
 
-        // Update reservation status
         $reservation->update([
             'status'       => 'forwarded_to_priest',
             'forwarded_by' => auth()->user()->id,
             'forwarded_at' => now(),
         ]);
 
-        // Get all priests with phone numbers
         $priests = User::where('role', 'priest')
             ->whereNotNull('phone_number')
             ->get();
@@ -297,12 +289,10 @@ class ReservationController extends Controller
             return back()->with('warning', 'Reservation forwarded, but no priests with phone numbers found.');
         }
 
-        // Get member name from related user
         $memberName = $reservation->member && $reservation->member->user
             ? $reservation->member->user->firstname . ' ' . $reservation->member->user->lastname
             : 'N/A';
 
-        // Get reservation date & time
         $reservationDate = $reservation->reservation_date
             ? $reservation->reservation_date->format('M d, Y')
             : 'N/A';
@@ -310,10 +300,9 @@ class ReservationController extends Controller
             ? $reservation->reservation_date->format('h:i A')
             : 'N/A';
 
-        // Get sacrament type
+
         $sacramentType = $reservation->sacrament ? $reservation->sacrament->sacrament_type : 'N/A';
 
-        // Send SMS to all priests with personalized greeting
         foreach ($priests as $priest) {
 
             $message = "Good day Father {$priest->firstname}, a new reservation has been forwarded to you for approval.\n"
@@ -335,31 +324,26 @@ class ReservationController extends Controller
 
     public function priestReject(Request $request, $id)
     {
-        // Load reservation with member.user and sacrament
         $reservation = Reservation::with(['member.user', 'sacrament'])->findOrFail($id);
 
         if ($reservation->status !== 'forwarded_to_priest') {
             return back()->with('error', 'Only forwarded reservations can be rejected.');
         }
 
-        // Add remarks with approver name if provided
         $remarks = $request->remarks
             ? $request->remarks . ' (by ' . auth()->user()->firstname . ' ' . auth()->user()->lastname . ')'
             : null;
 
-        // Update reservation
         $reservation->update([
             'status'      => 'rejected',
             'approved_by' => auth()->user()->id,
             'remarks'     => $remarks,
         ]);
 
-        // Get member name
         $memberName = $reservation->member && $reservation->member->user
             ? $reservation->member->user->firstname . ' ' . $reservation->member->user->lastname
             : 'N/A';
 
-        // Get reservation date & time
         $reservationDate = $reservation->reservation_date
             ? $reservation->reservation_date->format('M d, Y')
             : 'N/A';
@@ -367,10 +351,8 @@ class ReservationController extends Controller
             ? $reservation->reservation_date->format('h:i A')
             : 'N/A';
 
-        // Get sacrament type
         $sacramentType = $reservation->sacrament ? $reservation->sacrament->sacrament_type : 'N/A';
 
-        // Prepare SMS message
         $message = "Good day {$memberName}, your reservation has been rejected by Priest "
         . auth()->user()->firstname . " " . auth()->user()->lastname . ".\n"
             . "Sacrament: {$sacramentType}\n"
@@ -378,7 +360,6 @@ class ReservationController extends Controller
             . (! empty($remarks) ? "Remarks: {$remarks}\n" : "")
             . "Please contact the parish for further details.";
 
-        // Send SMS if member phone exists
         $memberPhone = optional($reservation->member->user)->phone_number;
         if ($memberPhone) {
             $response = Http::asForm()->post('https://semaphore.co/api/v4/messages', [
@@ -527,16 +508,12 @@ class ReservationController extends Controller
             ? $request->remarks . ' (by ' . auth()->user()->firstname . ' ' . auth()->user()->lastname . ')'
             : null;
 
-        // 1. Update reservation status
         $reservation->update([
             'status'      => 'approved',
             'approved_by' => auth()->user()->id,
             'remarks'     => $remarks,
         ]);
 
-        // 2. REVISED: Use updateOrCreate to prevent duplicates upon rescheduling
-        // This checks if a payment for this reservation already exists.
-        // If yes, it updates the fee; if no, it creates it.
         Payment::updateOrCreate(
             ['reservation_id' => $reservation->id],
             [
@@ -547,7 +524,6 @@ class ReservationController extends Controller
             ]
         );
 
-        // 3. Notify the user via SMS
         $memberPhone = optional($reservation->member->user)->phone_number;
         if ($memberPhone) {
             $message = "Good day {$reservation->member->user->firstname}, your reservation for {$reservation->sacrament->sacrament_type} is APPROVED. You may now settle your payment of ₱" . number_format($reservation->fee, 2) . " via the portal. Thank you!";
@@ -666,10 +642,8 @@ class ReservationController extends Controller
             $sacrament  = $reservation->sacrament->sacrament_type ?? 'Sacrament';
             $oldDate    = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y') : 'N/A';
 
-            // 1. Update Status
             $reservation->update(['status' => 'cancelled']);
 
-            // 2. Notify Admin/Staff via SMS
             $message = "⚠️ RESERVATION CANCELLED\n"
                 . "Member: {$memberName}\n"
                 . "Sacrament: {$sacrament}\n"
@@ -811,7 +785,7 @@ class ReservationController extends Controller
     {
         $request->validate([
             'reservation_date' => 'required|date|after:today',
-            'reason'           => 'required|string|max:100', // Keep reason short for SMS
+            'reason'           => 'required|string|max:100',
         ]);
 
         $reservation = Reservation::with(['member.user', 'sacrament'])
@@ -825,18 +799,14 @@ class ReservationController extends Controller
         $reason     = $request->input('reason');
         $timestamp  = now()->format('M d, g:i A');
 
-        // Dates for the Database (Detailed)
         $oldDateStr = $reservation->reservation_date ? $reservation->reservation_date->format('M d, Y') : 'N/A';
         $newDateStr = \Carbon\Carbon::parse($request->reservation_date)->format('M d, Y');
 
-        // 1. Update Database with FULL details (No character limit here)
         $reservation->update([
             'remarks'          => "RESCHEDULE LOG [$timestamp]\nBy: $memberName\nFrom: $oldDateStr\nTo: $newDateStr\nReason: $reason",
             'reservation_date' => $request->reservation_date,
         ]);
 
-        // 2. Short SMS Message (STRICTLY matching your working Cancel format)
-        // We keep this under 160 characters
         $message = "🔔 RESCHEDULE: {$sacrament}\n"
             . "Member: {$memberName}\n"
             . "New Date: {$newDateStr}\n"
@@ -847,7 +817,6 @@ class ReservationController extends Controller
             ->get();
 
         foreach ($recipients as $recipient) {
-            // Exact same Http call as your working cancel function
             Http::asForm()->post('https://semaphore.co/api/v4/messages', [
                 'apikey'     => config('services.semaphore.key'),
                 'number'     => $recipient->phone_number,

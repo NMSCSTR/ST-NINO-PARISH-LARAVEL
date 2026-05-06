@@ -60,7 +60,6 @@ class ReservationController extends Controller
             'status'           => 'pending',
         ]);
 
-        // Handle Payment
         if ($request->payment_option === 'pay_now' && $request->hasFile('receipt')) {
 
             $path = $request->file('receipt')->store('receipts', 'public');

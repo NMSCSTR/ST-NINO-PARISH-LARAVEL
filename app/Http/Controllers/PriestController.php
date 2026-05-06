@@ -46,10 +46,8 @@ class PriestController extends Controller
     {
         $user = auth()->user();
 
-        // Get the year from the request, or default to the current year
         $year = $request->get('year', date('Y'));
 
-        // Define the start and end of the chosen year
         $startOfYear = Carbon::createFromDate($year, 1, 1)->startOfDay();
         $endOfYear   = Carbon::createFromDate($year, 12, 31)->endOfDay();
 
@@ -70,7 +68,6 @@ class PriestController extends Controller
     {
         $user = Auth::user();
 
-        // Current month start and end
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth   = Carbon::now()->endOfMonth();
 
@@ -130,10 +127,8 @@ class PriestController extends Controller
         $oldDate     = $reservation->reservation_date->format('M d, Y h:i A');
         $newDate     = Carbon::parse($request->reservation_date)->format('M d, Y h:i A');
 
-        // Update the date
         $reservation->update([
             'reservation_date' => $request->reservation_date,
-            // Keep status as forwarded_to_priest so they can still 'approve' it later
         ]);
 
         // Notify Member via SMS
@@ -142,13 +137,13 @@ class PriestController extends Controller
 
             try {
                 Http::asForm()->post('https://semaphore.co/api/v4/messages', [
-                    'apikey'     => config('services.semaphore.key'), // Ensure this is in your .env
+                    'apikey'     => config('services.semaphore.key'),
                     'number'     => $reservation->member->user->phone_number,
                     'message'    => $msg,
                     'sendername' => 'SalnPlatfrm',
                 ]);
             } catch (\Exception $e) {
-                // Log error if SMS fails but allow the process to continue
+
                 \Log::error("SMS Failure: " . $e->getMessage());
             }
         }
